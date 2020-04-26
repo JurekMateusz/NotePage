@@ -1,0 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<footer class="footer">
+    <div class="container">
+        <p class="navbar-text">
+            TODO-Page - developed by <a href="https://github.com/JurekMateusz">
+            <img src="${pageContext.request.contextPath}/resources/img/github.png"
+            width="30" height="30" class="d-inline-block mr-1" alt=""></a>
+        </p>
+    </div>
+</footer>
