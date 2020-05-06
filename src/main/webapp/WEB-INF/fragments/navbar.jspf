@@ -1,17 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <a href="${pageContext.request.contextPath}" class="navbar-left">
-    <img src="${pageContext.request.contextPath}/resources/img/note.jpg"width="30" height="30">NOTE_Page</a>
-
+<nav class="navbar navbar-inverse navbar-fixed-top navbar-expand-lg">
     <div class="container">
+
+        <a class="navbar-brand" href="https://github.com/JurekMateusz">
+            <img src="${pageContext.request.contextPath}/resources/img/note.jpg" width="30" height="30" alt=""></a>
+
         <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
-            <span class="glyphicon glyphicon-list"></span>
+            <span class="glyphicon glyphicon-list " style="color:blue"></span>
         </button>
+
+
         <div class="collapse navbar-collapse navHeaderCollapse">
+
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="${pageContext.request.contextPath}">Główna</a></li>
-                <li><a href="${pageContext.request.contextPath}/add">Dodaj</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Add Note</a>
+                </li>
+
+                <li class="nav-item  dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button"
+                       aria-expanded="false" id="submenu" aria-haspopup="true">Sort By:</a>
+                    <div class="dropdown-menu" aria-labelledby="submenu">
+                        <a class="dropdown-item"><input type="submit" hidden>From Most Important</a>
+                        <a class="dropdown-item"><input type="submit" hidden>Important </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item "><input type="submit" hidden>Nearest deadline</a>
+                        <a class="dropdown-item"><input type="submit" hidden>Farthest deadline </a>
+                    </div>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}">All notes</a>
+                </li>
+                <li><a href="${pageContext.request.contextPath}">Account</a></li>
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
                         <li><a href="${pageContext.request.contextPath}/logout">Wyloguj się</a></li>
@@ -25,52 +48,3 @@
 
     </div>
 </nav>
-
-<%--<div class="collapse navbar-collapse navHeaderCollapse" id="main-menu">--%>
-
-<%--    <ul class="nav navbar-nav navbar-right">--%>
-
-<%--        <li class="nav-item">--%>
-<%--            <a class="nav-link" href="#">Add Note</a>--%>
-<%--        </li>--%>
-<%--        <form class="form-inline" action="#" method="post">--%>
-<%--            <li class="nav-item  dropdown">--%>
-<%--                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button"--%>
-<%--                   aria-expanded="false" id="submenu" aria-haspopup="true">Sort By</a>--%>
-<%--                <div class="dropdown-menu" aria-labelledby="submenu">--%>
-<%--                    <a class="dropdown-item"><input type="submit" hidden>From Most Important</a>--%>
-<%--                    <a class="dropdown-item"><input type="submit" hidden>Important </a>--%>
-
-<%--                    <div class="dropdown-divider"></div>--%>
-
-<%--                    <a class="dropdown-item "><input type="submit" hidden>Nearest deadline</a>--%>
-<%--                    <a class="dropdown-item"><input type="submit" hidden>Farthest deadline </a>--%>
-<%--                </div>--%>
-<%--            </li>--%>
-
-<%--            <div class="nav-item btn-group btn-group-toggle" data-toggle="buttons">--%>
-<%--                <label class="btn btn-outline-warning active">--%>
-<%--                    <input type="radio" name="button" id="option1" checked> TODO--%>
-<%--                </label>--%>
-<%--                <label class="btn btn-outline-success">--%>
-<%--                    <input type="radio" name="button" id="option2"> DONE--%>
-<%--                </label>--%>
-<%--            </div>--%>
-
-<%--        </form>--%>
-
-<%--        <li class="nav-item">--%>
-<%--            <a class="nav-link" href="#">Account</a>--%>
-<%--        </li>--%>
-
-<%--        <c:choose>--%>
-<%--            <c:when test="${not empty sessionScope.user}">--%>
-<%--                <li><a href="#">LOG OUT</a></li>--%>
-<%--            </c:when>--%>
-<%--            <c:otherwise>--%>
-<%--                <li><a href="#">LOG IN</a></li>--%>
-<%--            </c:otherwise>--%>
-<%--        </c:choose>--%>
-
-<%--    </ul>--%>
-<%--</div>--%>
