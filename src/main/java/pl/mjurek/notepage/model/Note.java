@@ -4,13 +4,13 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Getter
 @Builder
+@Getter
 @EqualsAndHashCode
-public class User {
+public class Note {
     private long id;
-    private String name;
-    private String email;
-    private String password;
-
+    private String description;
+    private DateNote date;
+    private User user;
+    private ImportantState importantState;
 }
