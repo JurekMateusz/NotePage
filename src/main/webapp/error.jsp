@@ -1,4 +1,3 @@
-<%@ page import="pl.mjurek.notepage.model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -7,7 +6,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TODO Note Page</title>
+    <title>ERROR</title>
 
     <meta http-equiv="X-Ua-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -25,34 +24,7 @@
 
 <body>
 
-<jsp:include page="WEB-INF/fragments/navbar.jspf"/>
-
-<% User user = (User) request.getAttribute("user"); %>
-<% String message = (String) request.getAttribute("message"); %>
-<div class="container">
-    <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <br><br><br><br>
-        <form class="form-signin" method="post" action="register">
-            <h2 class="form-signin-heading">Register</h2>
-            <input name="inputUsername" type="text" name="inputUsername" minlength="3" class="form-control"
-                   placeholder="user name*" value="${user.getName()}" required autofocus/>
-            <input name="inputEmail" type="email" class="form-control" placeholder="email" value="${user.getEmail()}" required autofocus/>
-            <input name="inputPassword" type="password" minlength="5" class="form-control" placeholder="password*" required/>
-            <input name="inputRepeatPassword" type="password" minlength="5" class="form-control" placeholder="repeat password*" required/>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">register</button>
-        </form>
-    </div>
-
-    <c:if test="${not empty message}">
-        <div class="alert alert-danger col-sm-6 col-md-4 col-md-offset-4" role="alert">
-            <h3 class="centered"><c:out value="${message}"/></h3>
-        </div>
-    </c:if>
-
-</div>
-
-
-<jsp:include page="WEB-INF/fragments/footer.jspf"/>
+<h1>ERRRRRRROR</h1>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>

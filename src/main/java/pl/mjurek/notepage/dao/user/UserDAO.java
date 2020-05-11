@@ -9,5 +9,5 @@ public interface UserDAO extends GenericDAO<User, Long> {
     //List<User> getAllActiveNow();
     User getUserByUserName(String userName);
 
-    boolean isNotExit(String userName);
+    User getUserByEmail(String email);
 }
