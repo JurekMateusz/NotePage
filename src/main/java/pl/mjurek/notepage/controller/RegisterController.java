@@ -55,10 +55,11 @@ public class RegisterController extends HttpServlet {
         User resultUser = userService.addUser(user);
 
         if (resultUser == null) {
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.setAttribute("fragment","error");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        request.setAttribute("fragment","login");
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 
     private boolean isAnyParamNull(String username, String email, String password, String repeatPassword) {
@@ -66,13 +67,15 @@ public class RegisterController extends HttpServlet {
     }
 
     private void setAttributeAndForward(String message, User user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("fragment","register");
         request.setAttribute("message", message);
         request.setAttribute("user", user);
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        request.setAttribute("fragment","register");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

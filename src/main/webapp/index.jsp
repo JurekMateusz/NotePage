@@ -26,7 +26,18 @@
 
 <jsp:include page="WEB-INF/fragments/navbar.jspf"/>
 
-
+<% String fragment= (String) request.getAttribute("fragment"); %>
+<c:choose>
+    <c:when test="${fragment eq 'register'}">
+        <jsp:include page="WEB-INF/fragments/register.jspf"/>
+    </c:when>
+    <c:when test="${fragment eq 'error'}">
+        <jsp:include page="WEB-INF/fragments/error.jspf"/>
+    </c:when>
+    <c:otherwise>
+        <jsp:include page="WEB-INF/fragments/login.jspf"/>
+    </c:otherwise>
+</c:choose>
 
 
 <jsp:include page="WEB-INF/fragments/footer.jspf"/>
