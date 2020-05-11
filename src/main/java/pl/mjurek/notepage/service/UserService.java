@@ -13,8 +13,10 @@ public class UserService {
         return result;
     }
 
-    private void codeUserPassword(User user) {
-
+    public User getUserByUserName(String name){
+        UserDAO userDAO = getUserDAO();
+        User result = userDAO.getUserByUserName(name);
+        return result;
     }
 
     public boolean isNameExisting(String name) {

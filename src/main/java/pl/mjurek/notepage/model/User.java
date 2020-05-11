@@ -6,10 +6,12 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
-    private long id = -1;
+    private long id;
+    @EqualsAndHashCode.Include
     private String name;
     private String email;
+    @EqualsAndHashCode.Include
     private String password;
 }

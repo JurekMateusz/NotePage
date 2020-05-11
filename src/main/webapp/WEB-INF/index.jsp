@@ -1,7 +1,9 @@
+<%@ page import="pl.mjurek.notepage.model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<% User loggedUser = (User) request.getAttribute("loggedUser"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,32 +21,34 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-<jsp:include page="WEB-INF/fragments/navbar.jspf"/>
+<jsp:include page="fragments/navbar.jspf"/>
 
 <% String fragment= (String) request.getAttribute("fragment"); %>
 <c:choose>
     <c:when test="${fragment eq 'register'}">
-        <jsp:include page="WEB-INF/fragments/register.jspf"/>
+        <jsp:include page="fragments/register.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'error'}">
-        <jsp:include page="WEB-INF/fragments/error.jspf"/>
+        <jsp:include page="fragments/error.jspf"/>
+    </c:when>
+    <c:when test="${fragment eq 'notes'}">
+        <jsp:include page="fragments/notes.jspf"/>
     </c:when>
     <c:otherwise>
-        <jsp:include page="WEB-INF/fragments/login.jspf"/>
+        <jsp:include page="fragments/login.jspf"/>
     </c:otherwise>
 </c:choose>
 
 
-<jsp:include page="WEB-INF/fragments/footer.jspf"/>
+<jsp:include page="fragments/footer.jspf"/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </body>
 </html>

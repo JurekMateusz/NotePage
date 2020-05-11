@@ -35,14 +35,10 @@
                     <a href="${pageContext.request.contextPath}">All notes</a>
                 </li>
                 <li><a href="${pageContext.request.contextPath}">Account</a></li>
-                <c:choose>
-                    <c:when test="${not empty sessionScope.user}">
-                        <li><a href="${pageContext.request.contextPath}/logout">Wyloguj się</a></li>
-                    </c:when>
-                    <c:otherwise>
-                        <li><a href="${pageContext.request.contextPath}/login">Zaloguj się</a></li>
-                    </c:otherwise>
-                </c:choose>
+
+                <c:if test="${not empty sessionScope.loggedUser}">
+                    <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
+                </c:if>
             </ul>
         </div>
 

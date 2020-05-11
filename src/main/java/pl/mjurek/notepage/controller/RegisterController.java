@@ -18,12 +18,13 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String username = request.getParameter("inputUsername");
-        String email = request.getParameter("inputEmail");
+        String username = request.getParameter("inputUsername").trim();
+        String email = request.getParameter("inputEmail").trim();
         String password = request.getParameter("inputPassword");
         String repeatPassword = request.getParameter("inputRepeatPassword");
 
         String sha1hexPassword = DigestUtils.sha1Hex(password);
+
         User user = User.builder()
                 .name(username)
                 .email(email)
@@ -56,10 +57,10 @@ public class RegisterController extends HttpServlet {
 
         if (resultUser == null) {
             request.setAttribute("fragment","error");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
         }
         request.setAttribute("fragment","login");
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/WEB-INF/index.jsp");
     }
 
     private boolean isAnyParamNull(String username, String email, String password, String repeatPassword) {
@@ -70,12 +71,13 @@ public class RegisterController extends HttpServlet {
         request.setAttribute("fragment","register");
         request.setAttribute("message", message);
         request.setAttribute("user", user);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("fragment","register");
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getSession().invalidate();
+        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 }
