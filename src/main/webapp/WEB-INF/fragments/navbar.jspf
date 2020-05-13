@@ -15,7 +15,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Add Note</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/add">Add Note</a>
                 </li>
 
                 <li class="nav-item  dropdown">
@@ -32,9 +32,9 @@
                     </div>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}">All notes</a>
+                    <a href="#">All notes</a>
                 </li>
-                <li><a href="${pageContext.request.contextPath}">Account</a></li>
+                <li><a href="#">Account</a></li>
 
                 <c:if test="${not empty sessionScope.loggedUser}">
                     <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>

@@ -11,6 +11,20 @@
     <welcome-file>/WEB-INF/index.jsp</welcome-file>
   </welcome-file-list>
 
+<!--  <security-constraint>-->
+<!--    <web-resource-collection>-->
+<!--      <web-resource-name>AuthServer</web-resource-name>-->
+<!--      <url-pattern>/*</url-pattern>-->
+<!--    </web-resource-collection>-->
+<!--    <user-data-constraint>-->
+<!--      <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+<!--    </user-data-constraint>-->
+<!--  </security-constraint>-->
+
+  <error-page>
+    <error-code>405</error-code>
+    <location>/WEB-INF/error.jsp</location>
+  </error-page>
   <jsp-config>
     <jsp-property-group>
       <url-pattern>*.jsp</url-pattern>

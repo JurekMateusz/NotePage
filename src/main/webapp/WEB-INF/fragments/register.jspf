@@ -8,11 +8,11 @@
         <br><br><br><br>
         <form class="form-signin" method="post" action="register">
             <h2 class="form-signin-heading">Register</h2>
-            <input name="inputUsername" type="text" name="inputUsername" minlength="3" class="form-control"
+            <input name="inputUsername" type="text" name="inputUsername" minlength="3" maxlength="40" class="form-control"
                    placeholder="user name*" value="${user.getName()}" required autofocus/>
-            <input name="inputEmail" type="email" class="form-control" placeholder="email" value="${user.getEmail()}" required autofocus/>
-            <input name="inputPassword" type="password" minlength="5" class="form-control" placeholder="password*" required/>
-            <input name="inputRepeatPassword" type="password" minlength="5" class="form-control" placeholder="repeat password*" required/>
+            <input name="inputEmail" type="email" class="form-control" maxlength="40" placeholder="email" value="${user.getEmail()}" required autofocus/>
+            <input name="inputPassword" type="password" minlength="5" maxlength="40" class="form-control" placeholder="password*" required/>
+            <input name="inputRepeatPassword" type="password" minlength="5" maxlength="40" class="form-control" placeholder="repeat password*" required/>
             <button class="btn btn-lg btn-primary btn-block" type="submit">register</button>
         </form>
     </div>

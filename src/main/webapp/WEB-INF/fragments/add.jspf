@@ -1,0 +1,53 @@
+<% String message = (String) request.getAttribute("message"); %>
+<% String note = (String) request.getAttribute("note"); %>
+<div class="container">
+    <br><br><br><br>
+    <div class="col-md-8 col-md-offset-2">
+        <form class="form-signin" method="post" action="add">
+            <h2 class="form-signin-heading"></h2>
+            <%--            <div class="input-container">--%>
+            <%--                <i class="fa fa-calendar-check-o"></i>--%>
+<%--            <input name="inputDeadLine" class="form-control" type="text" id="datepicker" placeholder="YYYY-MM-DD"--%>
+<%--                   style='width: 150px'>--%>
+            <%--            </div>--%>
+
+            <textarea name="inputDescription" rows="7" maxlength="1000"
+                      class="form-control" placeholder="Your note" value="${note.getDescription()}" required autofocus></textarea>
+
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                <label class="btn btn-success active">
+                    <input type="radio" class="btn btn-success btn-md active" name="importantState" value="just_remamber" checked>
+                    Just remember
+                </label>
+                <label class="btn btn-warning">
+                    <input type="radio" class="btn btn-warning btn-md" name="importantState" value="important" >
+                    Important
+                </label>
+                <label class="btn btn-danger">
+                    <input type="radio" class="btn btn-danger btn-md" name="importantState" value="very_important" >
+                    Very Important
+                </label>
+                <label>
+                <input class="form-control" type="text" name="inputDate" id="datepicker" placeholder="YYYY-MM-DD" ${note.getDate().getDateStickNote()}required autofocus>
+                </label>
+            </div>
+            <input class="btn btn-lg btn-primary btn-block" type="submit"
+                   value="Add note :)"/>
+        </form>
+    </div>
+    <c:if test="${not empty message}">
+        <div class="alert alert-danger col-sm-6 col-md-4 col-md-offset-4" role="alert">
+            <h3 class="centered"><c:out value="${message}"/></h3>
+        </div>
+    </c:if>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
+        $("#datepicker").datepicker();
+    });
+</script>

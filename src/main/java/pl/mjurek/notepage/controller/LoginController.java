@@ -18,18 +18,18 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("inputUsername");
         String password = request.getParameter("inputPassword");
-        String sha1hexPassword = DigestUtils.sha1Hex(password);
 
-        User user = User.builder()
+        User buffUser = User.builder()
                 .name(username)
-                .password(sha1hexPassword)
+                .password(password)
                 .build();
-        if (isCorrectAndExist(user)) {
-            //TODO redict and show latest notes by defould.
-            saveUserInSession(request, user);
+
+        if (isCorrectAndExist(buffUser)) {
+            saveUserInSession(request, buffUser);
             request.setAttribute("fragment", "notes");
         } else {
-            request.setAttribute("user", user);
+            request.setAttribute("buffUser", buffUser);
+            request.setAttribute("message","Incorrect username or password");
             request.setAttribute("fragment", "");
         }
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
@@ -37,8 +37,15 @@ public class LoginController extends HttpServlet {
 
     private boolean isCorrectAndExist(User user) {
         UserService userService = new UserService();
+        String sha1hexPassword = DigestUtils.sha1Hex(user.getPassword());
+
+        User userWithCodedPass = User.builder()
+                .name(user.getName())
+                .password(sha1hexPassword)
+                .build();
+
         User takenUser = userService.getUserByUserName(user.getName());
-        if (user.equals(takenUser)) {
+        if (userWithCodedPass.equals(takenUser)) {
             return true;
         }
         return false;
@@ -49,14 +56,7 @@ public class LoginController extends HttpServlet {
         String username = user.getName();
         User loggedUser = userService.getUserByUserName(username);
         HttpSession session = request.getSession(true);
-        session.setMaxInactiveInterval(15 * 60);
+        session.setMaxInactiveInterval(1 * 60);
         session.setAttribute("loggedUser", loggedUser);
     }
-
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.getSession().invalidate();
-//        request.setAttribute("fragment", "");
-//        request.getRequestDispatcher("index.jsp").forward(request, response);
-//    }
 }

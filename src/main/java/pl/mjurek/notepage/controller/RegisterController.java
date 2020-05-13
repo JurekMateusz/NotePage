@@ -57,9 +57,9 @@ public class RegisterController extends HttpServlet {
 
         if (resultUser == null) {
             request.setAttribute("fragment","error");
-            request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+            request.getRequestDispatcher(request.getContextPath()+"/WEB-INF/index.jsp").forward(request, response);
         }
-        request.setAttribute("fragment","login");
+      //  request.setAttribute("fragment","login");
         response.sendRedirect(request.getContextPath() + "/WEB-INF/index.jsp");
     }
 
