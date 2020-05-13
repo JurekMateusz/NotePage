@@ -1,6 +1,6 @@
 package pl.mjurek.notepage.controller;
 
-import pl.mjurek.notepage.exception.CantAddNoteException;
+import pl.mjurek.notepage.exception.CantAddObjectException;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.NoteService;
@@ -28,17 +28,21 @@ public class AddController extends HttpServlet {
         Note note = null;
         try {
             note = noteService.addNote(authenticatedUser, description, importantState, deadlineDate);
-        } catch (CantAddNoteException ex) {
+        } catch (CantAddObjectException ex) {
             request.setAttribute("message", "Can't add note");
+
+            request.setAttribute("note", note);
+            request.setAttribute("fragment", "add");
+            request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/index.jsp").forward(request, response);
         } catch (ParseException ex) {
             request.setAttribute("message", "Invalid date");
-        } finally {
+
             request.setAttribute("note", note);
             request.setAttribute("fragment", "add");
             request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/index.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/index.jsp").forward(request, response);
+        request.setAttribute("fragment","notes");
+        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
 

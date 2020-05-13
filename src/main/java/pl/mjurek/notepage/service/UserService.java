@@ -4,10 +4,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.user.UserDAO;
+import pl.mjurek.notepage.exception.CantAddObjectException;
 import pl.mjurek.notepage.model.User;
 
 public class UserService {
-    public User addUser(User user) {
+    public User addUser(User user) throws CantAddObjectException {
         UserDAO userDAO = getUserDAO();
         User result = userDAO.create(user);
         return result;
