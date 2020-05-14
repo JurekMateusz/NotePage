@@ -1,6 +1,6 @@
 package pl.mjurek.notepage.controller;
 
-import pl.mjurek.notepage.exception.CantAddObjectException;
+import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.NoteService;
@@ -18,33 +18,34 @@ public class AddController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        String description = request.getParameter("inputDescription");
+        String description = request.getParameter("inputDescription").trim();
         String importantState = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
         User authenticatedUser = (User) request.getSession().getAttribute("loggedUser");
 
-        NoteService noteService = new NoteService();
         Note note = null;
+        NoteService noteService = new NoteService();
         try {
             note = noteService.addNote(authenticatedUser, description, importantState, deadlineDate);
-        } catch (CantAddObjectException ex) {
+        } catch (AddObjectException ex) {
             request.setAttribute("message", "Can't add note");
 
-            request.setAttribute("note", note);
+            request.setAttribute("description", description);
             request.setAttribute("fragment", "add");
-            request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            return;
         } catch (ParseException ex) {
             request.setAttribute("message", "Invalid date");
 
-            request.setAttribute("note", note);
+            request.setAttribute("description", description);
             request.setAttribute("fragment", "add");
-            request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            return;
         }
-     //   request.setAttribute("fragment","notes");
-        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-    }
 
+        request.getRequestDispatcher("/default_note_list").forward(request, response);
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("fragment", "add");

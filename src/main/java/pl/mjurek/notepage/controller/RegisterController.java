@@ -1,7 +1,7 @@
 package pl.mjurek.notepage.controller;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import pl.mjurek.notepage.exception.CantAddObjectException;
+import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.UserService;
 
@@ -57,7 +57,7 @@ public class RegisterController extends HttpServlet {
         User resultUser = null;
         try {
             resultUser = userService.addUser(user);
-        } catch (CantAddObjectException e) {
+        } catch (AddObjectException e) {
             e.printStackTrace();
         }
 

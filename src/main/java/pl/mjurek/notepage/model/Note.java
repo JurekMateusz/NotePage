@@ -3,9 +3,11 @@ package pl.mjurek.notepage.model;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
-@Builder
+@Builder(toBuilder=true)
 @Getter
+@Setter
 @EqualsAndHashCode
 public class Note {
     private long id;

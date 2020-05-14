@@ -1,14 +1,12 @@
 package pl.mjurek.notepage.service;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.user.UserDAO;
-import pl.mjurek.notepage.exception.CantAddObjectException;
+import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
 
 public class UserService {
-    public User addUser(User user) throws CantAddObjectException {
+    public User addUser(User user) throws AddObjectException {
         UserDAO userDAO = getUserDAO();
         User result = userDAO.create(user);
         return result;

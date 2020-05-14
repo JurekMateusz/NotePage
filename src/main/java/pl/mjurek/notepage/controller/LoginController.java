@@ -32,8 +32,8 @@ public class LoginController extends HttpServlet {
             request.setAttribute("message","Incorrect username or password");
             request.setAttribute("fragment", "");
         }
-        request.getRequestDispatcher("/note").include(request,response);
-        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+
+        request.getRequestDispatcher("/default_note_list").forward(request, response);
     }
 
     private boolean isCorrectAndExist(User user) {
@@ -57,7 +57,7 @@ public class LoginController extends HttpServlet {
         String username = user.getName();
         User loggedUser = userService.getUserByUserName(username);
         HttpSession session = request.getSession(true);
-        session.setMaxInactiveInterval(1 * 60);
+        session.setMaxInactiveInterval(10 * 60);
         session.setAttribute("loggedUser", loggedUser);
     }
 }

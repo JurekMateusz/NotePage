@@ -2,11 +2,9 @@ package pl.mjurek.notepage.service;
 
 import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.note.NoteDAO;
-import pl.mjurek.notepage.exception.CantAddObjectException;
-import pl.mjurek.notepage.model.DateNote;
-import pl.mjurek.notepage.model.ImportantState;
-import pl.mjurek.notepage.model.Note;
-import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.exception.AddObjectException;
+import pl.mjurek.notepage.exception.DeleteObjectException;
+import pl.mjurek.notepage.model.*;
 
 
 import java.text.ParseException;
@@ -14,7 +12,7 @@ import java.util.List;
 
 
 public class NoteService {
-    public Note addNote(User user, String description, String importantState, String deadlineDate) throws CantAddObjectException, ParseException {
+    public Note addNote(User user, String description, String importantState, String deadlineDate) throws AddObjectException, ParseException {
         DateNoteService noteService = new DateNoteService();
         DateNote date = noteService.addDate(deadlineDate);
 
@@ -22,7 +20,6 @@ public class NoteService {
 
         NoteDAO noteDAO = getNoteDAO();
         noteDAO.create(note);
-
         return note;
     }
 
@@ -32,6 +29,7 @@ public class NoteService {
         Note result = Note.builder()
                 .description(description)
                 .importantState(state)
+                .statusNote(StatusNote.TODO)
                 .date(date)
                 .user(user)
                 .build();
@@ -49,13 +47,41 @@ public class NoteService {
         return result;
     }
 
-    public List<Note> getAllNotes(long user_id){
+    public List<Note> getAllTODONotes(long userId) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.getAll(user_id);
+        return noteDAO.getAll(userId, StatusNote.TODO);
+    }
+
+    public void deleteNote(long noteId) throws DeleteObjectException {
+        NoteDAO noteDAO = getNoteDAO();
+        Note note = noteDAO.read(noteId);
+
+        DateNoteService service = new DateNoteService();
+        service.delete(note.getDate().getId());
+
+        noteDAO.delete(note.getId());
+    }
+
+    public void update(long noteId,NotesControllerOptions action){
+        NoteDAO noteDAO = getNoteDAO();
+        Note note = noteDAO.read(noteId);
+
+        DateNoteService dateNoteService = new DateNoteService();
+        dateNoteService.update(note.getDate(),action);
+
+        if(action == NotesControllerOptions.DONE){
+            note.setStatusNote(StatusNote.MADE);
+        }
+        if(action == NotesControllerOptions.TODO){
+            note.setStatusNote(StatusNote.TODO);
+        }
+        noteDAO.update(note);
     }
 
     private NoteDAO getNoteDAO() {
         DAOFactory factory = DAOFactory.getDAOFactory();
         return factory.getNoteDAO();
     }
+
+
 }
