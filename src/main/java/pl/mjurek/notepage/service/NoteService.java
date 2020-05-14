@@ -10,6 +10,7 @@ import pl.mjurek.notepage.model.User;
 
 
 import java.text.ParseException;
+import java.util.List;
 
 
 public class NoteService {
@@ -46,6 +47,11 @@ public class NoteService {
 
         }
         return result;
+    }
+
+    public List<Note> getAllNotes(long user_id){
+        NoteDAO noteDAO = getNoteDAO();
+        return noteDAO.getAll(user_id);
     }
 
     private NoteDAO getNoteDAO() {

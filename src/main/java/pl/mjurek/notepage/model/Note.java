@@ -13,4 +13,5 @@ public class Note {
     private DateNote date;
     private User user;
     private ImportantState importantState;
+    private StatusNote statusNote;
 }

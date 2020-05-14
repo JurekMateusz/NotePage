@@ -41,7 +41,7 @@ public class AddController extends HttpServlet {
             request.setAttribute("fragment", "add");
             request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/index.jsp").forward(request, response);
         }
-        request.setAttribute("fragment","notes");
+     //   request.setAttribute("fragment","notes");
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 

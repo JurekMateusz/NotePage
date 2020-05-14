@@ -6,6 +6,6 @@ import pl.mjurek.notepage.model.Note;
 import java.util.List;
 
 public interface NoteDAO extends GenericDAO<Note,Long> {
-    List<Note> getAll();
+    List<Note> getAll(long user_id);
     //TODO getAllBy sort option ,getActualNote(),getOldNote(),getMadeNote(),getNotMadeNote();
 }
