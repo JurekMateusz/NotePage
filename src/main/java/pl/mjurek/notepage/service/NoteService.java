@@ -14,8 +14,8 @@ import java.util.List;
 
 public class NoteService {
     public Note addNote(User user, String description, String importantState, String deadlineDate) throws AddObjectException, ParseException {
-        DateNoteService noteService = new DateNoteService();
-        DateNote date = noteService.addDate(deadlineDate);
+        DateNoteService dateNoteService = new DateNoteService();
+        DateNote date = dateNoteService.addDate(deadlineDate);
 
         Note note = createNote(user, date, description, importantState);
 
@@ -69,9 +69,22 @@ public class NoteService {
         service.delete(note.getDate().getId());
     }
 
+    public void update(Note note,String deadline) throws UpdateObjectException, ParseException {
+        NoteDAO noteDAO = getNoteDAO();
+        Note result = noteDAO.read(note.getId());
+
+        DateNoteService dateNoteService = new DateNoteService();
+        dateNoteService.update(note.getDate().getId(),deadline);
+
+        result.setDescription(note.getDescription());
+        result.setStatusNote(note.getStatusNote());
+
+        noteDAO.update(result);
+    }
+
     public void update(long noteId, NotesControllerOptions action) throws UpdateObjectException {
         NoteDAO noteDAO = getNoteDAO();
-        Note note = noteDAO.read(noteId);
+        Note note = noteDAO.read(noteId);//todo to many quarry
 
         DateNoteService dateNoteService = new DateNoteService();
         dateNoteService.update(note.getDate(), action);

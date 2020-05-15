@@ -3,13 +3,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <% String message = (String) request.getAttribute("message"); %>
 <% String description = (String) request.getAttribute("description"); %>
-<% String date = (String) request.getAttribute("date"); %>
+<% String dateString = (String) request.getAttribute("dateString"); %>
+<% String modify = (String) request.getAttribute("modify"); %>
+<% String note_id= (String) request.getAttribute("note_id"); %>
 
 <div class="container">
     <br><br><br><br>
     <div class="col-md-8 col-md-offset-2">
+        <c:choose>
+        <c:when test="${not empty modify}">
+            <form class="form-signin" method="post/?note_id=${id}" action="wrench">
+                <h2 class="form-signin-heading">EDIT Your note:</h2>
+        </c:when>
+        <c:otherwise>
         <form class="form-signin" method="post" action="add">
             <h2 class="form-signin-heading">Your note:</h2>
+            </c:otherwise>
+            </c:choose>
             <%--            <div class="input-container">--%>
             <%--                <i class="fa fa-calendar-check-o"></i>--%>
             <%--            <input name="inputDeadLine" class="form-control" type="text" id="datepicker" placeholder="YYYY-MM-DD"--%>
@@ -35,7 +45,7 @@
                     Very Important
                 </label>
                 <label>
-                    <input class="form-control" type="text" name="inputDate" id="datepicker" value="${date}"
+                    <input class="form-control" type="text" name="inputDate" id="datepicker" value="${dateString}"
                            placeholder="YYYY-MM-DD"
                            required autofocus>
                 </label>

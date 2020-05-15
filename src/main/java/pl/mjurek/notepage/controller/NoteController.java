@@ -36,14 +36,10 @@ public class NoteController extends HttpServlet {
                 case DONE:
                     service.update(noteId, actionStatus);
                     break;
-                case WRENCH:
-                    request.getRequestDispatcher("/wrench").forward(request, response);
-                    return;
-                    //TODO WRENCH Controller
                 case DELETE:
                     service.deleteNote(noteId);
             }
-        } catch (Exception ex) {
+        } catch (DeleteObjectException | UpdateObjectException ex) {
             request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
             return;
         }

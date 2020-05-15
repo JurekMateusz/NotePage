@@ -14,6 +14,7 @@ import pl.mjurek.notepage.util.ConnectionProvider;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,9 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String UPDATE =
             "UPDATE date SET date_deadline_note=:date_deadline_note, date_user_made_task=:date_user_made_task " +
                     "WHERE date_id=:date_id;";
+    private static final String UPDATE_DEADLINE =
+            "UPDATE date SET date_deadline_note=:date_deadline_note" +
+                    " WHERE date_id=:date_id;";
     private static final String DELETE =
             "DELETE FROM date WHERE date_id=:date_id;";
 
@@ -77,13 +81,27 @@ public class DateNoteDAOImpl implements DateNoteDAO {
         paramMap.put("date_deadline_note", updateDate.getDateDeadlineNote());
         paramMap.put("date_user_made_task", updateDate.getDateUserMadeTask());
 
-        SqlParameterSource paramSource =new MapSqlParameterSource(paramMap);
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
         int update = template.update(UPDATE, paramSource);
         if (update < 1) {
-           throw new UpdateObjectException();
+            throw new UpdateObjectException();
         }
         return result;
     }
+
+    @Override
+    public void update(long dateId, Timestamp deadline) throws UpdateObjectException {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("date_id", dateId);
+        paramMap.put("date_deadline_note",deadline);
+
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+        int update = template.update(UPDATE_DEADLINE, paramSource);
+        if (update < 1) {
+            throw new UpdateObjectException();
+        }
+    }
+
 
     @Override
     public void delete(Long key) throws DeleteObjectException {

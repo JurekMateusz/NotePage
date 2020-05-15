@@ -85,6 +85,7 @@ public class NoteDAOImpl implements NoteDAO {
         return result;
     }
 
+
     @Override
     public void delete(Long key) throws DeleteObjectException {
         MapSqlParameterSource paramSource = new MapSqlParameterSource("note_id", key);

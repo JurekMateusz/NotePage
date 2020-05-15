@@ -59,7 +59,7 @@
                    class="btn btn-block btn-primary btn-warning"><span
                         class="glyphicon glyphicon-repeat"></span> </a>
             </c:if>
-            <a href="${pageContext.request.contextPath}/notes_control?note_id=${note.id}&action=WRENCH"
+            <a href="${pageContext.request.contextPath}/wrench?note_id=${note.id}&action=WRENCH"
                class="btn btn-block btn-primary btn-warning"><span
                     class="glyphicon glyphicon-wrench"></span> </a>
 

@@ -41,6 +41,13 @@ public class DateNoteService {
         DateNoteDAO dateNoteDAO = getDateNoteDAO();
         dateNoteDAO.update(dateNote);
     }
+    public void update(long dateId ,String deadline) throws UpdateObjectException, ParseException {
+        Date date = new SimpleDateFormat("MM/dd/yyyy").parse(deadline);
+        Timestamp deadlineTimestamp = new Timestamp(date.getTime());
+
+        DateNoteDAO dateNoteDAO = getDateNoteDAO();
+        dateNoteDAO.update(dateId,deadlineTimestamp);
+    }
 
     public void delete(long dateId) throws DeleteObjectException {
         DateNoteDAO noteDAO = getDateNoteDAO();
