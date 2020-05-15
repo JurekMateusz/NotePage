@@ -5,6 +5,7 @@
 <%@ page import="pl.mjurek.notepage.model.StatusNote" %>
 
 <br><br><br><br>
+<jsp:useBean id="now" class="java.util.Date"/>
 <c:if test="${not empty requestScope.notesList}">
     <c:forEach var="note" items="${requestScope.notesList}">
 
@@ -29,8 +30,16 @@
         <div class="col  col-md-11 col-sm-10">
             <h6>
                 <medium>Added: <fmt:formatDate value="${note.date.dateStickNote}" pattern="dd/MM/YYYY"/>,
-                    <strong>Deadline: <fmt:formatDate value="${note.date.dateDeadlineNote}"
-                                                      pattern="dd/MM/YYYY"/></strong>
+                    <c:choose>
+                        <c:when test="${(now.time - note.date.dateDeadlineNote.time) gt 0 && note.statusNote eq StatusNote.TODO}">
+                            <strong style="color:red">Deadline: <fmt:formatDate value="${note.date.dateDeadlineNote}"
+                                                                                pattern="dd/MM/YYYY"/></strong>
+                        </c:when>
+                        <c:otherwise>
+                            <strong>Deadline: <fmt:formatDate value="${note.date.dateDeadlineNote}"
+                                                              pattern="dd/MM/YYYY"/></strong>
+                        </c:otherwise>
+                    </c:choose>
                     <c:if test="${not empty note.date.dateUserMadeTask}">
                         Made: <fmt:formatDate value="${note.date.dateUserMadeTask}" pattern="dd/MM/YYYY"/>
                     </c:if>
@@ -54,7 +63,7 @@
                class="btn btn-block btn-primary btn-warning"><span
                     class="glyphicon glyphicon-wrench"></span> </a>
 
-            <a href="${pageContext.request.contextPath}/notes_control?discovery_id=${note.id}&action=DELETE"
+            <a href="${pageContext.request.contextPath}/notes_control?note_id=${note.id}&action=DELETE"
                class="btn btn-block btn-primary btn-danger"><span
                     class="glyphicon glyphicon-trash"></span> </a>
         </div>

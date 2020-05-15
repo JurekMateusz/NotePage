@@ -2,6 +2,7 @@ package pl.mjurek.notepage.dao;
 
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
+import pl.mjurek.notepage.exception.UpdateObjectException;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ public interface GenericDAO<T, PK extends Serializable> {
 
     T read(PK primaryKey);
 
-    T update(T updateObject);
+    T update(T updateObject) throws UpdateObjectException;
 
     void delete(PK key) throws DeleteObjectException;
 }

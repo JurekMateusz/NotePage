@@ -46,11 +46,13 @@ public class RegisterController extends HttpServlet {
         if (userService.isNameExisting(username)) {
             String message = "User exist";
             setAttributeAndForward(message, user, request, response);
+            return;
         }
 
         if (userService.isEmailExisting(email)) {
             String message = "Email exist";
             setAttributeAndForward(message, user, request, response);
+            return;
         }
 
 
@@ -62,11 +64,11 @@ public class RegisterController extends HttpServlet {
         }
 
         if (resultUser == null) {
-            request.setAttribute("fragment","error");
-            request.getRequestDispatcher(request.getContextPath()+"/WEB-INF/index.jsp").forward(request, response);
+            request.getRequestDispatcher(request.getContextPath()+"/WEB-INF/error.jsp").forward(request, response);
+            return;
         }
-      //  request.setAttribute("fragment","login");
-        response.sendRedirect(request.getContextPath() + "/WEB-INF/index.jsp");
+
+        request.getRequestDispatcher("/default_note_list").forward(request, response);
     }
 
     private boolean isAnyParamNull(String username, String email, String password, String repeatPassword) {

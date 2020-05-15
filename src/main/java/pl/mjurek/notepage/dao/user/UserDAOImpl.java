@@ -14,11 +14,10 @@ import pl.mjurek.notepage.util.ConnectionProvider;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 public class UserDAOImpl implements UserDAO {
 
-    private static final String CREATE_USER =
+    private static final String CREATE =
             "INSERT INTO user(user_name,email,password) VALUES (:name,:email,:password);";
 
 ///////// rest MAIN queries.
@@ -39,7 +38,7 @@ public class UserDAOImpl implements UserDAO {
     public User create(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        int update = template.update(CREATE_USER, parameterSource, keyHolder);
+        int update = template.update(CREATE, parameterSource, keyHolder);
         User resultUser = copyIfUpdateSuccessful(update, user, keyHolder);
         return resultUser;
     }

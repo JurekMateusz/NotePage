@@ -4,6 +4,7 @@ import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.note.NoteDAO;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
+import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.*;
 
 
@@ -56,13 +57,13 @@ public class NoteService {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
 
+        noteDAO.delete(note.getId());
+
         DateNoteService service = new DateNoteService();
         service.delete(note.getDate().getId());
-
-        noteDAO.delete(note.getId());
     }
 
-    public void update(long noteId,NotesControllerOptions action){
+    public void update(long noteId,NotesControllerOptions action) throws UpdateObjectException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
 
@@ -76,6 +77,11 @@ public class NoteService {
             note.setStatusNote(StatusNote.TODO);
         }
         noteDAO.update(note);
+    }
+
+    public Note read(long noteId){
+        NoteDAO noteDAO = getNoteDAO();
+        return noteDAO.read(noteId);
     }
 
     private NoteDAO getNoteDAO() {

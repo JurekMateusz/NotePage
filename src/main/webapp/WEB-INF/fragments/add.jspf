@@ -3,6 +3,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <% String message = (String) request.getAttribute("message"); %>
 <% String description = (String) request.getAttribute("description"); %>
+<% String date = (String) request.getAttribute("date"); %>
+
 <div class="container">
     <br><br><br><br>
     <div class="col-md-8 col-md-offset-2">
@@ -33,12 +35,19 @@
                     Very Important
                 </label>
                 <label>
-                    <input class="form-control" type="text" name="inputDate" id="datepicker" placeholder="YYYY-MM-DD"
+                    <input class="form-control" type="text" name="inputDate" id="datepicker" value="${date}"
+                           placeholder="YYYY-MM-DD"
                            required autofocus>
                 </label>
             </div>
-            <input class="btn btn-lg btn-primary btn-block" type="submit"
-                   value="Add note :)"/>
+            <c:choose>
+                <c:when test="${empty modify}">
+                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Add note :)"/>
+                </c:when>
+                <c:otherwise>
+                    <input class="btn btn-lg btn-warning btn-block" type="submit" value="Save Changes"/>
+                </c:otherwise>
+            </c:choose>
         </form>
     </div>
     <c:if test="${not empty message}">

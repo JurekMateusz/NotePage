@@ -31,6 +31,8 @@ public class LoginController extends HttpServlet {
             request.setAttribute("buffUser", buffUser);
             request.setAttribute("message","Incorrect username or password");
             request.setAttribute("fragment", "");
+            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            return;
         }
 
         request.getRequestDispatcher("/default_note_list").forward(request, response);

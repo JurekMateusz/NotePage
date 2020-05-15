@@ -4,6 +4,7 @@ import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.datenote.DateNoteDAO;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
+import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.DateNote;
 import pl.mjurek.notepage.model.NotesControllerOptions;
 
@@ -30,7 +31,7 @@ public class DateNoteService {
 
         return result;
     }
-    public void update(DateNote dateNote,NotesControllerOptions action){
+    public void update(DateNote dateNote,NotesControllerOptions action) throws UpdateObjectException {
         if(action == NotesControllerOptions.DONE){
             dateNote.setDateUserMadeTask(new Timestamp(new Date().getTime()));
         }

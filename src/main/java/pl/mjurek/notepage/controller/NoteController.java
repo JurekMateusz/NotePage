@@ -1,16 +1,18 @@
 package pl.mjurek.notepage.controller;
 
 import pl.mjurek.notepage.exception.DeleteObjectException;
+import pl.mjurek.notepage.exception.UpdateObjectException;
+import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.NotesControllerOptions;
+import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 @WebServlet("/notes_control")
 public class NoteController extends HttpServlet {
@@ -18,12 +20,6 @@ public class NoteController extends HttpServlet {
         String note_id = request.getParameter("note_id");
         String action = request.getParameter("action");
 
-
-//        HttpSession session = request.getSession(true);
-//        session.setMaxInactiveInterval(10 * 60);
-//        session.setAttribute("loggedUser", loggedUser);
-//    getLastSearchAtribute;
-//
         Long noteId = null;
         NotesControllerOptions actionStatus = null;
         try {
@@ -40,13 +36,33 @@ public class NoteController extends HttpServlet {
                     service.update(noteId, actionStatus);
                     break;
                 case WRENCH:
-                    //TODO send to ..
-                    break;
+//                    request.setAttribute("fragment", "add");
+//                    request.setAttribute("modify", "modify");
+//                    Note note = service.read();
+//                    request.setAttribute("description", note.getDescription());
+//                    request.setAttribute("date", jspFormat(note.getDate().getDateDeadlineNote()));
+//                    request.getRequestDispatcher("WEB-INF/index.js").forward(request, response);
+//                    return;
+                    //TODO WRENCH Controller
                 case DELETE:
                     service.deleteNote(noteId);
             }
-        }catch (DeleteObjectException ex){
-            //TODO
+        } catch (Exception ex) {
+            request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
+            return;
         }
+        String send = "/param_note_list";
+        Cookie[] cookies = request.getCookies();
+        if (cookies.length < 3) {//TODO temporary
+            send = "/default_note_list";
+        }
+//        request.getRequestDispatcher(send).forward(request, response);
+        response.sendRedirect(request.getContextPath()+send);
+    }
+
+    private String jspFormat(Timestamp time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String result = dateFormat.format(time);
+        return result;
     }
 }

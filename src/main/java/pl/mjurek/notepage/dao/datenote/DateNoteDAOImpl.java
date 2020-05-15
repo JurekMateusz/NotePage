@@ -8,8 +8,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
+import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.DateNote;
-import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.util.ConnectionProvider;
 
 import java.sql.ResultSet;
@@ -23,7 +23,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String READ =
             "SELECT date_id,date_stick_note,date_deadline_note,date_user_made_task from date WHERE date_id=:date_id;";
     private static final String UPDATE =
-            "UPDATE date SET date_deadline_note=:deadline, date_user_made_task=:date_user_made_task " +
+            "UPDATE date SET date_deadline_note=:date_deadline_note, date_user_made_task=:date_user_made_task " +
                     "WHERE date_id=:date_id;";
     private static final String DELETE =
             "DELETE FROM date WHERE date_id=:date_id;";
@@ -69,18 +69,18 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     }
 
     @Override
-    public DateNote update(DateNote updateDate) {
+    public DateNote update(DateNote updateDate) throws UpdateObjectException {
         DateNote result = updateDate.toBuilder().build();
-        KeyHolder keyHolder = new GeneratedKeyHolder();
 
         Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("date_id", updateDate.getId());
         paramMap.put("date_deadline_note", updateDate.getDateDeadlineNote());
         paramMap.put("date_user_made_task", updateDate.getDateUserMadeTask());
 
         SqlParameterSource paramSource =new MapSqlParameterSource(paramMap);
-        int update = template.update(UPDATE, paramSource, keyHolder);
-        if (update > 0) {
-            result.setId(keyHolder.getKey().longValue());
+        int update = template.update(UPDATE, paramSource);
+        if (update < 1) {
+           throw new UpdateObjectException();
         }
         return result;
     }

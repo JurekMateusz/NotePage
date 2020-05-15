@@ -9,10 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.model.DateNote;
-import pl.mjurek.notepage.model.ImportantState;
-import pl.mjurek.notepage.model.Note;
-import pl.mjurek.notepage.model.StatusNote;
+import pl.mjurek.notepage.model.*;
 import pl.mjurek.notepage.util.ConnectionProvider;
 
 import java.sql.ResultSet;
@@ -25,45 +22,34 @@ public class NoteDAOImpl implements NoteDAO {
     private static final String CREATE =
             "INSERT INTO note(description,  date_id, user_id, important_state, status_note)" +
                     "VALUES(:description, :date_id, :user_id, :important_state, :status_note);";
-    private static final String READ =
+
+    private static final String READ_BY_USER_ID =
             "SELECT note_id, description, note.date_id, user_id, status_note, important_state " +
                     ",date.date_id, date_stick_note, date_deadline_note, date_user_made_task" +
                     " FROM note JOIN date ON note.date_id=date.date_id WHERE user_id=:user_id;";
+    private static final String READ =
+            "SELECT note_id, description, note.date_id, note.user_id, status_note, important_state," +
+            "date.date_id, date_stick_note, date_deadline_note, date_user_made_task," +
+            "user.user_id,user_name,email FROM note JOIN date ON note.date_id=date.date_id" +
+                    " JOIN user ON note.user_id=user.user_id WHERE note_id=:note_id;";
+
     private static final String UPDATE =
             "UPDATE note SET description=:description, date_id=:date_id, user_id=:user_id," +
                     " status_note=:status_note, important_state=:important_state WHERE note_id=:note_id;";
+
+    private static final String DELETE =
+            "DELETE FROM note WHERE note_id=:note_id;";
+
     private static final String GET_ALL_BY_STATUS =
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE status_note=:status_note AND user_id=:user_id;";
 
-    private static final String DELETE =
-            "DELETE FROM note WHERE note_id=:note_id;";
-
     private NamedParameterJdbcTemplate template;
 
     public NoteDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
-    }
-
-    @Override
-    public List<Note> getAll(long user_id) {
-        SqlParameterSource parameterSource = new MapSqlParameterSource("user_id", user_id);
-        return template.query(READ, parameterSource, new NoteRowMapper());
-    }
-
-    @Override
-    public List<Note> getAll(long user_id, StatusNote state) {
-        SqlParameterSource parameterSource = getSqlParamSource(user_id, state);
-        return template.query(GET_ALL_BY_STATUS, parameterSource, new NoteRowMapper());
-    }
-
-    private SqlParameterSource getSqlParamSource(long user_id, StatusNote state) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("user_id", user_id);
-        paramMap.put("status_note", state.name());
-        return new MapSqlParameterSource(paramMap);
     }
 
     @Override
@@ -80,31 +66,21 @@ public class NoteDAOImpl implements NoteDAO {
         return copyNote;
     }
 
-    private SqlParameterSource getSqlParamSource(Note note) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("description", note.getDescription());
-        paramMap.put("date_id", note.getDate().getId());
-        paramMap.put("user_id", note.getUser().getId());
-        paramMap.put("status_note", note.getStatusNote().name());
-        paramMap.put("important_state", note.getImportantState().name());
-        return new MapSqlParameterSource(paramMap);
-    }
-
     @Override
     public Note read(Long noteId) {
         SqlParameterSource paramSource = new MapSqlParameterSource("note_id", noteId);
-        Note note = template.queryForObject(READ, paramSource, new NoteRowMapper());
+        Note note = template.queryForObject(READ, paramSource, new NoteFullRowMapper());
         return note;
     }
 
     @Override
-    public Note update(Note updateNote) {
+    public Note update(Note updateNote) throws UpdateObjectException {
         Note result = updateNote.toBuilder().build();
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         SqlParameterSource paramSource = getSqlParamSource(result);
-        int update = template.update(UPDATE, paramSource, keyHolder);
-        if (update > 0) {
-            result.setId(keyHolder.getKey().longValue());
+        int update = template.update(UPDATE, paramSource);
+        if (update < 1) {
+            throw new UpdateObjectException();
         }
         return result;
     }
@@ -118,6 +94,64 @@ public class NoteDAOImpl implements NoteDAO {
         }
     }
 
+    @Override
+    public List<Note> getAll(long user_id) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("user_id", user_id);
+        return template.query(READ_BY_USER_ID, parameterSource, new NoteRowMapper());
+    }
+
+    @Override
+    public List<Note> getAll(long user_id, StatusNote state) {
+        SqlParameterSource parameterSource = getSqlParamSource(user_id, state);
+        return template.query(GET_ALL_BY_STATUS, parameterSource, new NoteRowMapper());
+    }
+
+    private SqlParameterSource getSqlParamSource(long user_id, StatusNote state) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("user_id", user_id);
+        paramMap.put("status_note", state.name());
+        return new MapSqlParameterSource(paramMap);
+    }
+
+
+    private SqlParameterSource getSqlParamSource(Note note) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("description", note.getDescription());
+        paramMap.put("date_id", note.getDate().getId());
+        paramMap.put("user_id", note.getUser().getId());
+        paramMap.put("status_note", note.getStatusNote().name());
+        paramMap.put("important_state", note.getImportantState().name());
+        paramMap.put("note_id", note.getId());
+        return new MapSqlParameterSource(paramMap);
+    }
+
+
+    private class NoteFullRowMapper implements RowMapper<Note> {
+        @Override
+        public Note mapRow(ResultSet resultSet, int i) throws SQLException {
+            DateNote date = DateNote.builder()
+                    .id(resultSet.getLong("date_id"))
+                    .dateStickNote(resultSet.getTimestamp("date_stick_note"))
+                    .dateDeadlineNote(resultSet.getTimestamp("date_deadline_note"))
+                    .dateUserMadeTask(resultSet.getTimestamp("date_user_made_task"))
+                    .build();
+            User user = User.builder()
+                    .id(resultSet.getLong("user_id"))
+                    .name(resultSet.getString("user_name"))
+                    .email(resultSet.getString("email"))
+                    .build();
+            Note note = Note.builder()
+                    .id(resultSet.getLong("note_id"))
+                    .description(resultSet.getString("description"))
+                    .importantState(ImportantState.valueOf(resultSet.getString("important_state")))
+                    .date(date)
+                    .statusNote(StatusNote.valueOf(resultSet.getString("status_note")))
+                    .user(user)
+                    .build();
+
+            return note;
+        }
+    }
     private class NoteRowMapper implements RowMapper<Note> {
         @Override
         public Note mapRow(ResultSet resultSet, int i) throws SQLException {

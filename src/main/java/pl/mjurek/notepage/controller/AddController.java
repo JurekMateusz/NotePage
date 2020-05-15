@@ -39,11 +39,11 @@ public class AddController extends HttpServlet {
             request.setAttribute("message", "Invalid date");
 
             request.setAttribute("description", description);
+            request.setAttribute("date", deadlineDate);
             request.setAttribute("fragment", "add");
             request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
             return;
         }
-
         request.getRequestDispatcher("/default_note_list").forward(request, response);
     }
 

@@ -23,4 +23,7 @@ public class DefaultNoteController extends HttpServlet {
         request.setAttribute("fragment", "notes");
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
+    protected void goGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request,response);
+    }
 }
