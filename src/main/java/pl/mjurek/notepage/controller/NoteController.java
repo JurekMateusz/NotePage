@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 
 @WebServlet("/notes_control")
 public class NoteController extends HttpServlet {
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String note_id = request.getParameter("note_id");
         String action = request.getParameter("action");
@@ -36,13 +37,8 @@ public class NoteController extends HttpServlet {
                     service.update(noteId, actionStatus);
                     break;
                 case WRENCH:
-//                    request.setAttribute("fragment", "add");
-//                    request.setAttribute("modify", "modify");
-//                    Note note = service.read();
-//                    request.setAttribute("description", note.getDescription());
-//                    request.setAttribute("date", jspFormat(note.getDate().getDateDeadlineNote()));
-//                    request.getRequestDispatcher("WEB-INF/index.js").forward(request, response);
-//                    return;
+                    request.getRequestDispatcher("/wrench").forward(request, response);
+                    return;
                     //TODO WRENCH Controller
                 case DELETE:
                     service.deleteNote(noteId);
@@ -56,8 +52,8 @@ public class NoteController extends HttpServlet {
         if (cookies.length < 3) {//TODO temporary
             send = "/default_note_list";
         }
-//        request.getRequestDispatcher(send).forward(request, response);
-        response.sendRedirect(request.getContextPath()+send);
+        request.getRequestDispatcher(send).forward(request, response);
+//        response.sendRedirect(request.getContextPath() + send);
     }
 
     private String jspFormat(Timestamp time) {

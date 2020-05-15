@@ -32,7 +32,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#">All notes</a>
+                    <a href="${pageContext.request.contextPath}/default_note_list?all=true">All notes</a>
                 </li>
                 <li><a href="#">Account</a></li>
 

@@ -21,10 +21,10 @@
 <!--    </user-data-constraint>-->
 <!--  </security-constraint>-->
 
-  <error-page>
-    <error-code>405</error-code>
-    <location>/WEB-INF/error.jsp</location>
-  </error-page>
+<!--  <error-page>-->
+<!--    <error-code>405</error-code>-->
+<!--    <location>/WEB-INF/error.jsp</location>-->
+<!--  </error-page>-->
   <jsp-config>
     <jsp-property-group>
       <url-pattern>*.jsp</url-pattern>

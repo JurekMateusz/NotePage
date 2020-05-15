@@ -48,10 +48,16 @@ public class NoteService {
         return result;
     }
 
-    public List<Note> getAllTODONotes(long userId) {
+    public List<Note> getAll(long userId) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.getAll(userId, StatusNote.TODO);
+        return noteDAO.getAll(userId);
     }
+
+    public List<Note> getAll(long userId, StatusNote status) {
+        NoteDAO noteDAO = getNoteDAO();
+        return noteDAO.getAll(userId, status);
+    }
+
 
     public void deleteNote(long noteId) throws DeleteObjectException {
         NoteDAO noteDAO = getNoteDAO();
@@ -63,23 +69,23 @@ public class NoteService {
         service.delete(note.getDate().getId());
     }
 
-    public void update(long noteId,NotesControllerOptions action) throws UpdateObjectException {
+    public void update(long noteId, NotesControllerOptions action) throws UpdateObjectException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
 
         DateNoteService dateNoteService = new DateNoteService();
-        dateNoteService.update(note.getDate(),action);
+        dateNoteService.update(note.getDate(), action);
 
-        if(action == NotesControllerOptions.DONE){
+        if (action == NotesControllerOptions.DONE) {
             note.setStatusNote(StatusNote.MADE);
         }
-        if(action == NotesControllerOptions.TODO){
+        if (action == NotesControllerOptions.TODO) {
             note.setStatusNote(StatusNote.TODO);
         }
         noteDAO.update(note);
     }
 
-    public Note read(long noteId){
+    public Note read(long noteId) {
         NoteDAO noteDAO = getNoteDAO();
         return noteDAO.read(noteId);
     }
