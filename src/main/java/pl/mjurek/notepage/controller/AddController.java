@@ -1,7 +1,6 @@
 package pl.mjurek.notepage.controller;
 
 import pl.mjurek.notepage.exception.AddObjectException;
-import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.NoteService;
 
@@ -16,35 +15,34 @@ import java.text.ParseException;
 @WebServlet("/add")
 public class AddController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String destination = "/default_note_list";
+
         request.setCharacterEncoding("UTF-8");
+        User authenticatedUser = (User) request.getSession().getAttribute("loggedUser");
 
         String description = request.getParameter("inputDescription").trim();
         String importantState = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
-        User authenticatedUser = (User) request.getSession().getAttribute("loggedUser");
-
-        Note note = null;
         NoteService noteService = new NoteService();
         try {
-            note = noteService.addNote(authenticatedUser, description, importantState, deadlineDate);
+            noteService.addNote(authenticatedUser, description, importantState, deadlineDate);
         } catch (AddObjectException ex) {
-            request.setAttribute("message", "Can't add note");
-
-            request.setAttribute("description", description);
+            request.setAttribute("errorMessage","Can't add note");
+            request.setAttribute("noteDescription", description);
             request.setAttribute("fragment", "add");
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            return;
-        } catch (ParseException ex) {
-            request.setAttribute("message", "Invalid date");
 
-            request.setAttribute("description", description);
+            destination = "/WEB-INF/index.jsp";
+        } catch (ParseException ex) {
+            request.setAttribute("errorMessage", "Invalid date");
+            request.setAttribute("noteDescription", description);
             request.setAttribute("date", deadlineDate);
             request.setAttribute("fragment", "add");
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            return;
+
+            destination = "/WEB-INF/index.jsp";
         }
-        request.getRequestDispatcher("/default_note_list").forward(request, response);
+
+        request.getRequestDispatcher(destination).forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

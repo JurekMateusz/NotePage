@@ -3,7 +3,6 @@
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<% User loggedUser = (User) request.getAttribute("loggedUser"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +38,7 @@
                 <h2>
                     403 Not Found</h2>
                 <div class="error-details">
-                    Sorry, an error has occured!
+                    <c:out value="${errorMessage}"></c:out>
                 </div>
                 <div class="error-actions">
                     <a href="${pageContext.request.contextPath}/" class="btn btn-primary btn-lg">

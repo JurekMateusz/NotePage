@@ -34,40 +34,36 @@ public class RegisterController extends HttpServlet {
 
         if (isAnyParamNull(username, email, password, repeatPassword)) {
             String message = "Fill all form";
-            setAttributeAndForward(message, user, request, response);
+            setAttributeAndForward( user, request, response);
+            return;
         }
         if (!password.equals(repeatPassword)) {
             String message = "Passwords not the same";
-            setAttributeAndForward(message, user, request, response);
+            setAttributeAndForward( user, request, response);
+            return;
         }
 
         UserService userService = new UserService();
 
         if (userService.isNameExisting(username)) {
-            String message = "User exist";
-            setAttributeAndForward(message, user, request, response);
+            request.setAttribute("message","User exist");
+            setAttributeAndForward(user, request, response);
             return;
         }
 
         if (userService.isEmailExisting(email)) {
-            String message = "Email exist";
-            setAttributeAndForward(message, user, request, response);
+            request.setAttribute("message", "Email exist");
+            setAttributeAndForward(user, request, response);
             return;
         }
 
-
-        User resultUser = null;
         try {
-            resultUser = userService.addUser(user);
+           userService.addUser(user);
         } catch (AddObjectException e) {
-            e.printStackTrace();
-        }
-
-        if (resultUser == null) {
+            request.setAttribute("errorMessage","add user to DB fail");
             request.getRequestDispatcher(request.getContextPath()+"/WEB-INF/error.jsp").forward(request, response);
             return;
         }
-
         request.getRequestDispatcher("/default_note_list").forward(request, response);
     }
 
@@ -75,9 +71,8 @@ public class RegisterController extends HttpServlet {
         return username == null || email == null || password == null || repeatPassword == null;
     }
 
-    private void setAttributeAndForward(String message, User user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void setAttributeAndForward( User user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("fragment","register");
-        request.setAttribute("message", message);
         request.setAttribute("user", user);
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }

@@ -1,9 +1,7 @@
-<%@ page import="pl.mjurek.notepage.model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<% User loggedUser = (User) request.getAttribute("loggedUser"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,13 +27,9 @@
 
 <jsp:include page="fragments/navbar.jspf"/>
 
-<% String fragment = (String) request.getAttribute("fragment"); %>
 <c:choose>
     <c:when test="${fragment eq 'register'}">
         <jsp:include page="fragments/register.jspf"/>
-    </c:when>
-    <c:when test="${fragment eq 'error'}">
-        <jsp:include page="fragments/error.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'notes'}">
         <jsp:include page="fragments/notes.jspf"/>

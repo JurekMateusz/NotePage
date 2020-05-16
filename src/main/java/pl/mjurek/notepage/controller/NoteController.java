@@ -43,13 +43,15 @@ public class NoteController extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
             return;
         }
-        String send = "/param_note_list";
+
+        String destination;
         Cookie[] cookies = request.getCookies();
         if (cookies.length < 3) {//TODO temporary
-            send = "/default_note_list";
+            destination = "/default_note_list";
+        } else {
+            destination = "/param_note_list";
         }
-        request.getRequestDispatcher(send).forward(request, response);
-//        response.sendRedirect(request.getContextPath() + send);
+        request.getRequestDispatcher(destination).forward(request, response);
     }
 
     private String jspFormat(Timestamp time) {

@@ -6,15 +6,21 @@ import pl.mjurek.notepage.model.ImportantState;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.NotesControllerOptions;
 import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.service.DateNoteService;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 
 @WebServlet("/wrench")
 public class WrenchController extends HttpServlet {
@@ -22,22 +28,17 @@ public class WrenchController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String description = request.getParameter("inputDescription").trim();
-        String importantState = request.getParameter("importantState");
+        String importantStatus = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
-        User authenticatedUser = (User) request.getSession().getAttribute("loggedUser");
-        String id = request.getParameter("note_id");
+        Long noteId = (Long) request.getSession().getAttribute("note_id");
+        Long dateId = (Long) request.getSession().getAttribute("date_id");
 
-        Long dateId = Long.parseLong(id);
-
-        Note note = Note.builder()
-                .id(dateId)
-                .description(description)
-                .importantState(ImportantState.valueOf(importantState))
-                .build();
         NoteService noteService = new NoteService();
+        DateNoteService dateNoteService = new DateNoteService();
         try {
-            noteService.update(note,deadlineDate);
+            noteService.update(noteId,description,importantStatus);
+            dateNoteService.update(dateId,deadlineDate);
         } catch (UpdateObjectException ex) {
             request.setAttribute("message", "Can't update note");
 
@@ -49,7 +50,7 @@ public class WrenchController extends HttpServlet {
             request.setAttribute("message", "Invalid date");
 
             request.setAttribute("description", description);
-            request.setAttribute("dateString", deadlineDate);
+            request.setAttribute("date", deadlineDate);
             request.setAttribute("fragment", "add");
             request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
             return;
@@ -70,11 +71,16 @@ public class WrenchController extends HttpServlet {
         NoteService service = new NoteService();
         Note note = service.read(noteId);
 
+        String date = new SimpleDateFormat("MM/dd/yyyy").format(note.getDate().getDateDeadlineNote());
+
+
+        request.getSession(false).setAttribute("note_id", noteId);
+        request.getSession(false).setAttribute("date_id", note.getDate().getId());
+
         request.setAttribute("description", note.getDescription());
-        request.setAttribute("dateString", note.getDate().toString());
+        request.setAttribute("date", date);
         request.setAttribute("modify", "modify");
         request.setAttribute("fragment", "add");
-        request.setAttribute("note_id", note_id);
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
 }

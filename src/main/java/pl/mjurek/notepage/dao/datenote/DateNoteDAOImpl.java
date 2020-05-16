@@ -27,8 +27,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
             "UPDATE date SET date_deadline_note=:date_deadline_note, date_user_made_task=:date_user_made_task " +
                     "WHERE date_id=:date_id;";
     private static final String UPDATE_DEADLINE =
-            "UPDATE date SET date_deadline_note=:date_deadline_note" +
-                    " WHERE date_id=:date_id;";
+            "UPDATE date SET date_deadline_note=:date_deadline_note WHERE date_id=:date_id;";
     private static final String DELETE =
             "DELETE FROM date WHERE date_id=:date_id;";
 

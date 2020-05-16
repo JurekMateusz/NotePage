@@ -36,6 +36,8 @@ public class NoteDAOImpl implements NoteDAO {
     private static final String UPDATE =
             "UPDATE note SET description=:description, date_id=:date_id, user_id=:user_id," +
                     " status_note=:status_note, important_state=:important_state WHERE note_id=:note_id;";
+    private static final String UPDATE_DESCRIPTION_IMPORTANT_STATE =
+            "UPDATE note SET description=:description,important_state=:important_state WHERE note_id=:note_id;";
 
     private static final String DELETE =
             "DELETE FROM note WHERE note_id=:note_id;";
@@ -84,7 +86,23 @@ public class NoteDAOImpl implements NoteDAO {
         }
         return result;
     }
+    @Override
+    public Note update(long noteId,String description,String importantStatus) throws UpdateObjectException {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("note_id", noteId);
+        paramMap.put("description", description);
+        paramMap.put("important_state",importantStatus);
 
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+        int update = template.update(UPDATE_DESCRIPTION_IMPORTANT_STATE, paramSource);
+        if (update < 1) {
+            throw new UpdateObjectException();
+        }
+        return Note.builder()
+                .description(description)
+                .importantState(ImportantState.valueOf(importantStatus.toUpperCase()))
+                .build();
+    }
 
     @Override
     public void delete(Long key) throws DeleteObjectException {

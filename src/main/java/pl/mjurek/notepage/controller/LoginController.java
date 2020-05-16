@@ -29,10 +29,8 @@ public class LoginController extends HttpServlet {
             request.setAttribute("fragment", "notes");
         } else {
             request.setAttribute("buffUser", buffUser);
-            request.setAttribute("message","Incorrect username or password");
-            request.setAttribute("fragment", "");
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            return;
+            request.setAttribute("fragment", "");//default login page
+            request.setAttribute("errorMessage", "Incorrect username or password");
         }
 
         request.getRequestDispatcher("/default_note_list").forward(request, response);
@@ -61,5 +59,9 @@ public class LoginController extends HttpServlet {
         HttpSession session = request.getSession(true);
         session.setMaxInactiveInterval(10 * 60);
         session.setAttribute("loggedUser", loggedUser);
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }
 }

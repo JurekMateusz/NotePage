@@ -38,7 +38,7 @@ public class NoteService {
         return result;
     }
 
-    private ImportantState createEnum(String state) {
+    public static ImportantState createEnum(String state) {
         ImportantState result = ImportantState.JUST_REMEMBER;
         try {
             result = ImportantState.valueOf(state.toUpperCase());
@@ -69,17 +69,9 @@ public class NoteService {
         service.delete(note.getDate().getId());
     }
 
-    public void update(Note note,String deadline) throws UpdateObjectException, ParseException {
+    public void update(long dateId,String description,String importantStatus) throws UpdateObjectException, ParseException {
         NoteDAO noteDAO = getNoteDAO();
-        Note result = noteDAO.read(note.getId());
-
-        DateNoteService dateNoteService = new DateNoteService();
-        dateNoteService.update(note.getDate().getId(),deadline);
-
-        result.setDescription(note.getDescription());
-        result.setStatusNote(note.getStatusNote());
-
-        noteDAO.update(result);
+        noteDAO.update(dateId,description,importantStatus);
     }
 
     public void update(long noteId, NotesControllerOptions action) throws UpdateObjectException {
