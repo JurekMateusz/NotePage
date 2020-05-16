@@ -28,6 +28,11 @@ public class DefaultNoteController extends HttpServlet {
         } else {
             notes = service.getAll(loggedUser.getId());
         }
+//        notes.forEach(note -> {
+//            String description = note.getDescription();
+//            String converted = description.replace("\n","\r\n");
+//            note.setDescription(converted);
+//        });
         request.setAttribute("notesList", notes);
         request.setAttribute("fragment", "notes");
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);

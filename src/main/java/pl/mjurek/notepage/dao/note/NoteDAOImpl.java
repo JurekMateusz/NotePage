@@ -23,10 +23,6 @@ public class NoteDAOImpl implements NoteDAO {
             "INSERT INTO note(description,  date_id, user_id, important_state, status_note)" +
                     "VALUES(:description, :date_id, :user_id, :important_state, :status_note);";
 
-    private static final String READ_BY_USER_ID =
-            "SELECT note_id, description, note.date_id, user_id, status_note, important_state " +
-                    ",date.date_id, date_stick_note, date_deadline_note, date_user_made_task" +
-                    " FROM note JOIN date ON note.date_id=date.date_id WHERE user_id=:user_id;";
     private static final String READ =
             "SELECT note_id, description, note.date_id, note.user_id, status_note, important_state," +
             "date.date_id, date_stick_note, date_deadline_note, date_user_made_task," +
@@ -41,6 +37,11 @@ public class NoteDAOImpl implements NoteDAO {
 
     private static final String DELETE =
             "DELETE FROM note WHERE note_id=:note_id;";
+
+    private static final String READ_ALL_BY_USER_ID =
+            "SELECT note_id, description, note.date_id, user_id, status_note, important_state " +
+                    ",date.date_id, date_stick_note, date_deadline_note, date_user_made_task" +
+                    " FROM note JOIN date ON note.date_id=date.date_id WHERE user_id=:user_id;";
 
     private static final String GET_ALL_BY_STATUS =
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
@@ -116,7 +117,7 @@ public class NoteDAOImpl implements NoteDAO {
     @Override
     public List<Note> getAll(long user_id) {
         SqlParameterSource parameterSource = new MapSqlParameterSource("user_id", user_id);
-        return template.query(READ_BY_USER_ID, parameterSource, new NoteRowMapper());
+        return template.query(READ_ALL_BY_USER_ID, parameterSource, new NoteRowMapper());
     }
 
     @Override
@@ -159,6 +160,7 @@ public class NoteDAOImpl implements NoteDAO {
                     .name(resultSet.getString("user_name"))
                     .email(resultSet.getString("email"))
                     .build();
+
             Note note = Note.builder()
                     .id(resultSet.getLong("note_id"))
                     .description(resultSet.getString("description"))
@@ -180,6 +182,7 @@ public class NoteDAOImpl implements NoteDAO {
                     .dateDeadlineNote(resultSet.getTimestamp("date_deadline_note"))
                     .dateUserMadeTask(resultSet.getTimestamp("date_user_made_task"))
                     .build();
+
             Note note = Note.builder()
                     .id(resultSet.getLong("note_id"))
                     .description(resultSet.getString("description"))

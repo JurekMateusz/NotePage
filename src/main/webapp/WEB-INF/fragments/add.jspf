@@ -21,7 +21,7 @@
                 <%--            </div>--%>
 
                 <textarea name="inputDescription" rows="7" maxlength="1000"
-                          class="form-control" required><c:out value="${description}"/>
+                          class="form-control" required><c:out value="${noteDescription}" escapeXml="false"/>
             </textarea>
 
                 <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">

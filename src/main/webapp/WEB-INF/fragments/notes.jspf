@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="pl.mjurek.notepage.model.ImportantState" %>
 <%@ page import="pl.mjurek.notepage.model.StatusNote" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <br><br><br><br>
 <jsp:useBean id="now" class="java.util.Date"/>
@@ -46,7 +47,8 @@
                         <%--                                <p> Status: <c:out value="${note.importantState}"/></p>--%>
                 </medium>
             </h6>
-            <p><c:out value="${note.description}"/></p>
+
+            <p><c:out value="${note.description}" escapeXml="false"/></p>
         </div>
         <div class="col col-md-1 col-sm-2">
             <c:if test="${note.statusNote eq StatusNote.TODO}">

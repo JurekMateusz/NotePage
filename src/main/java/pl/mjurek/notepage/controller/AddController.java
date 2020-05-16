@@ -14,6 +14,7 @@ import java.text.ParseException;
 
 @WebServlet("/add")
 public class AddController extends HttpServlet {
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String destination = "/default_note_list";
 
@@ -24,11 +25,13 @@ public class AddController extends HttpServlet {
         String importantState = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
+        String converted = description.replaceAll("(\r\n|\n)", "<br>");
+
         NoteService noteService = new NoteService();
         try {
-            noteService.addNote(authenticatedUser, description, importantState, deadlineDate);
+            noteService.addNote(authenticatedUser, converted, importantState, deadlineDate);
         } catch (AddObjectException ex) {
-            request.setAttribute("errorMessage","Can't add note");
+            request.setAttribute("errorMessage", "Can't add note");
             request.setAttribute("noteDescription", description);
             request.setAttribute("fragment", "add");
 
@@ -45,8 +48,13 @@ public class AddController extends HttpServlet {
         request.getRequestDispatcher(destination).forward(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("fragment", "add");
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+    }
+
+    private String preareDescriptionBeforeSave(String description) {
+        return null;
     }
 }
