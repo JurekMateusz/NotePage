@@ -1,0 +1,41 @@
+<%@ page import="pl.mjurek.notepage.model.User" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<div class="container">
+    <form>
+        <h1>Sort note:</h1>
+        <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+            <label class="btn btn-success active">
+                <input type="radio" class="btn btn-success btn-md active" name="type"
+                       value="made_notes" checked>
+                MADE notes
+            </label>
+            <label class="btn btn-warning">
+                <input type="radio" class="btn btn-warning btn-md" name="type" value="all_notes">
+                ALL notes
+            </label>
+            <label class="btn btn-danger">
+                <input type="radio" class="btn btn-danger btn-md" name="type" value="todo_notes">
+                TODO notes
+            </label>
+        </div>
+        <h1>Sort By:</h1>
+        <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+            <label class="btn btn-success active">
+                <input type="radio" class="btn btn-success btn-md active" name="sort_by"
+                       value="nearest_deadline" checked>
+                Nearest deadline
+            </label>
+            <label class="btn btn-warning">
+                <input type="radio" class="btn btn-warning btn-md" name="sort_by" value="farthest_deadline">
+                farthest deadline
+            </label>
+            <label class="btn btn-danger">
+                <input type="radio" class="btn btn-danger btn-md" name="sort_by" value="stick_date">
+                Stick date
+            </label>
+        </div>
+        <br>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Look to notes"/>
+    </form>
+</div>

@@ -12,7 +12,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styless.css">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -21,11 +21,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
 <jsp:include page="fragments/navbar.jspf"/>
+<br><br><br><br>
 
 <c:choose>
     <c:when test="${fragment eq 'register'}">
@@ -36,6 +39,9 @@
     </c:when>
     <c:when test="${fragment eq 'add'}">
         <jsp:include page="fragments/add.jspf"/>
+    </c:when>
+    <c:when test="${fragment eq 'search'}">
+        <jsp:include page="fragments/search.jspf"/>
     </c:when>
     <c:otherwise>
         <jsp:include page="fragments/login.jspf"/>
@@ -56,6 +62,16 @@
 <script>
     $(function () {
         $("#datepicker").datepicker();
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable div").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
     });
 </script>
 </body>

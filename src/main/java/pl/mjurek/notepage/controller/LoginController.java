@@ -18,6 +18,7 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("inputUsername").trim();
         String password = request.getParameter("inputPassword");
+        String destination = "/default_note_list";
 
         User buffUser = User.builder()
                 .name(username)
@@ -31,9 +32,11 @@ public class LoginController extends HttpServlet {
             request.setAttribute("buffUser", buffUser);
             request.setAttribute("fragment", "");//default login page
             request.setAttribute("errorMessage", "Incorrect username or password");
+
+            destination = "WEB-INF/index.jsp";
         }
 
-        request.getRequestDispatcher("/default_note_list").forward(request, response);
+        request.getRequestDispatcher(destination).forward(request, response);
     }
 
     private boolean isCorrectAndExist(User user) {
@@ -60,8 +63,9 @@ public class LoginController extends HttpServlet {
         session.setMaxInactiveInterval(10 * 60);
         session.setAttribute("loggedUser", loggedUser);
     }
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
 }

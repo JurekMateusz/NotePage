@@ -5,12 +5,11 @@
 <%@ page import="pl.mjurek.notepage.model.StatusNote" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<br><br><br><br>
 <jsp:useBean id="now" class="java.util.Date"/>
 <c:if test="${not empty requestScope.notesList}">
     <c:forEach var="note" items="${requestScope.notesList}">
 
-        <div class="container">
+        <div class="container" id="myTable">
         <c:choose>
             <c:when test="${note.importantState eq ImportantState.JUST_REMEMBER  && note.statusNote eq StatusNote.TODO}">
                 <div class="row bs-callout bs-callout-default col-sm-offset-1">
@@ -52,12 +51,12 @@
         </div>
         <div class="col col-md-1 col-sm-2">
             <c:if test="${note.statusNote eq StatusNote.TODO}">
-                <a href="${pageContext.request.contextPath}/notes_control?note_id=${note.id}&action=DONE"
+                <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DONE"
                    class="btn btn-block btn-primary btn-success"><span
                         class="glyphicon glyphicon-ok-circle"></span> </a>
             </c:if>
             <c:if test="${note.statusNote eq StatusNote.MADE}">
-                <a href="${pageContext.request.contextPath}/notes_control?note_id=${note.id}&action=TODO"
+                <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=TODO"
                    class="btn btn-block btn-primary btn-warning"><span
                         class="glyphicon glyphicon-repeat"></span> </a>
             </c:if>
@@ -65,7 +64,7 @@
                class="btn btn-block btn-primary btn-warning"><span
                     class="glyphicon glyphicon-wrench"></span> </a>
 
-            <a href="${pageContext.request.contextPath}/notes_control?note_id=${note.id}&action=DELETE"
+            <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DELETE"
                class="btn btn-block btn-primary btn-danger"><span
                     class="glyphicon glyphicon-trash"></span> </a>
         </div>

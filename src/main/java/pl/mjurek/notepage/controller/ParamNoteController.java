@@ -13,8 +13,10 @@ public class ParamNoteController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setAttribute("fragment", "search");
+        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
 }

@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styless.css">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"

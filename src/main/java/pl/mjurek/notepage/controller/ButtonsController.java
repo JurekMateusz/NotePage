@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-@WebServlet("/notes_control")
-public class NoteController extends HttpServlet {
+@WebServlet("/button_control")
+public class ButtonsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String note_id = request.getParameter("note_id");
@@ -45,18 +45,14 @@ public class NoteController extends HttpServlet {
         }
 
         String destination;
-        Cookie[] cookies = request.getCookies();
-        if (cookies.length < 3) {//TODO temporary
-            destination = "/default_note_list";
-        } else {
-            destination = "/param_note_list";
-        }
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies.length < 3) {//TODO temporary
+//            destination = "/default_note_list";
+//        } else {
+//            destination = "/param_note_list";
+//        }
+        destination = "/default_note_list";
         request.getRequestDispatcher(destination).forward(request, response);
     }
 
-    private String jspFormat(Timestamp time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String result = dateFormat.format(time);
-        return result;
-    }
 }

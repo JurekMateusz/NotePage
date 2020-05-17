@@ -1,40 +1,33 @@
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <nav class="navbar navbar-inverse navbar-fixed-top navbar-expand-lg">
     <div class="container">
-
-        <a class="navbar-brand" href="https://github.com/JurekMateusz">
+        <a class="navbar-brand" href="default_note_list">
             <img src="${pageContext.request.contextPath}/resources/img/note.jpg" width="30" height="30" alt=""></a>
 
         <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
             <span class="glyphicon glyphicon-list " style="color:blue"></span>
         </button>
 
-
         <div class="collapse navbar-collapse navHeaderCollapse">
 
             <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item" id="search">
+                    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/add">Add Note</a>
                 </li>
 
-                <li class="nav-item  dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button"
-                       aria-expanded="false" id="submenu" aria-haspopup="true">Sort By:</a>
-                    <div class="dropdown-menu" aria-labelledby="submenu">
-                        <a class="dropdown-item"><input type="submit" hidden>From Most Important</a>
-                        <a class="dropdown-item"><input type="submit" hidden>Important </a>
-
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item "><input type="submit" hidden>Nearest deadline</a>
-                        <a class="dropdown-item"><input type="submit" hidden>Farthest deadline </a>
-                    </div>
+                <li class="nav-item">
+                    <a href="${pageContext.request.contextPath}/param_note_list">Search Notes</a>
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/default_note_list?all=true">All notes</a>
                 </li>
-                <li><a href="#">Account</a></li>
+<%--                <li><a href="#">Account</a></li>--%>
 
                 <c:if test="${not empty sessionScope.loggedUser}">
                     <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
