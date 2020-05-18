@@ -76,7 +76,7 @@ public class WrenchController extends HttpServlet {
         request.getSession(false).setAttribute("note_id", noteId);
         request.getSession(false).setAttribute("date_id", note.getDate().getId());
 
-        request.setAttribute("description", note.getDescription());
+        request.setAttribute("noteDescription", note.getDescription());
         request.setAttribute("date", date);
         request.setAttribute("modify", "modify");
         request.setAttribute("fragment", "add");

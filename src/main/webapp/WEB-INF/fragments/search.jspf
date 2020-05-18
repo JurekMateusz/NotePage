@@ -2,46 +2,48 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class="container">
-    <form>
-        <h1>Sort note:</h1>
-        <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-            <label class="btn btn-success active">
-                <input type="radio" class="btn btn-success btn-md active" name="type" value="MADE" checked>
-                MADE notes
-            </label>
-            <label class="btn btn-warning">
-                <input type="radio" class="btn btn-warning btn-md" name="type" value="ALL">
-                ALL notes
-            </label>
-            <label class="btn btn-danger">
-                <input type="radio" class="btn btn-danger btn-md" name="type" value="TODO">
-                TODO notes
-            </label>
-        </div>
-        <h1>Sort By Column:</h1>
-        <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-            <label class="btn btn-success active">
-                <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
-                       value="date_stick_note" checked>
-                Date Stick Note
-            </label>
-            <label class="btn btn-warning">
-                <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="date_deadline_note">
-                Date Deadline Note
-            </label>
-        </div>
-        <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-            <label class="btn btn-success active">
-                <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
-                       value="natural" checked>
-                Natural Order
-            </label>
-            <label class="btn btn-warning">
-                <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="desc">
-                Descending Order
-            </label>
-        </div>
-        <br>
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Look to notes"/>
-    </form>
+    <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <form action="param_note_list" method="post">
+            <h1>Sort note:</h1>
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                <label class="btn btn-success active">
+                    <input type="radio" class="btn btn-success btn-md active" name="type" value="MADE" checked>
+                    MADE notes
+                </label>
+                <label class="btn btn-warning">
+                    <input type="radio" class="btn btn-warning btn-md" name="type" value="ALL">
+                    ALL notes
+                </label>
+                <label class="btn btn-danger">
+                    <input type="radio" class="btn btn-danger btn-md" name="type" value="TODO">
+                    TODO notes
+                </label>
+            </div>
+            <h1>Sort By Column:</h1>
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                <label class="btn btn-success active">
+                    <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
+                           value="date_stick_note" checked>
+                    Date Stick Note
+                </label>
+                <label class="btn btn-warning">
+                    <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="date_deadline_note">
+                    Date Deadline Note
+                </label>
+            </div>
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                <label class="btn btn-success active">
+                    <input type="radio" class="btn btn-success btn-md active" name="order"
+                           value="natural" checked>
+                    Natural Order
+                </label>
+                <label class="btn btn-warning">
+                    <input type="radio" class="btn btn-warning btn-md" name="order" value="desc">
+                    Descending Order
+                </label>
+            </div>
+            <br>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Look to notes"/>
+        </form>
+    </div>
 </div>

@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-inverse navbar-fixed-top navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="default_note_list">
+        <a class="navbar-brand" href="note_list">
             <img src="${pageContext.request.contextPath}/resources/img/note.jpg" width="30" height="30" alt=""></a>
 
         <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
@@ -25,7 +25,7 @@
                     <a href="${pageContext.request.contextPath}/param_note_list">Search Notes</a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/default_note_list?all=true">All notes</a>
+                    <a href="${pageContext.request.contextPath}/note_list?search_by=all">All notes</a>
                 </li>
 <%--                <li><a href="#">Account</a></li>--%>
 

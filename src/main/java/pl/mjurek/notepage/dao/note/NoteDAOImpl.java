@@ -14,6 +14,8 @@ import pl.mjurek.notepage.util.ConnectionProvider;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +54,12 @@ public class NoteDAOImpl implements NoteDAO {
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
-                    " WHERE user_id=:user_id ORDER BY :date_record;";
+                    " WHERE user_id=:user_id ORDER BY :date_record ASC;";
     private static final String GET_ALL_BY_STATUS_ORDER_BY =
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task" +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
-                    "WHERE user_id=:user_id  AND status_note=:status_note ORDER BY :date_record;";
+                    "WHERE user_id=:user_id  AND status_note=:status_note ORDER BY :date_record ASC;";
 
     private NamedParameterJdbcTemplate template;
 
@@ -138,22 +140,62 @@ public class NoteDAOImpl implements NoteDAO {
     }
 
     @Override
-    public List<Note> getAll(long user_id, String orderBy) {
-        Map<String, Object> paramMap = new HashMap<>();
+    public List<Note> getAll(long user_id, String orderByColumn) {
+     /*   Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("user_id", user_id);
-        paramMap.put("date_record", "date." + orderBy);
+        paramMap.put("date_record", "date." + orderByColumn);
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         return template.query(GET_ALL_ORDER_BY, parameterSource, new NoteRowMapper());
+        DONT WORKING https://stackoverflow.com/questions/34760951/binding-value-in-orderby-not-working-with-namedparameterjdbctemplate
+
+    temporary solution:
+      */
+        List<Note> result = null;
+        try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
+            String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
+                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
+                    "FROM note JOIN date ON note.date_id=date.date_id" +
+                    " WHERE user_id=" + user_id + " ORDER BY " + orderByColumn + " ASC;";
+            ResultSet set = statement.executeQuery(sql);
+
+            result = makeList(set);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    private List<Note> makeList(ResultSet set) throws SQLException {
+        List<Note> result = new ArrayList<>();
+        NoteRowMapper rowMapper = new NoteRowMapper();
+        while(set.next()){
+            Note note = rowMapper.mapRow(set, set.getRow());
+            result.add(note);
+        }
+        return result;
     }
 
     @Override
-    public List<Note> getAll(long user_id, StatusNote state, String orderBy) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("user_id", user_id);
-        paramMap.put("status_note", state.name());
-        paramMap.put("date_record", "date." + orderBy);
-        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
-        return template.query(GET_ALL_BY_STATUS_ORDER_BY, parameterSource, new NoteRowMapper());
+    public List<Note> getAll(long user_id, StatusNote state, String orderByColumn) {
+//        Map<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("user_id", user_id);
+//        paramMap.put("status_note", state.name());
+//        paramMap.put("date_record", "date." + orderBy);
+//        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
+//        return template.query(GET_ALL_BY_STATUS_ORDER_BY, parameterSource, new NoteRowMapper());
+        List<Note> result = null;
+        try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
+            String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
+                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
+                    "FROM note JOIN date ON note.date_id=date.date_id" +
+                    " WHERE user_id=" + user_id + " AND status_note=\'"+state.name()+"\' ORDER BY " + orderByColumn + " ASC;";
+            ResultSet set = statement.executeQuery(sql);
+
+            result = makeList(set);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     private SqlParameterSource getSqlParamSource(long user_id, StatusNote state) {

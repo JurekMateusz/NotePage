@@ -10,7 +10,6 @@ import pl.mjurek.notepage.model.*;
 
 import java.text.ParseException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -70,7 +69,7 @@ public class NoteService {
             result = noteDAO.getAll(userId, statusNote, orderByColumn);
         }
 
-        if (order.equals("desc")) {
+        if (order.equals("desc")&& result != null) {
             Collections.reverse(result);
         }
         return result;
