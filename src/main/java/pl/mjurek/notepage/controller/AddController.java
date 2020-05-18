@@ -16,7 +16,7 @@ import java.text.ParseException;
 public class AddController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String destination = "/default_note_list";
+        String destination = "/note_list";
 
         request.setCharacterEncoding("UTF-8");
         User authenticatedUser = (User) request.getSession().getAttribute("loggedUser");
@@ -54,7 +54,4 @@ public class AddController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
-    private String preareDescriptionBeforeSave(String description) {
-        return null;
-    }
 }

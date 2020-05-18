@@ -9,6 +9,8 @@ import pl.mjurek.notepage.model.*;
 
 
 import java.text.ParseException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -58,6 +60,22 @@ public class NoteService {
         return noteDAO.getAll(userId, status);
     }
 
+    public List<Note> getAll(long userId, String type, String orderByColumn, String order) {
+        NoteDAO noteDAO = getNoteDAO();
+        List<Note> result;
+        if (type.equals("ALL")) {
+            result = noteDAO.getAll(userId, orderByColumn);
+        } else {
+            StatusNote statusNote = StatusNote.valueOf(type);
+            result = noteDAO.getAll(userId, statusNote, orderByColumn);
+        }
+
+        if (order.equals("desc")) {
+            Collections.reverse(result);
+        }
+        return result;
+    }
+
 
     public void deleteNote(long noteId) throws DeleteObjectException {
         NoteDAO noteDAO = getNoteDAO();
@@ -69,9 +87,9 @@ public class NoteService {
         service.delete(note.getDate().getId());
     }
 
-    public void update(long dateId,String description,String importantStatus) throws UpdateObjectException, ParseException {
+    public void update(long dateId, String description, String importantStatus) throws UpdateObjectException, ParseException {
         NoteDAO noteDAO = getNoteDAO();
-        noteDAO.update(dateId,description,importantStatus);
+        noteDAO.update(dateId, description, importantStatus);
     }
 
     public void update(long noteId, NotesControllerOptions action) throws UpdateObjectException {
@@ -99,6 +117,4 @@ public class NoteService {
         DAOFactory factory = DAOFactory.getDAOFactory();
         return factory.getNoteDAO();
     }
-
-
 }

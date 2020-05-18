@@ -64,7 +64,8 @@ public class RegisterController extends HttpServlet {
             request.getRequestDispatcher(request.getContextPath()+"/WEB-INF/error.jsp").forward(request, response);
             return;
         }
-        request.getRequestDispatcher("/default_note_list").forward(request, response);
+        request.setAttribute("fragment","");
+        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
     private boolean isAnyParamNull(String username, String email, String password, String repeatPassword) {

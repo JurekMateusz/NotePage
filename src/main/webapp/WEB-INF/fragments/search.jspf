@@ -6,33 +6,39 @@
         <h1>Sort note:</h1>
         <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
             <label class="btn btn-success active">
-                <input type="radio" class="btn btn-success btn-md active" name="type"
-                       value="made_notes" checked>
+                <input type="radio" class="btn btn-success btn-md active" name="type" value="MADE" checked>
                 MADE notes
             </label>
             <label class="btn btn-warning">
-                <input type="radio" class="btn btn-warning btn-md" name="type" value="all_notes">
+                <input type="radio" class="btn btn-warning btn-md" name="type" value="ALL">
                 ALL notes
             </label>
             <label class="btn btn-danger">
-                <input type="radio" class="btn btn-danger btn-md" name="type" value="todo_notes">
+                <input type="radio" class="btn btn-danger btn-md" name="type" value="TODO">
                 TODO notes
             </label>
         </div>
-        <h1>Sort By:</h1>
+        <h1>Sort By Column:</h1>
         <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
             <label class="btn btn-success active">
-                <input type="radio" class="btn btn-success btn-md active" name="sort_by"
-                       value="nearest_deadline" checked>
-                Nearest deadline
+                <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
+                       value="date_stick_note" checked>
+                Date Stick Note
             </label>
             <label class="btn btn-warning">
-                <input type="radio" class="btn btn-warning btn-md" name="sort_by" value="farthest_deadline">
-                farthest deadline
+                <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="date_deadline_note">
+                Date Deadline Note
             </label>
-            <label class="btn btn-danger">
-                <input type="radio" class="btn btn-danger btn-md" name="sort_by" value="stick_date">
-                Stick date
+        </div>
+        <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+            <label class="btn btn-success active">
+                <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
+                       value="natural" checked>
+                Natural Order
+            </label>
+            <label class="btn btn-warning">
+                <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="desc">
+                Descending Order
             </label>
         </div>
         <br>

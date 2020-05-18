@@ -14,5 +14,9 @@ public interface NoteDAO extends GenericDAO<Note,Long> {
     List<Note> getAll(long user_id);
     List<Note> getAll(long user_id, StatusNote state);
 
+    List<Note> getAll(long user_id, StatusNote state, String orderBy);
+
+    List<Note> getAll(long user_id, String orderBy);
+
     //TODO getAllBy sort option ,getActualNote(),getOldNote(),getMadeNote(),getNotMadeNote();
 }

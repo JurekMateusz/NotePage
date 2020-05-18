@@ -25,6 +25,7 @@ import java.util.Date;
 @WebServlet("/wrench")
 public class WrenchController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String destination = "/note_list";
         request.setCharacterEncoding("UTF-8");
 
         String description = request.getParameter("inputDescription").trim();
@@ -44,18 +45,16 @@ public class WrenchController extends HttpServlet {
 
             request.setAttribute("description", description);
             request.setAttribute("fragment", "add");
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            return;
+            destination = "/WEB-INF/index.jsp";
         } catch (ParseException ex) {
             request.setAttribute("message", "Invalid date");
 
             request.setAttribute("description", description);
             request.setAttribute("date", deadlineDate);
             request.setAttribute("fragment", "add");
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            return;
+            destination = "/WEB-INF/index.jsp";
         }
-        request.getRequestDispatcher("/default_note_list").forward(request, response);
+        request.getRequestDispatcher(destination).forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

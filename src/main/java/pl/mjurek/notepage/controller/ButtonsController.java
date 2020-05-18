@@ -44,15 +44,7 @@ public class ButtonsController extends HttpServlet {
             return;
         }
 
-        String destination;
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies.length < 3) {//TODO temporary
-//            destination = "/default_note_list";
-//        } else {
-//            destination = "/param_note_list";
-//        }
-        destination = "/default_note_list";
-        request.getRequestDispatcher(destination).forward(request, response);
+        request.getRequestDispatcher("/default_note_list").forward(request, response);
     }
 
 }

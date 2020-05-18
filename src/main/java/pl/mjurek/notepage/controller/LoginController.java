@@ -18,7 +18,7 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("inputUsername").trim();
         String password = request.getParameter("inputPassword");
-        String destination = "/default_note_list";
+        String destination = "/note_list";
 
         User buffUser = User.builder()
                 .name(username)
