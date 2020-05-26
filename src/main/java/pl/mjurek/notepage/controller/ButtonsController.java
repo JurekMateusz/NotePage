@@ -2,17 +2,13 @@ package pl.mjurek.notepage.controller;
 
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.NotesControllerOptions;
-import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 @WebServlet("/button_control")
 public class ButtonsController extends HttpServlet {

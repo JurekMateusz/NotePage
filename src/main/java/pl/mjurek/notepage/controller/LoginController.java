@@ -35,7 +35,6 @@ public class LoginController extends HttpServlet {
 
             destination = "WEB-INF/index.jsp";
         }
-
         request.getRequestDispatcher(destination).forward(request, response);
     }
 
