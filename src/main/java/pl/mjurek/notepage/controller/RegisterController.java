@@ -3,6 +3,7 @@ package pl.mjurek.notepage.controller;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.service.AccountActionService;
 import pl.mjurek.notepage.service.UserService;
 
 import javax.servlet.ServletException;
@@ -33,20 +34,20 @@ public class RegisterController extends HttpServlet {
                 .build();
 
         if (isAnyParamNull(username, email, password, repeatPassword)) {
-            String message = "Fill all form";
-            setAttributeAndForward( user, request, response);
+            request.setAttribute("errorMessage", "Fill all form");
+            setAttributeAndForward(user, request, response);
             return;
         }
         if (!password.equals(repeatPassword)) {
-            String message = "Passwords not the same";
-            setAttributeAndForward( user, request, response);
+            request.setAttribute("errorMessage", "Passwords not the same");
+            setAttributeAndForward(user, request, response);
             return;
         }
 
         UserService userService = new UserService();
 
         if (userService.isNameExisting(username)) {
-            request.setAttribute("message","User exist");
+            request.setAttribute("message", "User exist");
             setAttributeAndForward(user, request, response);
             return;
         }
@@ -56,15 +57,23 @@ public class RegisterController extends HttpServlet {
             setAttributeAndForward(user, request, response);
             return;
         }
-
+        User registerUser;
         try {
-           userService.addUser(user);
+            registerUser = userService.addUser(user);
         } catch (AddObjectException e) {
-            request.setAttribute("errorMessage","add user to DB fail");
-            request.getRequestDispatcher(request.getContextPath()+"/WEB-INF/error.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "add user to DB fail");
+            request.getRequestDispatcher(request.getContextPath() + "/WEB-INF/error.jsp").forward(request, response);
             return;
         }
-        request.setAttribute("fragment","");
+
+        String patch = makeURL(request.getRequestURL());
+        Thread thread = new Thread(() -> {
+            AccountActionService action = new AccountActionService();
+            action.makeActivateKeyAndSendEmail(registerUser, patch);
+        });
+        thread.start();
+
+        request.setAttribute("fragment", "");
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
@@ -72,15 +81,22 @@ public class RegisterController extends HttpServlet {
         return username == null || email == null || password == null || repeatPassword == null;
     }
 
-    private void setAttributeAndForward( User user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("fragment","register");
+    private void setAttributeAndForward(User user, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("fragment", "register");
         request.setAttribute("user", user);
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
+    private String makeURL(StringBuffer stringBuffer) {
+        int lastIndex = stringBuffer.lastIndexOf("/");
+        String result = String.valueOf(stringBuffer);
+        result = result.substring(0, lastIndex);
+        return result;
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("fragment","register");
+        request.setAttribute("fragment", "register");
         request.getSession().invalidate();
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }

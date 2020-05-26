@@ -14,11 +14,9 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">register</button>
         </form>
     </div>
-
-    <c:if test="${not empty message}">
+    <c:if test="${not empty errorMessage}">
         <div class="alert alert-danger col-sm-6 col-md-4 col-md-offset-4" role="alert">
-            <h3 class="centered"><c:out value="${message}"/></h3>
+            <h3 class="centered"><c:out value="${errorMessage}"/></h3>
         </div>
     </c:if>
-
 </div>

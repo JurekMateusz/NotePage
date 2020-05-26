@@ -20,14 +20,14 @@ import java.util.Map;
 
 public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String CREATE =
-            "INSERT INTO date(date_stick_note,date_deadline_note) VALUES(:date_stick_note,:date_deadline_note);";
+            "INSERT INTO date(stick_note,deadline_note) VALUES(:stick_note,:deadline_note);";
     private static final String READ =
-            "SELECT date_id,date_stick_note,date_deadline_note,date_user_made_task from date WHERE date_id=:date_id;";
+            "SELECT date_id,stick_note,deadline_note,user_made_task from date WHERE date_id=:date_id;";
     private static final String UPDATE =
-            "UPDATE date SET date_deadline_note=:date_deadline_note, date_user_made_task=:date_user_made_task " +
+            "UPDATE date SET deadline_note=:deadline_note, user_made_task=:user_made_task " +
                     "WHERE date_id=:date_id;";
     private static final String UPDATE_DEADLINE =
-            "UPDATE date SET date_deadline_note=:date_deadline_note WHERE date_id=:date_id;";
+            "UPDATE date SET deadline_note=:deadline_note WHERE date_id=:date_id;";
     private static final String DELETE =
             "DELETE FROM date WHERE date_id=:date_id;";
 
@@ -42,8 +42,8 @@ public class DateNoteDAOImpl implements DateNoteDAO {
         DateNote copyDate = null;
         KeyHolder keyHolder = new GeneratedKeyHolder();
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("date_stick_note", dateNote.getDateStickNote());
-        paramMap.put("date_deadline_note", dateNote.getDateDeadlineNote());
+        paramMap.put("stick_note", dateNote.getDateStickNote());
+        paramMap.put("deadline_note", dateNote.getDateDeadlineNote());
 
         SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
         int update = template.update(CREATE, parameterSource, keyHolder);
@@ -77,8 +77,8 @@ public class DateNoteDAOImpl implements DateNoteDAO {
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("date_id", updateDate.getId());
-        paramMap.put("date_deadline_note", updateDate.getDateDeadlineNote());
-        paramMap.put("date_user_made_task", updateDate.getDateUserMadeTask());
+        paramMap.put("deadline_note", updateDate.getDateDeadlineNote());
+        paramMap.put("user_made_task", updateDate.getDateUserMadeTask());
 
         SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
         int update = template.update(UPDATE, paramSource);
@@ -92,7 +92,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     public void update(long dateId, Timestamp deadline) throws UpdateObjectException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("date_id", dateId);
-        paramMap.put("date_deadline_note",deadline);
+        paramMap.put("deadline_note",deadline);
 
         SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
         int update = template.update(UPDATE_DEADLINE, paramSource);
@@ -117,9 +117,9 @@ public class DateNoteDAOImpl implements DateNoteDAO {
         public DateNote mapRow(ResultSet resultSet, int i) throws SQLException {
             return DateNote.builder()
                     .id(resultSet.getLong("date_id"))
-                    .dateStickNote(resultSet.getTimestamp("date_stick_note"))
-                    .dateDeadlineNote(resultSet.getTimestamp("date_deadline_note"))
-                    .dateUserMadeTask(resultSet.getTimestamp("date_user_made_task"))
+                    .dateStickNote(resultSet.getTimestamp("stick_note"))
+                    .dateDeadlineNote(resultSet.getTimestamp("deadline_note"))
+                    .dateUserMadeTask(resultSet.getTimestamp("user_made_task"))
                     .build();
         }
     }

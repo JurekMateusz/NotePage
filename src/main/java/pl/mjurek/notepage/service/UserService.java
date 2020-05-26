@@ -3,6 +3,7 @@ package pl.mjurek.notepage.service;
 import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.user.UserDAO;
 import pl.mjurek.notepage.exception.AddObjectException;
+import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.User;
 
 public class UserService {
@@ -34,6 +35,10 @@ public class UserService {
             return false;
         }
         return true;
+    }
+    public void unblock(long userId) throws UpdateObjectException {
+        UserDAO userDAO = getUserDAO();
+        userDAO.updateVerification(userId,"YES");
     }
 
     private UserDAO getUserDAO() {

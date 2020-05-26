@@ -1,6 +1,7 @@
 package pl.mjurek.notepage.dao;
 
 import pl.mjurek.notepage.dao.datenote.DateNoteDAO;
+import pl.mjurek.notepage.dao.key.KeyActionDAO;
 import pl.mjurek.notepage.dao.note.NoteDAO;
 import pl.mjurek.notepage.dao.user.UserDAO;
 import pl.mjurek.notepage.exception.NoSuchDbTypeException;
@@ -14,6 +15,7 @@ public abstract class DAOFactory {
 
     public abstract DateNoteDAO getDateNoteDAO();
     //TODO active_nowDAO ???
+    public abstract KeyActionDAO getKeyActionDAO();
 
     public static DAOFactory getDAOFactory() {
         DAOFactory factory = null;

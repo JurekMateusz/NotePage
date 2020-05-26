@@ -27,8 +27,8 @@ public class NoteDAOImpl implements NoteDAO {
 
     private static final String READ =
             "SELECT note_id, description, note.date_id, note.user_id, status_note, important_state," +
-                    "date.date_id, date_stick_note, date_deadline_note, date_user_made_task," +
-                    "user.user_id,user_name,email FROM note JOIN date ON note.date_id=date.date_id" +
+                    "date.date_id, stick_note, deadline_note, user_made_task," +
+                    "user.user_id,name,email FROM note JOIN date ON note.date_id=date.date_id" +
                     " JOIN user ON note.user_id=user.user_id WHERE note_id=:note_id;";
 
     private static final String UPDATE =
@@ -42,22 +42,22 @@ public class NoteDAOImpl implements NoteDAO {
 
     private static final String READ_ALL_BY_USER_ID =
             "SELECT note_id, description, note.date_id, user_id, status_note, important_state " +
-                    ",date.date_id, date_stick_note, date_deadline_note, date_user_made_task" +
+                    ",date.date_id, stick_note, deadline_note, user_made_task" +
                     " FROM note JOIN date ON note.date_id=date.date_id WHERE user_id=:user_id;";
 
     private static final String GET_ALL_BY_STATUS =
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
+                    ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE status_note=:status_note AND user_id=:user_id;";
     private static final String GET_ALL_ORDER_BY =
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
+                    ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE user_id=:user_id ORDER BY :date_record ASC;";
     private static final String GET_ALL_BY_STATUS_ORDER_BY =
             "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task" +
+                    ",date.date_id,stick_note,deadline_note,user_made_task" +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     "WHERE user_id=:user_id  AND status_note=:status_note ORDER BY :date_record ASC;";
 
@@ -153,7 +153,7 @@ public class NoteDAOImpl implements NoteDAO {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
+                    ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE user_id=" + user_id + " ORDER BY " + orderByColumn + " ASC;";
             ResultSet set = statement.executeQuery(sql);
@@ -186,7 +186,7 @@ public class NoteDAOImpl implements NoteDAO {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,date_stick_note,date_deadline_note,date_user_made_task " +
+                    ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE user_id=" + user_id + " AND status_note=\'"+state.name()+"\' ORDER BY " + orderByColumn + " ASC;";
             ResultSet set = statement.executeQuery(sql);
@@ -223,13 +223,13 @@ public class NoteDAOImpl implements NoteDAO {
         public Note mapRow(ResultSet resultSet, int i) throws SQLException {
             DateNote date = DateNote.builder()
                     .id(resultSet.getLong("date_id"))
-                    .dateStickNote(resultSet.getTimestamp("date_stick_note"))
-                    .dateDeadlineNote(resultSet.getTimestamp("date_deadline_note"))
-                    .dateUserMadeTask(resultSet.getTimestamp("date_user_made_task"))
+                    .dateStickNote(resultSet.getTimestamp("stick_note"))
+                    .dateDeadlineNote(resultSet.getTimestamp("deadline_note"))
+                    .dateUserMadeTask(resultSet.getTimestamp("user_made_task"))
                     .build();
             User user = User.builder()
                     .id(resultSet.getLong("user_id"))
-                    .name(resultSet.getString("user_name"))
+                    .name(resultSet.getString("name"))
                     .email(resultSet.getString("email"))
                     .build();
 
@@ -251,9 +251,9 @@ public class NoteDAOImpl implements NoteDAO {
         public Note mapRow(ResultSet resultSet, int i) throws SQLException {
             DateNote date = DateNote.builder()
                     .id(resultSet.getLong("date_id"))
-                    .dateStickNote(resultSet.getTimestamp("date_stick_note"))
-                    .dateDeadlineNote(resultSet.getTimestamp("date_deadline_note"))
-                    .dateUserMadeTask(resultSet.getTimestamp("date_user_made_task"))
+                    .dateStickNote(resultSet.getTimestamp("stick_note"))
+                    .dateDeadlineNote(resultSet.getTimestamp("deadline_note"))
+                    .dateUserMadeTask(resultSet.getTimestamp("user_made_task"))
                     .build();
 
             Note note = Note.builder()

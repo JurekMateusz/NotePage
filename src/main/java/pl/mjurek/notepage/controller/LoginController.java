@@ -20,38 +20,40 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("inputPassword");
         String destination = "/note_list";
 
-        User buffUser = User.builder()
+        User user = User.builder()
                 .name(username)
                 .password(password)
                 .build();
 
-        if (isCorrectAndExist(buffUser)) {
-            saveUserInSession(request, buffUser);
-            request.setAttribute("fragment", "notes");
-        } else {
-            request.setAttribute("buffUser", buffUser);
-            request.setAttribute("fragment", "");//default login page
-            request.setAttribute("errorMessage", "Incorrect username or password");
-
-            destination = "WEB-INF/index.jsp";
-        }
-        request.getRequestDispatcher(destination).forward(request, response);
-    }
-
-    private boolean isCorrectAndExist(User user) {
         UserService userService = new UserService();
         String sha1hexPassword = DigestUtils.sha1Hex(user.getPassword());
 
-        User userWithCodedPass = User.builder()
-                .name(user.getName())
-                .password(sha1hexPassword)
-                .build();
-
         User takenUser = userService.getUserByUserName(user.getName());
-        if (userWithCodedPass.equals(takenUser)) {
-            return true;
+        boolean passwordsCorrect = false;
+        boolean verificated = false;
+        if (takenUser != null) {
+            passwordsCorrect = sha1hexPassword.equals(takenUser.getPassword());
+            verificated = takenUser.getVerification().equals("YES");
         }
-        return false;
+
+        if (passwordsCorrect) {
+            if (verificated) {
+                saveUserInSession(request, user);
+                request.setAttribute("fragment", "notes");
+            }else {
+                request.setAttribute("buffUser", user);
+                request.setAttribute("fragment", "");//default login page
+                request.setAttribute("errorMessage", "Check your email and click to link");
+                destination = "WEB-INF/index.jsp";
+            }
+        } else {
+            request.setAttribute("buffUser", user);
+            request.setAttribute("fragment", "");//default login page
+            request.setAttribute("errorMessage", "Incorrect username or password");
+            destination = "WEB-INF/index.jsp";
+        }
+
+        request.getRequestDispatcher(destination).forward(request, response);
     }
 
     private void saveUserInSession(HttpServletRequest request, User user) {

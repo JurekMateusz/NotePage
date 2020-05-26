@@ -14,4 +14,5 @@ public class User {
     private String email;
     @EqualsAndHashCode.Include
     private String password;
+    private String verification;
 }
