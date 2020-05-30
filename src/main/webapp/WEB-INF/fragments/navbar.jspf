@@ -27,7 +27,9 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/note_list?search_by=all">All notes</a>
                 </li>
-<%--                <li><a href="#">Account</a></li>--%>
+                <li>
+                    <a href="${pageContext.request.contextPath}/account">Account</a>
+                </li>
 
                 <c:if test="${not empty sessionScope.loggedUser}">
                     <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>

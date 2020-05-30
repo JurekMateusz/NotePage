@@ -27,7 +27,6 @@ public class NoteService {
 
     private Note createNote(User user, DateNote date, String description, String importantState) throws ParseException {
         ImportantState state = createEnum(importantState);
-
         Note result = Note.builder()
                 .description(description)
                 .importantState(state)
@@ -110,6 +109,18 @@ public class NoteService {
     public Note read(long noteId) {
         NoteDAO noteDAO = getNoteDAO();
         return noteDAO.read(noteId);
+    }
+
+    public void deleteAllUserNotes(long userId) throws DeleteObjectException {
+        NoteDAO noteDAO = getNoteDAO();
+        DateNoteService dateNoteService= new DateNoteService();
+
+        List<Note> allNotes = getAll(userId);
+
+        for (Note note :allNotes) {
+            noteDAO.delete(note.getId());
+            dateNoteService.delete(note.getDate().getId());
+        }
     }
 
     private NoteDAO getNoteDAO() {

@@ -118,6 +118,7 @@ public class NoteDAOImpl implements NoteDAO {
                 .build();
     }
 
+
     @Override
     public void delete(Long key) throws DeleteObjectException {
         MapSqlParameterSource paramSource = new MapSqlParameterSource("note_id", key);
@@ -137,6 +138,13 @@ public class NoteDAOImpl implements NoteDAO {
     public List<Note> getAll(long user_id, StatusNote state) {
         SqlParameterSource parameterSource = getSqlParamSource(user_id, state);
         return template.query(GET_ALL_BY_STATUS, parameterSource, new NoteRowMapper());
+    }
+
+    private SqlParameterSource getSqlParamSource(long user_id, StatusNote state) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("user_id", user_id);
+        paramMap.put("status_note", state.name());
+        return new MapSqlParameterSource(paramMap);
     }
 
     @Override
@@ -168,7 +176,7 @@ public class NoteDAOImpl implements NoteDAO {
     private List<Note> makeList(ResultSet set) throws SQLException {
         List<Note> result = new ArrayList<>();
         NoteRowMapper rowMapper = new NoteRowMapper();
-        while(set.next()){
+        while (set.next()) {
             Note note = rowMapper.mapRow(set, set.getRow());
             result.add(note);
         }
@@ -188,7 +196,7 @@ public class NoteDAOImpl implements NoteDAO {
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
-                    " WHERE user_id=" + user_id + " AND status_note=\'"+state.name()+"\' ORDER BY " + orderByColumn + " ASC;";
+                    " WHERE user_id=" + user_id + " AND status_note=\'" + state.name() + "\' ORDER BY " + orderByColumn + " ASC;";
             ResultSet set = statement.executeQuery(sql);
 
             result = makeList(set);
@@ -197,14 +205,6 @@ public class NoteDAOImpl implements NoteDAO {
         }
         return result;
     }
-
-    private SqlParameterSource getSqlParamSource(long user_id, StatusNote state) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("user_id", user_id);
-        paramMap.put("status_note", state.name());
-        return new MapSqlParameterSource(paramMap);
-    }
-
 
     private SqlParameterSource getSqlParamSource(Note note) {
         Map<String, Object> paramMap = new HashMap<>();

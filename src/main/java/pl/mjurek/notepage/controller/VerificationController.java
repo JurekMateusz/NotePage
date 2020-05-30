@@ -1,5 +1,6 @@
 package pl.mjurek.notepage.controller;
 
+import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.service.AccountActionService;
 
 import javax.servlet.ServletException;
@@ -17,8 +18,9 @@ public class VerificationController extends HttpServlet {
 
         String key = request.getParameter("key");
         AccountActionService service = new AccountActionService();
-        boolean success = service.verification(key);
-        if (!success) {
+        try {
+             service.verification(key);
+        } catch (UpdateObjectException e) {
             destination = "WEB-INF/error.jsp";
         }
         request.getRequestDispatcher(destination).forward(request, response);

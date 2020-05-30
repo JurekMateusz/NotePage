@@ -11,8 +11,8 @@
             <input name="inputPassword" type="password" class="form-control"value="${buffUser.password}" placeholder="password*" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
             <div class="form-group">
-                <a href="register" class="btnForgetPwd" value="Login">Forget Password?</a>
-                <br>
+<%--                <a href="register" class="btnForgetPwd" value="Login">Forget Password?</a>--%>
+<%--                <br>--%>
                 Don't have account ? <a href="register">Register</a>
             </div>
         </form>

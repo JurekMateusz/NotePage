@@ -24,24 +24,14 @@ public class AccountActionService {
         emailSessionBean.sendEmail(email, subject, content);
     }
 
-    public boolean verification(String key) {
+    public void verification(String key) throws UpdateObjectException {
         KeyActionService service = new KeyActionService();
         KeyAction keyAction = service.read(key);
-        if(keyAction == null){
-            return false;
-        }else {
-            long userId = keyAction.getUserId();
-            UserService userService = new UserService();
 
-            try {
-                userService.unblock(userId);
-            } catch (UpdateObjectException e) {
-                return false;
-            }
-
-            service.delete(userId);
-        }
-        return true;
+        long userId = keyAction.getUserId();
+        UserService userService = new UserService();
+        userService.unblock(userId);
+        service.delete(userId);
     }
 
 

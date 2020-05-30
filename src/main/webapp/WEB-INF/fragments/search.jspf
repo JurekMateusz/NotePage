@@ -1,4 +1,3 @@
-<%@ page import="pl.mjurek.notepage.model.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class="container">
@@ -23,11 +22,11 @@
             <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
                 <label class="btn btn-success active">
                     <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
-                           value="date_stick_note" checked>
+                           value="stick_note" checked>
                     Date Stick Note
                 </label>
                 <label class="btn btn-warning">
-                    <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="date_deadline_note">
+                    <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="deadline_note">
                     Date Deadline Note
                 </label>
             </div>

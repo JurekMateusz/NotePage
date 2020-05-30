@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/add", "/note", "/note_list", "/wrench", "/param_note_list", "/button_control"})
+@WebFilter(urlPatterns = {"/add", "/note", "/note_list", "/wrench",
+        "/param_note_list", "/button_control","/account","/deleteAccount"})
 public class AuthenticationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

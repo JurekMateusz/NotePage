@@ -1,5 +1,6 @@
 package pl.mjurek.notepage.dao.user;
 
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
@@ -24,7 +26,8 @@ public class UserDAOImpl implements UserDAO {
     private static final String CREATE =
             "INSERT INTO user(name,email,password) VALUES (:name,:email,:password);";
 
-    ///////// rest MAIN queries.
+    private static final String UPDATE =
+            "UPDATE user SET email=:email, password=:password WHERE user_id=:user_id;";
     private static final String UPDATE_VERIFICATION =
             "UPDATE user SET verification=:verification WHERE user_id=:user_id;";
     private static final String READ_USER_BY_USERNAME =
@@ -32,7 +35,8 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String READ_USER_BY_EMAIL =
             "SELECT user_id,name,email,password,verification FROM user WHERE email=:email LIMIT 1;";
-
+    private static final String DELETE =
+            "DELETE FROM user WHERE user_id=:user_id";
     private NamedParameterJdbcTemplate template;
 
     public UserDAOImpl() {
@@ -68,13 +72,27 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User update(User updateObject) {
-        return null;
+    public User update(User updateUser) throws UpdateObjectException {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("email", updateUser.getEmail());
+        paramMap.put("password", updateUser.getPassword());
+        paramMap.put("user_id", updateUser.getId());
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+        int update = template.update(UPDATE, paramSource);
+        if (update < 1) {
+            throw new UpdateObjectException();
+        }
+        return updateUser;
     }
 
-    @Override
-    public void delete(Long key) {
 
+    @Override
+    public void delete(Long userId) throws DeleteObjectException {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource("user_id", userId);
+        int update = template.update(DELETE, paramSource);
+        if (update < 1) {
+            throw new DeleteObjectException();
+        }
     }
 
     @Override

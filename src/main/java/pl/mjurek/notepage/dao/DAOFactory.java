@@ -14,7 +14,7 @@ public abstract class DAOFactory {
     public abstract NoteDAO getNoteDAO();
 
     public abstract DateNoteDAO getDateNoteDAO();
-    //TODO active_nowDAO ???
+
     public abstract KeyActionDAO getKeyActionDAO();
 
     public static DAOFactory getDAOFactory() {

@@ -42,5 +42,4 @@ public class ButtonsController extends HttpServlet {
 
         request.getRequestDispatcher("/note_list").forward(request, response);
     }
-
 }

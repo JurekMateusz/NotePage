@@ -23,6 +23,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -42,6 +43,12 @@
     </c:when>
     <c:when test="${fragment eq 'search'}">
         <jsp:include page="fragments/search.jspf"/>
+    </c:when>
+    <c:when test="${fragment eq 'account'}">
+        <jsp:include page="fragments/account.jspf"/>
+    </c:when>
+    <c:when test="${fragment eq 'deleteAccount'}">
+        <jsp:include page="fragments/deleteAccount.jspf"/>
     </c:when>
     <c:otherwise>
         <jsp:include page="fragments/login.jspf"/>

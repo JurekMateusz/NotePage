@@ -1,0 +1,15 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+        <form method="post" action="deleteAccount">
+            <div class="form-group">
+                <h3>This action cannot be undone. This will permanently delete all your data</h3>
+                <label>Please type text bellow to confirm:<h2><strong>NotePage/${sessionScope.loggedUser.name}</strong></h2></label>
+                <input name="deleteText" type="text" class="form-control"
+                        required aria-describedby="deleteInputText">
+            </div>
+            <input class="btn btn-lg btn-danger btn-block" type="submit" value="Save changes"/>
+        </form>
+    </div>
+</div>
