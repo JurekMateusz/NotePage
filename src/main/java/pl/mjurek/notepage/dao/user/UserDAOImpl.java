@@ -99,6 +99,7 @@ public class UserDAOImpl implements UserDAO {
     public User getUserByUserName(String username) {
         SqlParameterSource parameterSource = new MapSqlParameterSource("name", username);
         List<User> resultUser = template.query(READ_USER_BY_USERNAME, parameterSource, new UserRowMapper());
+
         if (resultUser.isEmpty()) {
             return null;
         }
