@@ -58,14 +58,14 @@ public class NoteService {
         return noteDAO.getAll(userId, status);
     }
 
-    public List<Note> getAll(long userId, String type, String orderByColumn, String order) {
+    public List<Note> getAll(long userId, String type, SortOptions sortBy, String order) {
         NoteDAO noteDAO = getNoteDAO();
         List<Note> result;
         if (type.equals("ALL")) {
-            result = noteDAO.getAll(userId, orderByColumn);
+            result = noteDAO.getAll(userId, sortBy);
         } else {
             StatusNote statusNote = StatusNote.valueOf(type);
-            result = noteDAO.getAll(userId, statusNote, orderByColumn);
+            result = noteDAO.getAll(userId, statusNote, sortBy);
         }
 
         if (order.equals("desc")&& result != null) {

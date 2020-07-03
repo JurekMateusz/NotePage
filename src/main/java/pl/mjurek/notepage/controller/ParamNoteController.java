@@ -16,12 +16,11 @@ public class ParamNoteController extends HttpServlet {
         session.setAttribute("search_by", "param");
 
         String typeNotes = request.getParameter("type");
-        String columnSearch = request.getParameter("sort_by_column");
+        String columnSearch = request.getParameter("sort_by");
         String order = request.getParameter("order");
-       //TODO prevent sql injection
 
         session.setAttribute("type",typeNotes);
-        session.setAttribute("sort_by_column",columnSearch);
+        session.setAttribute("sort_by",columnSearch);
         session.setAttribute("order",order);
 
         request.getRequestDispatcher("note_list").forward(request, response);

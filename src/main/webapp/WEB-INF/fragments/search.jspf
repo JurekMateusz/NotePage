@@ -21,13 +21,17 @@
             <h1>Sort By Column:</h1>
             <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
                 <label class="btn btn-success active">
-                    <input type="radio" class="btn btn-success btn-md active" name="sort_by_column"
-                           value="stick_note" checked>
+                    <input type="radio" class="btn btn-success btn-md active" name="sort_by"
+                           value="STICK_NOTE" checked>
                     Date Stick Note
                 </label>
                 <label class="btn btn-warning">
-                    <input type="radio" class="btn btn-warning btn-md" name="sort_by_column" value="deadline_note">
+                    <input type="radio" class="btn btn-warning btn-md" name="sort_by" value="DEADLINE_NOTE">
                     Date Deadline Note
+                </label>
+                <label class="btn btn-success">
+                    <input type="radio" class="btn btn-warning btn-md" name="sort_by" value="USER_MADE_TASK">
+                    Date Made Task
                 </label>
             </div>
             <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">

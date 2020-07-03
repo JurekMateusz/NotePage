@@ -1,6 +1,7 @@
 package pl.mjurek.notepage.controller;
 
 import pl.mjurek.notepage.model.Note;
+import pl.mjurek.notepage.model.SortOptions;
 import pl.mjurek.notepage.model.StatusNote;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.NoteService;
@@ -32,10 +33,12 @@ public class NoteController extends HttpServlet {
         } else if (searchByFromSession != null) {
             if (searchByFromSession.equals("param")) {
                 String typeNotes = (String) session.getAttribute("type");
-                String columnSearch = (String) session.getAttribute("sort_by_column");
+                String sortBy = (String) session.getAttribute("sort_by");
                 String order = (String) session.getAttribute("order");
 
-                notes = service.getAll(id, typeNotes, columnSearch, order);
+                SortOptions sortByEnum = SortOptions.valueOf(sortBy);
+
+                notes = service.getAll(id, typeNotes,sortByEnum, order);
             } else {
                 notes = service.getAll(id);
             }

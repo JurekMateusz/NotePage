@@ -35,7 +35,7 @@ public class UserService {
             e.printStackTrace();
         }
 
-        sleep();
+        sleep(); // to go out from this thread and send user response.
 
         NoteService noteService = new NoteService();
         try {

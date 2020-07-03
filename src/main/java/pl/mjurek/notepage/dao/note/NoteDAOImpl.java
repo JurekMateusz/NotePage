@@ -148,22 +148,13 @@ public class NoteDAOImpl implements NoteDAO {
     }
 
     @Override
-    public List<Note> getAll(long user_id, String orderByColumn) {
-     /*   Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("user_id", user_id);
-        paramMap.put("date_record", "date." + orderByColumn);
-        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
-        return template.query(GET_ALL_ORDER_BY, parameterSource, new NoteRowMapper());
-        DONT WORKING https://stackoverflow.com/questions/34760951/binding-value-in-orderby-not-working-with-namedparameterjdbctemplate
-
-    temporary solution:
-      */
+    public List<Note> getAll(long user_id, SortOptions sortBy) {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
-                    " WHERE user_id=" + user_id + " ORDER BY " + orderByColumn + " ASC;";
+                    " WHERE user_id=" + user_id + " ORDER BY " + sortBy.name().toLowerCase() + " ASC;";
             ResultSet set = statement.executeQuery(sql);
 
             result = makeList(set);
@@ -184,19 +175,14 @@ public class NoteDAOImpl implements NoteDAO {
     }
 
     @Override
-    public List<Note> getAll(long user_id, StatusNote state, String orderByColumn) {
-//        Map<String, Object> paramMap = new HashMap<>();
-//        paramMap.put("user_id", user_id);
-//        paramMap.put("status_note", state.name());
-//        paramMap.put("date_record", "date." + orderBy);
-//        SqlParameterSource parameterSource = new MapSqlParameterSource(paramMap);
-//        return template.query(GET_ALL_BY_STATUS_ORDER_BY, parameterSource, new NoteRowMapper());
+    public List<Note> getAll(long user_id, StatusNote state, SortOptions sortBy) {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
-                    " WHERE user_id=" + user_id + " AND status_note=\'" + state.name() + "\' ORDER BY " + orderByColumn + " ASC;";
+                    " WHERE user_id=" + user_id + " AND status_note=\'" +
+                    state.name() + "\' ORDER BY " + sortBy.name().toLowerCase() + " ASC;";
             ResultSet set = statement.executeQuery(sql);
 
             result = makeList(set);
