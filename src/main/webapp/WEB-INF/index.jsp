@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TODO Note Page</title>
+    <title>Note Page</title>
 
     <meta http-equiv="X-Ua-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>

@@ -12,29 +12,28 @@
         </button>
 
         <div class="collapse navbar-collapse navHeaderCollapse">
+            <c:if test="${not empty sessionScope.loggedUser}">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="nav-item" id="search">
+                        <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/add">Add Note</a>
+                    </li>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item" id="search">
-                    <input class="form-control" id="myInput" type="text" placeholder="Search..">
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/add">Add Note</a>
-                </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/param_note_list">Search Notes</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/note_list?search_by=all">All notes</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/account">Account</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/param_note_list">Search Notes</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/note_list?search_by=all">All notes</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/account">Account</a>
-                </li>
-
-                <c:if test="${not empty sessionScope.loggedUser}">
                     <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
-                </c:if>
-            </ul>
+                </ul>
+            </c:if>
         </div>
 
     </div>

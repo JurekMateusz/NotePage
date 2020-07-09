@@ -32,7 +32,7 @@
                         Very Important
                     </label>
                     <label>
-                        <input class="form-control" type="text" name="inputDate" id="datepicker" value="${date}"
+                        <input class="form-control" type="text" autocomplete="off" name="inputDate" id="datepicker" value="${date}"
                                placeholder="MM-dd-yyyy"
                                required autofocus>
                     </label>

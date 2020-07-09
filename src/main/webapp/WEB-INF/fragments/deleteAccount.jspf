@@ -9,7 +9,7 @@
                 <input name="deleteText" type="text" class="form-control"
                         required aria-describedby="deleteInputText">
             </div>
-            <input class="btn btn-lg btn-danger btn-block" type="submit" value="Save changes"/>
+            <input class="btn btn-lg btn-danger btn-block" type="submit" value="DELETE ACCOUNT"/>
         </form>
     </div>
 </div>
