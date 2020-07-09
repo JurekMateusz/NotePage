@@ -8,7 +8,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-//TODO try to use https://docs.jboss.org/hibernate/core/3.6/javadocs/org/hibernate/connection/ConnectionProvider.html
 public class ConnectionProvider {
 
     private static DataSource dataSource;

@@ -1,7 +1,7 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.user;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.service.AccountActionService;
 import pl.mjurek.notepage.service.UserService;
 
 import javax.servlet.ServletException;
@@ -26,13 +26,14 @@ public class LoginController extends HttpServlet {
                 .build();
 
         UserService userService = new UserService();
-        String sha1hexPassword = DigestUtils.sha1Hex(user.getPassword());
+
+        String encodedPassword = AccountActionService.encodePassword(password);
 
         User takenUser = userService.getUserByUserName(user.getName());
         boolean passwordsCorrect = false;
         boolean verificated = false;
         if (takenUser != null) {
-            passwordsCorrect = sha1hexPassword.equals(takenUser.getPassword());
+            passwordsCorrect = encodedPassword.equals(takenUser.getPassword());
             verificated = takenUser.getVerification().equals("YES");
         }
 

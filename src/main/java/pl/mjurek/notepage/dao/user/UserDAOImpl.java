@@ -1,6 +1,5 @@
 package pl.mjurek.notepage.dao.user;
 
-import org.springframework.core.env.MapPropertySource;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -8,10 +7,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.util.ConnectionProvider;
 
@@ -37,6 +34,7 @@ public class UserDAOImpl implements UserDAO {
             "SELECT user_id,name,email,password,verification FROM user WHERE email=:email LIMIT 1;";
     private static final String DELETE =
             "DELETE FROM user WHERE user_id=:user_id";
+
     private NamedParameterJdbcTemplate template;
 
     public UserDAOImpl() {
@@ -48,8 +46,7 @@ public class UserDAOImpl implements UserDAO {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         int update = template.update(CREATE, parameterSource, keyHolder);
-        User resultUser = copyIfUpdateSuccessful(update, user, keyHolder);
-        return resultUser;
+        return copyIfUpdateSuccessful(update, user, keyHolder);
     }
 
     private User copyIfUpdateSuccessful(int update, User user, KeyHolder keyHolder) {
@@ -147,6 +144,5 @@ public class UserDAOImpl implements UserDAO {
                     .verification(verification)
                     .build();
         }
-
     }
 }

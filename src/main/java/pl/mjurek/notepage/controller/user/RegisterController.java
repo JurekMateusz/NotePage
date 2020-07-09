@@ -1,6 +1,5 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.user;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.AccountActionService;
@@ -25,12 +24,12 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("inputPassword");
         String repeatPassword = request.getParameter("inputRepeatPassword");
 
-        String sha1hexPassword = DigestUtils.sha1Hex(password);
+        String encodePassword = AccountActionService.encodePassword(password);
 
         User user = User.builder()
                 .name(username)
                 .email(email)
-                .password(sha1hexPassword)
+                .password(encodePassword)
                 .build();
 
         if (isAnyParamNull(username, email, password, repeatPassword)) {
@@ -47,13 +46,13 @@ public class RegisterController extends HttpServlet {
         UserService userService = new UserService();
 
         if (userService.isNameExisting(username)) {
-            request.setAttribute("message", "User exist");
+            request.setAttribute("errorMessage", "User exist");
             setAttributeAndForward(user, request, response);
             return;
         }
 
         if (userService.isEmailExisting(email)) {
-            request.setAttribute("message", "Email exist");
+            request.setAttribute("errorMessage", "Email exist");
             setAttributeAndForward(user, request, response);
             return;
         }
@@ -67,6 +66,7 @@ public class RegisterController extends HttpServlet {
         }
 
         String patch = makeURL(request.getRequestURL());
+
         Thread thread = new Thread(() -> {
             AccountActionService action = new AccountActionService();
             action.makeActivateKeyAndSendEmail(registerUser, patch);

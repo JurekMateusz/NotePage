@@ -5,8 +5,13 @@ import pl.mjurek.notepage.dao.note.NoteDAO;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.model.*;
-
+import pl.mjurek.notepage.model.DateNote;
+import pl.mjurek.notepage.model.Note;
+import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.model.states.ImportantState;
+import pl.mjurek.notepage.model.states.NotesControllerOptions;
+import pl.mjurek.notepage.model.states.SortOptions;
+import pl.mjurek.notepage.model.states.StatusNote;
 
 import java.text.ParseException;
 import java.util.Collections;
@@ -43,7 +48,7 @@ public class NoteService {
         try {
             result = ImportantState.valueOf(state.toUpperCase());
         } catch (IllegalArgumentException ex) {
-
+            ex.printStackTrace();
         }
         return result;
     }
@@ -68,7 +73,7 @@ public class NoteService {
             result = noteDAO.getAll(userId, statusNote, sortBy);
         }
 
-        if (order.equals("desc")&& result != null) {
+        if (order.equals("desc") && result != null) {
             Collections.reverse(result);
         }
         return result;
@@ -92,7 +97,7 @@ public class NoteService {
 
     public void update(long noteId, NotesControllerOptions action) throws UpdateObjectException {
         NoteDAO noteDAO = getNoteDAO();
-        Note note = noteDAO.read(noteId);//todo to many quarry
+        Note note = noteDAO.read(noteId);
 
         DateNoteService dateNoteService = new DateNoteService();
         dateNoteService.update(note.getDate(), action);
@@ -113,11 +118,11 @@ public class NoteService {
 
     public void deleteAllUserNotes(long userId) throws DeleteObjectException {
         NoteDAO noteDAO = getNoteDAO();
-        DateNoteService dateNoteService= new DateNoteService();
+        DateNoteService dateNoteService = new DateNoteService();
 
         List<Note> allNotes = getAll(userId);
 
-        for (Note note :allNotes) {
+        for (Note note : allNotes) {
             noteDAO.delete(note.getId());
             dateNoteService.delete(note.getDate().getId());
         }

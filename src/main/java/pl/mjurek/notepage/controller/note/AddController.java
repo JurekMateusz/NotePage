@@ -1,4 +1,4 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.note;
 
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;

@@ -20,6 +20,12 @@ public class UserService {
         return result;
     }
 
+    public User getUserByEmail(String email) {
+        UserDAO userDAO = getUserDAO();
+        User result = userDAO.getUserByEmail(email);
+        return result;
+    }
+
     public User update(User user) throws UpdateObjectException {
         UserDAO userDAO = getUserDAO();
         User result = userDAO.update(user);
@@ -57,19 +63,13 @@ public class UserService {
     public boolean isNameExisting(String name) {
         UserDAO userDAO = getUserDAO();
         User user = userDAO.getUserByUserName(name);
-        if (user == null) {
-            return false;
-        }
-        return true;
+        return user == null ? false : true;
     }
 
     public boolean isEmailExisting(String email) {
         UserDAO userDAO = getUserDAO();
         User user = userDAO.getUserByEmail(email);
-        if (user == null) {
-            return false;
-        }
-        return true;
+        return user == null ? false : true;
     }
 
     public void unblock(long userId) throws UpdateObjectException {

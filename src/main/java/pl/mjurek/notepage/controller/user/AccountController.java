@@ -1,8 +1,8 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.user;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.service.AccountActionService;
 import pl.mjurek.notepage.service.UserService;
 
 import javax.servlet.ServletException;
@@ -30,8 +30,8 @@ public class AccountController extends HttpServlet {
             HttpSession session = req.getSession();
             User user = (User) session.getAttribute("loggedUser");
             user.setEmail(email);
-            String sha1hexPassword = DigestUtils.sha1Hex(password);
-            user.setPassword(sha1hexPassword);
+            String encodedPassword = AccountActionService.encodePassword(password);
+            user.setPassword(encodedPassword);
             UserService service = new UserService();
 
             try {

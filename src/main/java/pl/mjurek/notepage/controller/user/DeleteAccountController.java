@@ -1,7 +1,6 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.user;
 
 import pl.mjurek.notepage.model.User;
-import pl.mjurek.notepage.service.AccountActionService;
 import pl.mjurek.notepage.service.UserService;
 
 import javax.servlet.ServletException;

@@ -1,4 +1,4 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.user;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

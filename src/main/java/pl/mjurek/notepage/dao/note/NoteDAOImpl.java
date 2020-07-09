@@ -10,6 +10,9 @@ import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.*;
+import pl.mjurek.notepage.model.states.ImportantState;
+import pl.mjurek.notepage.model.states.SortOptions;
+import pl.mjurek.notepage.model.states.StatusNote;
 import pl.mjurek.notepage.util.ConnectionProvider;
 
 import java.sql.ResultSet;
@@ -50,16 +53,6 @@ public class NoteDAOImpl implements NoteDAO {
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE status_note=:status_note AND user_id=:user_id;";
-    private static final String GET_ALL_ORDER_BY =
-            "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,stick_note,deadline_note,user_made_task " +
-                    "FROM note JOIN date ON note.date_id=date.date_id" +
-                    " WHERE user_id=:user_id ORDER BY :date_record ASC;";
-    private static final String GET_ALL_BY_STATUS_ORDER_BY =
-            "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
-                    ",date.date_id,stick_note,deadline_note,user_made_task" +
-                    "FROM note JOIN date ON note.date_id=date.date_id" +
-                    "WHERE user_id=:user_id  AND status_note=:status_note ORDER BY :date_record ASC;";
 
     private NamedParameterJdbcTemplate template;
 
@@ -118,7 +111,6 @@ public class NoteDAOImpl implements NoteDAO {
                 .build();
     }
 
-
     @Override
     public void delete(Long key) throws DeleteObjectException {
         MapSqlParameterSource paramSource = new MapSqlParameterSource("note_id", key);
@@ -151,6 +143,8 @@ public class NoteDAOImpl implements NoteDAO {
     public List<Note> getAll(long user_id, SortOptions sortBy) {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
+            //elegant solution dont working
+            // https://stackoverflow.com/questions/34760951/binding-value-in-orderby-not-working-with-namedparameterjdbctemplate
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
@@ -178,6 +172,8 @@ public class NoteDAOImpl implements NoteDAO {
     public List<Note> getAll(long user_id, StatusNote state, SortOptions sortBy) {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
+            //elegant solution dont working
+            // https://stackoverflow.com/questions/34760951/binding-value-in-orderby-not-working-with-namedparameterjdbctemplate
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +

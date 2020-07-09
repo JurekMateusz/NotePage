@@ -1,4 +1,4 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.note;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,14 +14,6 @@ public class ParamNoteController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         session.setAttribute("search_by", "param");
-
-        String typeNotes = request.getParameter("type");
-        String columnSearch = request.getParameter("sort_by");
-        String order = request.getParameter("order");
-
-        session.setAttribute("type",typeNotes);
-        session.setAttribute("sort_by",columnSearch);
-        session.setAttribute("order",order);
 
         request.getRequestDispatcher("note_list").forward(request, response);
     }

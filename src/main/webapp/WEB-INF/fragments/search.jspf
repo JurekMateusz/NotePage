@@ -29,20 +29,21 @@
                     <input type="radio" class="btn btn-warning btn-md" name="sort_by" value="DEADLINE_NOTE">
                     Date Deadline Note
                 </label>
-                <label class="btn btn-success">
+                <label class="btn btn-danger">
                     <input type="radio" class="btn btn-warning btn-md" name="sort_by" value="USER_MADE_TASK">
                     Date Made Task
                 </label>
             </div>
-            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+            <h1>Order:</h1>
+            <div class="btn-group btn-group-toggle btn-block active" data-toggle="buttons">
                 <label class="btn btn-success active">
                     <input type="radio" class="btn btn-success btn-md active" name="order"
                            value="natural" checked>
-                    Natural Order
+                    Natural
                 </label>
                 <label class="btn btn-warning">
                     <input type="radio" class="btn btn-warning btn-md" name="order" value="desc">
-                    Descending Order
+                    Descending
                 </label>
             </div>
             <br>

@@ -1,4 +1,4 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.note;
 
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.Note;
@@ -62,8 +62,7 @@ public class WrenchController extends HttpServlet {
         NoteService service = new NoteService();
         Note note = service.read(noteId);
 
-        String date = new SimpleDateFormat("MM/dd/yyyy").format(note.getDate().getDateDeadlineNote());
-
+        String date = convertDate(note);
 
         request.getSession(false).setAttribute("note_id", noteId);
         request.getSession(false).setAttribute("date_id", note.getDate().getId());
@@ -73,5 +72,8 @@ public class WrenchController extends HttpServlet {
         request.setAttribute("modify", "modify");
         request.setAttribute("fragment", "add");
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+    }
+    private String convertDate(Note note){
+        return new SimpleDateFormat("MM/dd/yyyy").format(note.getDate().getDateDeadlineNote());
     }
 }

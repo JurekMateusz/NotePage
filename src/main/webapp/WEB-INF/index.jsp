@@ -50,6 +50,9 @@
     <c:when test="${fragment eq 'deleteAccount'}">
         <jsp:include page="fragments/deleteAccount.jspf"/>
     </c:when>
+    <c:when test="${fragment eq 'resetPassword'}">
+        <jsp:include page="fragments/resetPassword.jspf"/>
+    </c:when>
     <c:otherwise>
         <jsp:include page="fragments/login.jspf"/>
     </c:otherwise>

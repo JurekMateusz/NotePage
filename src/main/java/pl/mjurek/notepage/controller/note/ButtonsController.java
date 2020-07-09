@@ -1,8 +1,8 @@
-package pl.mjurek.notepage.controller;
+package pl.mjurek.notepage.controller.note;
 
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.model.NotesControllerOptions;
+import pl.mjurek.notepage.model.states.NotesControllerOptions;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;

@@ -6,7 +6,7 @@ import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.DateNote;
-import pl.mjurek.notepage.model.NotesControllerOptions;
+import pl.mjurek.notepage.model.states.NotesControllerOptions;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -31,22 +31,24 @@ public class DateNoteService {
 
         return result;
     }
-    public void update(DateNote dateNote,NotesControllerOptions action) throws UpdateObjectException {
-        if(action == NotesControllerOptions.DONE){
+
+    public void update(DateNote dateNote, NotesControllerOptions action) throws UpdateObjectException {
+        if (action == NotesControllerOptions.DONE) {
             dateNote.setDateUserMadeTask(new Timestamp(new Date().getTime()));
         }
-        if(action == NotesControllerOptions.TODO){
-           dateNote.setDateUserMadeTask(null);
+        if (action == NotesControllerOptions.TODO) {
+            dateNote.setDateUserMadeTask(null);
         }
         DateNoteDAO dateNoteDAO = getDateNoteDAO();
         dateNoteDAO.update(dateNote);
     }
-    public void update(long dateId ,String deadline) throws UpdateObjectException, ParseException {
+
+    public void update(long dateId, String deadline) throws UpdateObjectException, ParseException {
         Date date = new SimpleDateFormat("MM/dd/yyyy").parse(deadline);
         Timestamp deadlineTimestamp = new Timestamp(date.getTime());
 
         DateNoteDAO dateNoteDAO = getDateNoteDAO();
-        dateNoteDAO.update(dateId,deadlineTimestamp);
+        dateNoteDAO.update(dateId, deadlineTimestamp);
     }
 
     public void delete(long dateId) throws DeleteObjectException {

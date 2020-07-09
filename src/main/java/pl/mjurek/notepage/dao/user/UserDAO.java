@@ -6,7 +6,6 @@ import pl.mjurek.notepage.model.User;
 
 
 public interface UserDAO extends GenericDAO<User, Long> {
-    //List<User> getAllActiveNow();
     User getUserByUserName(String username);
 
     User getUserByEmail(String email);

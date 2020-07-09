@@ -35,5 +35,4 @@ public abstract class DAOFactory {
                 throw new NoSuchDbTypeException();
         }
     }
-
 }

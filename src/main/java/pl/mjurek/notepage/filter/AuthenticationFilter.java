@@ -1,8 +1,5 @@
 package pl.mjurek.notepage.filter;
 
-import com.mysql.cj.Session;
-import pl.mjurek.notepage.model.User;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 
@@ -14,11 +11,6 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {"/add", "/note", "/note_list", "/wrench",
         "/param_note_list", "/button_control","/account","/deleteAccount"})
 public class AuthenticationFilter implements Filter {
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -36,10 +28,5 @@ public class AuthenticationFilter implements Filter {
             return session.getAttribute("loggedUser") != null;
         }
         return false;
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }
