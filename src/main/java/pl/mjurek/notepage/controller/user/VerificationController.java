@@ -23,6 +23,7 @@ public class VerificationController extends HttpServlet {
         } catch (UpdateObjectException e) {
             destination = "WEB-INF/error.jsp";
         }
+        request.setAttribute("successMessage","Verification successful");
         request.getRequestDispatcher(destination).forward(request, response);
     }
 }

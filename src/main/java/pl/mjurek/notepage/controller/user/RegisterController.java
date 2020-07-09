@@ -74,6 +74,7 @@ public class RegisterController extends HttpServlet {
         thread.start();
 
         request.setAttribute("fragment", "");
+        request.setAttribute("successMessage","Verification link send to email");
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 

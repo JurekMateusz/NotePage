@@ -21,4 +21,9 @@
             <h3 class="centered"><c:out value="${errorMessage}"/></h3>
         </div>
     </c:if>
+    <c:if test="${not empty successMessage}">
+        <div class="alert alert-success col-sm-6 col-md-4 col-md-offset-4" role="alert">
+            <h3 class="centered"><c:out value="${successMessage}"/></h3>
+        </div>
+    </c:if>
 </div>
