@@ -1,7 +1,9 @@
 package pl.mjurek.notepage.controller.note;
 
 import pl.mjurek.notepage.exception.AddObjectException;
+import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
+import pl.mjurek.notepage.service.NoteActionService;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
@@ -25,21 +27,23 @@ public class AddController extends HttpServlet {
         String importantState = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
-        String converted = description.replaceAll("(\r\n|\n)", "<br/>");
+        Note note = Note.builder()
+                .description(description)
+                .build();
 
+        description = NoteActionService.convertNewLineCharToBR_Tag(description);
         NoteService noteService = new NoteService();
         try {
-            noteService.addNote(authenticatedUser, converted, importantState, deadlineDate);
+            noteService.addNote(authenticatedUser, description, importantState, deadlineDate);
         } catch (AddObjectException ex) {
             request.setAttribute("errorMessage", "Can't add note");
-            request.setAttribute("noteDescription", description);
+            request.setAttribute("note", note);
             request.setAttribute("fragment", "add");
 
             destination = "/WEB-INF/index.jsp";
         } catch (ParseException ex) {
             request.setAttribute("errorMessage", "Invalid date");
-            request.setAttribute("noteDescription", description);
-            request.setAttribute("date", deadlineDate);
+            request.setAttribute("note", note);
             request.setAttribute("fragment", "add");
 
             destination = "/WEB-INF/index.jsp";

@@ -3,6 +3,7 @@ package pl.mjurek.notepage.controller.note;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.service.DateNoteService;
+import pl.mjurek.notepage.service.NoteActionService;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 @WebServlet("/wrench")
 public class WrenchController extends HttpServlet {
@@ -22,7 +22,7 @@ public class WrenchController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String description = request.getParameter("inputDescription").trim();
-        description = convertNewLineCharToBRtag(description);
+        description = NoteActionService.convertNewLineCharToBR_Tag(description);
         String importantStatus = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
@@ -65,29 +65,16 @@ public class WrenchController extends HttpServlet {
         NoteService service = new NoteService();
         Note note = service.read(noteId);
 
-        String date = convertDate(note);
-        String description = convertReadableNewLine(note.getDescription());
+        String description = NoteActionService.convertReadableNewLine(note.getDescription());
         note.setDescription(description);
 
         request.getSession(false).setAttribute("note_id", noteId);
         request.getSession(false).setAttribute("date_id", note.getDate().getId());
 
-        request.setAttribute("noteDescription", note.getDescription());
-        request.setAttribute("date", date);
+        request.setAttribute("note", note);
         request.setAttribute("modify", "modify");
         request.setAttribute("fragment", "add");
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
 
-    private String convertDate(Note note) {
-        return new SimpleDateFormat("MM/dd/yyyy").format(note.getDate().getDateDeadlineNote());
-    }
-
-    private String convertReadableNewLine(String text) {
-        return text.replaceAll("<br/>", "&#013;&#010;");
-    }
-
-    private String convertNewLineCharToBRtag(String text) {
-        return text.replaceAll("(\r\n|\n)", "<br/>");
-    }
 }
