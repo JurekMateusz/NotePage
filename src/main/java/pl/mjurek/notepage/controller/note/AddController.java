@@ -25,7 +25,7 @@ public class AddController extends HttpServlet {
         String importantState = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
-        String converted = description.replaceAll("(\r\n|\n)", "<br>");
+        String converted = description.replaceAll("(\r\n|\n)", "<br/>");
 
         NoteService noteService = new NoteService();
         try {

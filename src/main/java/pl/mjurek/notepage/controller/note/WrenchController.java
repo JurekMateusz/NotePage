@@ -16,11 +16,13 @@ import java.text.SimpleDateFormat;
 
 @WebServlet("/wrench")
 public class WrenchController extends HttpServlet {
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String destination = "/note_list";
         request.setCharacterEncoding("UTF-8");
 
         String description = request.getParameter("inputDescription").trim();
+        description = convertNewLineCharToBRtag(description);
         String importantStatus = request.getParameter("importantState");
         String deadlineDate = request.getParameter("inputDate");
 
@@ -30,8 +32,8 @@ public class WrenchController extends HttpServlet {
         NoteService noteService = new NoteService();
         DateNoteService dateNoteService = new DateNoteService();
         try {
-            noteService.update(noteId,description,importantStatus);
-            dateNoteService.update(dateId,deadlineDate);
+            noteService.update(noteId, description, importantStatus);
+            dateNoteService.update(dateId, deadlineDate);
         } catch (UpdateObjectException ex) {
             request.setAttribute("message", "Can't update note");
 
@@ -49,6 +51,7 @@ public class WrenchController extends HttpServlet {
         request.getRequestDispatcher(destination).forward(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String note_id = request.getParameter("note_id");
 
@@ -63,6 +66,8 @@ public class WrenchController extends HttpServlet {
         Note note = service.read(noteId);
 
         String date = convertDate(note);
+        String description = convertReadableNewLine(note.getDescription());
+        note.setDescription(description);
 
         request.getSession(false).setAttribute("note_id", noteId);
         request.getSession(false).setAttribute("date_id", note.getDate().getId());
@@ -73,7 +78,16 @@ public class WrenchController extends HttpServlet {
         request.setAttribute("fragment", "add");
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
-    private String convertDate(Note note){
+
+    private String convertDate(Note note) {
         return new SimpleDateFormat("MM/dd/yyyy").format(note.getDate().getDateDeadlineNote());
+    }
+
+    private String convertReadableNewLine(String text) {
+        return text.replaceAll("<br/>", "&#013;&#010;");
+    }
+
+    private String convertNewLineCharToBRtag(String text) {
+        return text.replaceAll("(\r\n|\n)", "<br/>");
     }
 }

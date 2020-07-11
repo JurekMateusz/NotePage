@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
@@ -13,10 +15,8 @@
                 </c:otherwise>
                 </c:choose>
 
-                <textarea name="inputDescription" rows="7" maxlength="1000"
-                          class="form-control" required><c:out value="${noteDescription}" escapeXml="false"/>
-            </textarea>
-
+                <textarea name="inputDescription" rows="7" maxlength="1000" class="form-control" required
+                ><c:out value="${noteDescription}" escapeXml="false"/></textarea>
                 <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
                     <label class="btn btn-success active">
                         <input type="radio" class="btn btn-success btn-md active" name="importantState"
