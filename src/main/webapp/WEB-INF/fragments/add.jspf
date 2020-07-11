@@ -16,7 +16,7 @@
                 </c:choose>
 
                 <textarea name="inputDescription" rows="7" maxlength="1000" class="form-control" required
-                ><c:out value="${noteDescription}" escapeXml="false"/></textarea>
+                ><c:out value="${note.description}" escapeXml="false"/></textarea>
                 <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
                     <label class="btn btn-success active">
                         <input type="radio" class="btn btn-success btn-md active" name="importantState"
@@ -32,9 +32,8 @@
                         Very Important
                     </label>
                     <label>
-                        <input class="form-control" type="text" autocomplete="off" name="inputDate" id="datepicker" value="${date}"
-                               placeholder="MM-dd-yyyy"
-                               required autofocus>
+                        <input class="form-control" type="text" autocomplete="off" name="inputDate" id="datepicker"
+                               placeholder="MM-dd-yyyy" value="<fmt:formatDate pattern="MM/dd/YYYY" value="${note.date.dateDeadlineNote}"/>" required autofocus>
                     </label>
                 </div>
                 <c:choose>
