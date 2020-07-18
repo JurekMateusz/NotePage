@@ -14,9 +14,6 @@
     <c:if test="${not empty sessionScope.loggedUser}">
         <div class="collapse navbar-collapse justify-content-end " id="navbar">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                <li class="nav-item" id="search">
-                    <input class="form-control" id="myInput" type="text" placeholder="Search..">
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/add">Add Note</a>
                 </li>
