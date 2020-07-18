@@ -19,17 +19,17 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String username = request.getParameter("inputUsername").trim();
-        String email = request.getParameter("inputEmail").trim();
-        String password = request.getParameter("inputPassword");
-        String repeatPassword = request.getParameter("inputRepeatPassword");
+        String username = request.getParameter("username").trim();
+        String email = request.getParameter("email").trim();
+        String password = request.getParameter("password");
+        String repeatPassword = request.getParameter("confirm_password");
 
         String encodePassword = AccountActionService.encodePassword(password);
 
         User user = User.builder()
                 .name(username)
                 .email(email)
-                .password(encodePassword)
+                .password(password)
                 .build();
 
         if (isAnyParamNull(username, email, password, repeatPassword)) {
@@ -58,6 +58,7 @@ public class RegisterController extends HttpServlet {
         }
         User registerUser;
         try {
+            user.setPassword(encodePassword);
             registerUser = userService.addUser(user);
         } catch (AddObjectException e) {
             request.setAttribute("errorMessage", "add user to DB fail");

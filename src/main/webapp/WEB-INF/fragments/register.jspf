@@ -1,21 +1,63 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<br><br><br><br>
 <div class="container">
-    <div class="col-sm-6 col-md-4 col-md-offset-4">
-        <form class="form-signin" method="post" action="register">
-            <h2 class="form-signin-heading">Register</h2>
-            <input name="inputUsername" type="text" name="inputUsername" minlength="3" maxlength="40" class="form-control"
-                   placeholder="user name*" value="${user.name}" required autofocus/>
-            <input name="inputEmail" type="email" class="form-control" maxlength="40" placeholder="email" value="${user.email}" required autofocus/>
-            <input name="inputPassword" type="password" minlength="5" maxlength="40" class="form-control" placeholder="password*" required/>
-            <input name="inputRepeatPassword" type="password" minlength="5" maxlength="40" class="form-control" placeholder="repeat password*" required/>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">register</button>
-        </form>
-    </div>
-    <c:if test="${not empty errorMessage}">
-        <div class="alert alert-danger col-sm-6 col-md-4 col-md-offset-4" role="alert">
-            <h3 class="centered"><c:out value="${errorMessage}"/></h3>
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3>Register</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" action="register">
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input name="username" type="text" class="form-control" value="${user.name}"
+                               placeholder="username" required autofocus>
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                        </div>
+                        <input name="email" type="email" class="form-control" value="${user.email}"
+                               placeholder="email" required>
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input name="password" type="password" class="form-control" placeholder="password" required>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input name="confirm_password" type="password" class="form-control"
+                               placeholder="repeat password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Register" class="btn float-right login_btn">
+                    </div>
+                    <div class="d-flex justify-content-left links">
+                        <a href="login">Log in</a>
+                    </div>
+                    <div class="d-flex justify-content-left">
+                        <a href="reset_password">Forgot your password?</a>
+                    </div>
+                </form>
+            </div>
+            <%--            <div class="card-footer">--%>
+            <%--                <div class="d-flex justify-content-center links">--%>
+            <%--                    <a href="login">Log in</a>--%>
+            <%--                </div>--%>
+            <%--                <div class="d-flex justify-content-center">--%>
+            <%--                    <a href="reset_password">Forgot your password?</a>--%>
+            <%--                </div>--%>
+            <%--            </div>--%>
         </div>
-    </c:if>
+    </div>
 </div>
