@@ -25,7 +25,7 @@
                     <div id="myNote" class="row bs-callout bs-callout-primary col-sm-offset-1">
                         </c:otherwise>
                         </c:choose>
-                        <div class="col col-md-10 col-sm-10">
+                        <div class="col col-md-9 col-sm-9">
                             <div class="col col-md-2 col-sm-1">
                                 <h7>
                                     <medium>Added: <fmt:formatDate value="${note.date.dateStickNote}"
@@ -51,7 +51,7 @@
                             <p id="description" class="text-center"><c:out value="${note.description}"
                                                                            escapeXml="false"/></p>
                         </div>
-                        <div class="col col-md-2 col-sm-1">
+                        <div class="col col-md-3 col-sm-2">
 
                             <c:if test="${note.statusNote eq StatusNote.TODO}">
                                 <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DONE"

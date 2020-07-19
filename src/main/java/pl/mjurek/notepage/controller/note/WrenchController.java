@@ -21,10 +21,10 @@ public class WrenchController extends HttpServlet {
         String destination = "/note_list";
         request.setCharacterEncoding("UTF-8");
 
-        String description = request.getParameter("inputDescription").trim();
+        String description = request.getParameter("description").trim();
         description = NoteActionService.convertNewLineCharToBR_Tag(description);
         String importantStatus = request.getParameter("importantState");
-        String deadlineDate = request.getParameter("inputDate");
+        String deadlineDate = request.getParameter("date");
 
         Long noteId = (Long) request.getSession().getAttribute("note_id");
         Long dateId = (Long) request.getSession().getAttribute("date_id");

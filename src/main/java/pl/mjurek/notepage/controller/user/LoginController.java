@@ -16,8 +16,8 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("inputUsername").trim();
-        String password = request.getParameter("inputPassword");
+        String username = request.getParameter("username").trim();
+        String password = request.getParameter("password");
         String destination = "/note_list";
 
         User user = User.builder()

@@ -23,9 +23,9 @@ public class AddController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         User authenticatedUser = (User) request.getSession().getAttribute("loggedUser");
 
-        String description = request.getParameter("inputDescription").trim();
+        String description = request.getParameter("description").trim();
         String importantState = request.getParameter("importantState");
-        String deadlineDate = request.getParameter("inputDate");
+        String deadlineDate = request.getParameter("date");
 
         Note note = Note.builder()
                 .description(description)

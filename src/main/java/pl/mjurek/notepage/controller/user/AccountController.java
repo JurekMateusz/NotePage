@@ -19,7 +19,7 @@ public class AccountController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        String repeatPassword = req.getParameter("repeatPassword");
+        String repeatPassword = req.getParameter("confirm_password");
 
         if (email == null || password == null || repeatPassword == null) {
             doGet(req, resp);

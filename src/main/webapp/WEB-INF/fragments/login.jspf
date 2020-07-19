@@ -14,7 +14,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input name="inputUsername" type="text" class="form-control" value="${buffUser.name}"
+                        <input name="username" type="text" class="form-control" value="${buffUser.name}"
                                placeholder="username" required autofocus>
 
                     </div>
@@ -22,7 +22,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <input name="inputPassword" type="password" class="form-control" value="${buffUser.password}"
+                        <input name="password" type="password" class="form-control" value="${buffUser.password}"
                                placeholder="password" required>
                     </div>
                     <%--                    <div class="row align-items-center remember">--%>
@@ -39,7 +39,7 @@
                     Don't have an account?<a href="register">Sign Up</a>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <a href="reset_password">Forgot your password?</a>
+                    <a href="reset_password_email">Forgot your password?</a>
                 </div>
             </div>
         </div>

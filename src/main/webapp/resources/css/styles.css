@@ -13,13 +13,17 @@ body {
     overflow-x: hidden;
 }
 
+h1{
+color:white;
+}
+
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 60px;
-    background-color: orange;
+ /*  background-color: orange;*/
 }
 
 #search {
