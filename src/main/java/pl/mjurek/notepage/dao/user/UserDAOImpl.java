@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -25,13 +26,20 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String UPDATE =
             "UPDATE user SET email = :email, password = :password WHERE user_id = :user_id;";
+
     private static final String UPDATE_VERIFICATION =
             "UPDATE user SET verification = :verification WHERE user_id = :user_id;";
+
     private static final String READ_USER_BY_USERNAME =
             "SELECT user_id ,name ,email ,password ,verification FROM user WHERE name = :name LIMIT 1;";
 
+    private static final String READ_USER_BY_CREDENTIAL =
+            "SELECT user_id ,name ,email ,password ,verification FROM user " +
+                    "WHERE name = :name AND password = :password LIMIT 1;";
+
     private static final String READ_USER_BY_EMAIL =
             "SELECT user_id ,name ,email ,password ,verification FROM user WHERE email = :email LIMIT 1;";
+
     private static final String DELETE =
             "DELETE FROM user WHERE user_id = :user_id";
 
@@ -54,6 +62,11 @@ public class UserDAOImpl implements UserDAO {
         return copyIfUpdateSuccessful(update, user, keyHolder);
     }
 
+    @Override
+    public User read(Long primaryKey) {
+        return null;
+    }
+
     private User copyIfUpdateSuccessful(int update, User user, KeyHolder keyHolder) {
         User resultUser = null;
         if (update > 0) {
@@ -67,10 +80,15 @@ public class UserDAOImpl implements UserDAO {
         return resultUser;
     }
 
-
     @Override
-    public User read(Long primaryKey) {
-        return null;
+    public Optional<User> readUserByCredential(String name, String password) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("name", name);
+        paramMap.put("password", password);
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+
+        List<User> users = template.query(READ_USER_BY_CREDENTIAL, paramSource, new UserRowMapper());
+        return users.isEmpty() ? Optional.empty() : Optional.ofNullable(users.get(0));
     }
 
     @Override
