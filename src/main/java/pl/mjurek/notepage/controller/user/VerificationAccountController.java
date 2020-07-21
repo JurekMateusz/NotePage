@@ -1,5 +1,6 @@
 package pl.mjurek.notepage.controller.user;
 
+import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.service.AccountActionService;
 
@@ -20,10 +21,11 @@ public class VerificationAccountController extends HttpServlet {
         AccountActionService service = new AccountActionService();
         try {
             service.verification(key);
-        } catch (UpdateObjectException e) {
+        } catch (UpdateObjectException | DeleteObjectException e) {
+            request.setAttribute("errorMessage", "Something went wrong");
             destination = "WEB-INF/error.jsp";
         }
-        request.setAttribute("successMessage","Verification successful");
+        request.setAttribute("successMessage", "Verification successful");
         request.getRequestDispatcher(destination).forward(request, response);
     }
 }

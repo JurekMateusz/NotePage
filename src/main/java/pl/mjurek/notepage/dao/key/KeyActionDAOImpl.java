@@ -4,10 +4,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-
-import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
-import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.KeyAction;
 import pl.mjurek.notepage.util.ConnectionProvider;
 
@@ -25,16 +22,16 @@ public class KeyActionDAOImpl implements KeyActionDAO {
     private static final String DELETE =
             "DELETE FROM key_action WHERE user_id=:user_id;";
 
-    private NamedParameterJdbcTemplate template;
+    private final NamedParameterJdbcTemplate template;
 
     public KeyActionDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
     }
 
     @Override
-    public KeyAction create(KeyAction key) throws AddObjectException {
+    public KeyAction create(KeyAction key) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("user_id",key.getUserId());
+        paramMap.put("user_id", key.getUserId());
         paramMap.put("code", key.getKey());
         SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
         int update = template.update(CREATE, paramSource);
@@ -57,7 +54,7 @@ public class KeyActionDAOImpl implements KeyActionDAO {
     }
 
     @Override
-    public KeyAction update(KeyAction updateObject) throws UpdateObjectException {
+    public KeyAction update(KeyAction updateObject) {
         return null;
     }
 

@@ -9,14 +9,6 @@ import pl.mjurek.notepage.exception.NoSuchDbTypeException;
 public abstract class DAOFactory {
     public static final int MYSQL_DAO_FACTORY = 1;
 
-    public abstract UserDAO getUserDAO();
-
-    public abstract NoteDAO getNoteDAO();
-
-    public abstract DateNoteDAO getDateNoteDAO();
-
-    public abstract KeyActionDAO getKeyActionDAO();
-
     public static DAOFactory getDAOFactory() {
         DAOFactory factory = null;
         try {
@@ -35,4 +27,12 @@ public abstract class DAOFactory {
                 throw new NoSuchDbTypeException();
         }
     }
+
+    public abstract UserDAO getUserDAO();
+
+    public abstract NoteDAO getNoteDAO();
+
+    public abstract DateNoteDAO getDateNoteDAO();
+
+    public abstract KeyActionDAO getKeyActionDAO();
 }

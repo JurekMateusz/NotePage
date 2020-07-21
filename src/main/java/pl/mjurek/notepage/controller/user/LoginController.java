@@ -41,7 +41,7 @@ public class LoginController extends HttpServlet {
             if (verificated) {
                 saveUserInSession(request, user);
                 request.setAttribute("fragment", "notes");
-            }else {
+            } else {
                 request.setAttribute("buffUser", user);
                 request.setAttribute("fragment", "");//default login page
                 request.setAttribute("errorMessage", "Check your email and click to link");

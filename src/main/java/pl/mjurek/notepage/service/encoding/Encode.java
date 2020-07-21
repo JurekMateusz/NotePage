@@ -9,8 +9,8 @@ import java.security.NoSuchAlgorithmException;
 public class Encode {
     private static Encode instance;
     private static Cipher cipher;
-    private static  Key aesKey;
-    private static String key = "Bar12345Bar12345";
+    private static Key aesKey;
+    private static final String key = "Bar12345Bar12345";
 
     private Encode() {
     }

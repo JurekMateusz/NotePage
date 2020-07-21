@@ -50,7 +50,7 @@
                             </div>
                             <div>
                                 <p id="description" class="text-center"><c:out value="${note.description}"
-                                                                                escapeXml="false"/></p>
+                                                                               escapeXml="false"/></p>
                             </div>
 
                         </div>

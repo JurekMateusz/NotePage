@@ -21,6 +21,16 @@ import java.util.stream.Collectors;
 
 
 public class NoteService {
+    public static ImportantState createEnum(String state) {
+        ImportantState result = ImportantState.JUST_REMEMBER;
+        try {
+            result = ImportantState.valueOf(state.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
     public Note addNote(User user, String description, String importantState, String deadlineDate) throws AddObjectException, ParseException {
         DateNoteService dateNoteService = new DateNoteService();
         DateNote date = dateNoteService.addDate(deadlineDate);
@@ -35,25 +45,14 @@ public class NoteService {
     private Note createNote(User user, DateNote date, String description, String importantState) throws ParseException {
         ImportantState state = createEnum(importantState);
         description = encode(description);
-        Note result = Note.builder()
+
+        return Note.builder()
                 .description(description)
                 .importantState(state)
                 .statusNote(StatusNote.TODO)
                 .date(date)
                 .user(user)
                 .build();
-
-        return result;
-    }
-
-    public static ImportantState createEnum(String state) {
-        ImportantState result = ImportantState.JUST_REMEMBER;
-        try {
-            result = ImportantState.valueOf(state.toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        }
-        return result;
     }
 
     public List<Note> getAll(long userId) {

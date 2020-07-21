@@ -1,6 +1,8 @@
 package pl.mjurek.notepage.service;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import pl.mjurek.notepage.exception.AddObjectException;
+import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.KeyAction;
 import pl.mjurek.notepage.model.User;
@@ -10,7 +12,11 @@ import java.util.Random;
 
 public class AccountActionService {//todo
 
-    public void makeActivateKeyAndSendEmail(User user, String patch) {
+    public static String encodePassword(String pass) {
+        return DigestUtils.sha1Hex(pass).substring(0, 40);
+    }
+
+    public void makeActivateKeyAndSendEmail(User user, String patch) throws AddObjectException {
         sleep();
         String activateKey = getKey();
 
@@ -24,7 +30,7 @@ public class AccountActionService {//todo
         emailSessionBean.sendEmail(email, subject, content);
     }
 
-    public void verification(String key) throws UpdateObjectException {
+    public void verification(String key) throws UpdateObjectException, DeleteObjectException {
         KeyActionService service = new KeyActionService();
         KeyAction keyAction = service.read(key);
 
@@ -60,13 +66,9 @@ public class AccountActionService {//todo
         Random random = new Random(System.currentTimeMillis() % 17);
 
         for (int i = 0; i < 4; i++) {
-            password.append((char)(random.nextInt(90)+65));
-            password.append((char)(random.nextInt(63)+46));
+            password.append((char) (random.nextInt(90) + 65));
+            password.append((char) (random.nextInt(63) + 46));
         }
         return password.toString();
-    }
-
-    public static String encodePassword(String pass) {
-        return DigestUtils.sha1Hex(pass).substring(0, 40);
     }
 }

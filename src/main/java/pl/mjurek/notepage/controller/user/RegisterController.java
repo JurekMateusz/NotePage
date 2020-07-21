@@ -70,12 +70,16 @@ public class RegisterController extends HttpServlet {
 
         Thread thread = new Thread(() -> {
             AccountActionService action = new AccountActionService();
-            action.makeActivateKeyAndSendEmail(registerUser, patch);
+            try {
+                action.makeActivateKeyAndSendEmail(registerUser, patch);
+            } catch (AddObjectException e) {
+                e.printStackTrace();
+            }
         });
         thread.start();
 
         request.setAttribute("fragment", "");
-        request.setAttribute("successMessage","Verification link send to email");
+        request.setAttribute("successMessage", "Verification link send to email");
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 

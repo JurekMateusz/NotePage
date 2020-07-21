@@ -31,7 +31,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String DELETE =
             "DELETE FROM date WHERE date_id=:date_id;";
 
-    private NamedParameterJdbcTemplate template;
+    private final NamedParameterJdbcTemplate template;
 
     public DateNoteDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
@@ -92,7 +92,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     public void update(long dateId, Timestamp deadline) throws UpdateObjectException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("date_id", dateId);
-        paramMap.put("deadline_note",deadline);
+        paramMap.put("deadline_note", deadline);
 
         SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
         int update = template.update(UPDATE_DEADLINE, paramSource);

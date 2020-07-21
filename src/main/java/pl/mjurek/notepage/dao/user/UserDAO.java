@@ -10,5 +10,5 @@ public interface UserDAO extends GenericDAO<User, Long> {
 
     User getUserByEmail(String email);
 
-    void updateVerification(long userId,String status) throws UpdateObjectException;
+    void updateVerification(long userId, String status) throws UpdateObjectException;
 }

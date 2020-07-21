@@ -35,7 +35,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String DELETE =
             "DELETE FROM user WHERE user_id=:user_id";
 
-    private NamedParameterJdbcTemplate template;
+    private final NamedParameterJdbcTemplate template;
 
     public UserDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
