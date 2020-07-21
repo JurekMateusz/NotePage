@@ -26,7 +26,7 @@
                         </c:otherwise>
                         </c:choose>
                         <div class="col col-md-9 col-sm-9">
-                            <div class="col col-md-2 col-sm-1">
+                            <div class="col col-md-2 col-sm-1 justify-content-left">
                                 <h7>
                                     <medium>Added: <fmt:formatDate value="${note.date.dateStickNote}"
                                                                    pattern="dd/MM/YYYY"/>,
@@ -48,8 +48,11 @@
                                     </medium>
                                 </h7>
                             </div>
-                            <p id="description" class="text-center"><c:out value="${note.description}"
-                                                                           escapeXml="false"/></p>
+                            <div>
+                                <p id="description" class="text-center"><c:out value="${note.description}"
+                                                                                escapeXml="false"/></p>
+                            </div>
+
                         </div>
                         <div class="col col-md-3 col-sm-2">
 
