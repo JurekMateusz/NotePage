@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -28,18 +29,11 @@ public class LoginController extends HttpServlet {
         UserService userService = new UserService();
 
         String encodedPassword = AccountActionService.encodePassword(password);
+        Optional<User> userOpt = userService.getUserByCredential(username, encodedPassword);
 
-        User takenUser = userService.getUserByUserName(user.getName());
-        boolean passwordsCorrect = false;
-        boolean verificated = false;
-        if (takenUser != null) {
-            passwordsCorrect = encodedPassword.equals(takenUser.getPassword());
-            verificated = takenUser.getVerification().equals("YES");
-        }
-
-        if (passwordsCorrect) {
-            if (verificated) {
-                saveUserInSession(request, user);
+        if (userOpt.isPresent()) {
+            if (wasVerified(userOpt.get())) {
+                saveUserInSession(request, userOpt.get());
                 request.setAttribute("fragment", "notes");
             } else {
                 request.setAttribute("buffUser", user);
@@ -57,13 +51,14 @@ public class LoginController extends HttpServlet {
         request.getRequestDispatcher(destination).forward(request, response);
     }
 
+    private boolean wasVerified(User user) {
+        return user.getVerification().equals("YES");
+    }
+
     private void saveUserInSession(HttpServletRequest request, User user) {
-        UserService userService = new UserService();
-        String username = user.getName();
-        User loggedUser = userService.getUserByUserName(username);
         HttpSession session = request.getSession(true);
         session.setMaxInactiveInterval(10 * 60);
-        session.setAttribute("loggedUser", loggedUser);
+        session.setAttribute("loggedUser", user);
     }
 
     @Override

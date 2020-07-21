@@ -7,6 +7,8 @@ import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.User;
 
+import java.util.Optional;
+
 public class UserService {
     public User addUser(User user) throws AddObjectException {
         UserDAO userDAO = getUserDAO();
@@ -16,6 +18,10 @@ public class UserService {
     public User getUserByUserName(String name) {
         UserDAO userDAO = getUserDAO();
         return userDAO.getUserByUserName(name);
+    }
+    public Optional<User> getUserByCredential(String name,String password) {
+        UserDAO userDAO = getUserDAO();
+        return userDAO.readUserByCredential(name,password);
     }
 
     public User getUserByEmail(String email) {

@@ -79,8 +79,7 @@ public class NoteDAOImpl implements NoteDAO {
     @Override
     public Note read(Long noteId) {
         SqlParameterSource paramSource = new MapSqlParameterSource("note_id", noteId);
-        Note note = template.queryForObject(READ, paramSource, new NoteFullRowMapper());
-        return note;
+        return template.queryForObject(READ, paramSource, new NoteFullRowMapper());
     }
 
     @Override
