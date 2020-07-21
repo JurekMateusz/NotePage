@@ -6,8 +6,8 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card-body">
-        <c:choose>
-        <c:when test="${not empty modify}">
+            <c:choose>
+            <c:when test="${not empty modify}">
             <form method="post" action="wrench">
                 <div class="card-header">
                     <h1>EDIT Your note:</h1>

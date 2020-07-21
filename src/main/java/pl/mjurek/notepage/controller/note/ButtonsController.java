@@ -7,7 +7,9 @@ import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/button_control")
@@ -17,13 +19,14 @@ public class ButtonsController extends HttpServlet {
         String note_id = request.getParameter("note_id");
         String action = request.getParameter("action");
 
-        Long noteId = null;
-        NotesControllerOptions actionStatus = null;
+        Long noteId;
+        NotesControllerOptions actionStatus;
         try {
             noteId = Long.parseLong(note_id);
             actionStatus = NotesControllerOptions.valueOf(action);
         } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/note_list");
+            return;
         }
         NoteService service = new NoteService();
         try {
@@ -35,9 +38,10 @@ public class ButtonsController extends HttpServlet {
                 case DELETE:
                     service.deleteNote(noteId);
             }
-        } catch (DeleteObjectException | UpdateObjectException ex) {
-            request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
-            return;
+        } catch (UpdateObjectException ex) {
+            request.setAttribute("errorMessage", "Can't update note");
+        } catch (DeleteObjectException e) {
+            request.setAttribute("errorMessage", "Can't delete note");
         }
 
         request.getRequestDispatcher("/note_list").forward(request, response);

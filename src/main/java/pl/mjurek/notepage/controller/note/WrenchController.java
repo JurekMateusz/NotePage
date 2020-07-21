@@ -76,5 +76,4 @@ public class WrenchController extends HttpServlet {
         request.setAttribute("fragment", "add");
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
-
 }

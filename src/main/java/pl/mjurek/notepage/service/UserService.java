@@ -10,26 +10,22 @@ import pl.mjurek.notepage.model.User;
 public class UserService {
     public User addUser(User user) throws AddObjectException {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.create(user);
-        return result;
+        return userDAO.create(user);
     }
 
     public User getUserByUserName(String name) {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.getUserByUserName(name);
-        return result;
+        return userDAO.getUserByUserName(name);
     }
 
     public User getUserByEmail(String email) {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.getUserByEmail(email);
-        return result;
+        return userDAO.getUserByEmail(email);
     }
 
     public User update(User user) throws UpdateObjectException {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.update(user);
-        return result;
+        return userDAO.update(user);
     }
 
     public void delete(User user) {
@@ -63,13 +59,13 @@ public class UserService {
     public boolean isNameExisting(String name) {
         UserDAO userDAO = getUserDAO();
         User user = userDAO.getUserByUserName(name);
-        return user == null ? false : true;
+        return user != null;
     }
 
     public boolean isEmailExisting(String email) {
         UserDAO userDAO = getUserDAO();
         User user = userDAO.getUserByEmail(email);
-        return user == null ? false : true;
+        return user != null;
     }
 
     public void unblock(long userId) throws UpdateObjectException {

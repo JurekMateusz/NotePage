@@ -19,9 +19,9 @@ public class ParamNoteController extends HttpServlet {
         String sortBy = request.getParameter("sort_by");
         String order = request.getParameter("order");
 
-        session.setAttribute("type",typeNotes);
-        session.setAttribute("sort_by",sortBy);
-        session.setAttribute("order",order);
+        session.setAttribute("type", typeNotes);
+        session.setAttribute("sort_by", sortBy);
+        session.setAttribute("order", order);
 
         request.getRequestDispatcher("note_list").forward(request, response);
     }

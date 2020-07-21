@@ -19,17 +19,17 @@ public class DeleteAccountController extends HttpServlet {
         User user = (User) session.getAttribute("loggedUser");
         String deleteText = request.getParameter("deleteText");
         String correctText = "NotePage/" + user.getName();
-        if (deleteText.equals(correctText)){
+        if (deleteText.equals(correctText)) {
             Thread thread = new Thread(() -> {
                 UserService service = new UserService();
                 service.delete(user);
             });
             thread.start();
-        }else {
-            doGet(request,response);
+        } else {
+            doGet(request, response);
             return;
         }
-        response.sendRedirect(request.getContextPath()+"/logout");
+        response.sendRedirect(request.getContextPath() + "/logout");
     }
 
     @Override
