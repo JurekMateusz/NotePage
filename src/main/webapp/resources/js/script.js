@@ -1,6 +1,11 @@
-$('#password, #confirm_password').on('keyup', function () {
-    if ($('#password').val() == $('#confirm_password').val()) {
-        $('#message').html('Matching').css('color', 'green');
-    } else
-        $('#message').html('Not Matching').css('color', 'red');
+$(function () {
+    $("#datepicker").datepicker();
+});
+
+jQuery(document).ready(function($) {
+
+    var url = window.location.href;
+    url = url.split('?')[0];
+    window.history.replaceState({}, document.title, url);
+    window.history.pushState({}, url);
 });
