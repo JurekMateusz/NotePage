@@ -34,9 +34,9 @@ public class NoteController extends HttpServlet {
             session.setAttribute("search_by", "all");
         } else if (searchByFromSession != null) {
             if (searchByFromSession.equals("param")) {
-                String typeNotes = request.getParameter("type");
-                String sortBy = request.getParameter("sort_by");
-                String order = request.getParameter("order");
+                String typeNotes = (String) session.getAttribute("type");
+                String sortBy = (String) session.getAttribute("sort_by");
+                String order = (String) session.getAttribute("order");
 
                 SortOptions sortByEnum = SortOptions.valueOf(sortBy);
 
