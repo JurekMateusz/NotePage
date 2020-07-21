@@ -21,19 +21,24 @@ import java.util.Map;
 public class UserDAOImpl implements UserDAO {
 
     private static final String CREATE =
-            "INSERT INTO user(name,email,password) VALUES (:name,:email,:password);";
+            "INSERT INTO user(name, email, password) VALUES (:name, :email, :password);";
 
     private static final String UPDATE =
-            "UPDATE user SET email=:email, password=:password WHERE user_id=:user_id;";
+            "UPDATE user SET email = :email, password = :password WHERE user_id = :user_id;";
     private static final String UPDATE_VERIFICATION =
-            "UPDATE user SET verification=:verification WHERE user_id=:user_id;";
+            "UPDATE user SET verification = :verification WHERE user_id = :user_id;";
     private static final String READ_USER_BY_USERNAME =
-            "SELECT user_id,name,email,password,verification FROM user WHERE name=:name LIMIT 1;";
+            "SELECT user_id ,name ,email ,password ,verification FROM user WHERE name = :name LIMIT 1;";
 
     private static final String READ_USER_BY_EMAIL =
-            "SELECT user_id,name,email,password,verification FROM user WHERE email=:email LIMIT 1;";
+            "SELECT user_id ,name ,email ,password ,verification FROM user WHERE email = :email LIMIT 1;";
     private static final String DELETE =
-            "DELETE FROM user WHERE user_id=:user_id";
+            "DELETE FROM user WHERE user_id = :user_id";
+
+    private final String isNameExist = "SELECT EXISTS(SELECT 1 FROM user WHERE name = :name )";
+
+    private final String isEmailExist = "SELECT EXISTS(SELECT 1 FROM user WHERE email = :email )";
+
 
     private final NamedParameterJdbcTemplate template;
 
@@ -123,6 +128,20 @@ public class UserDAOImpl implements UserDAO {
         if (update < 1) {
             throw new UpdateObjectException();
         }
+    }
+
+    @Override
+    public boolean isUsernameExist(String username) {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource("name", username);
+        int result = template.queryForObject(isNameExist, paramSource, Integer.class);
+        return result == 1;
+    }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource("email", email);
+        int result = template.queryForObject(isEmailExist, paramSource, Integer.class);
+        return result == 1;
     }
 
 

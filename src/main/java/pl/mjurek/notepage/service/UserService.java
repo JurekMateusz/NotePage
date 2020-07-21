@@ -58,14 +58,12 @@ public class UserService {
 
     public boolean isNameExisting(String name) {
         UserDAO userDAO = getUserDAO();
-        User user = userDAO.getUserByUserName(name);
-        return user != null;
+        return userDAO.isUsernameExist(name);
     }
 
     public boolean isEmailExisting(String email) {
         UserDAO userDAO = getUserDAO();
-        User user = userDAO.getUserByEmail(email);
-        return user != null;
+        return userDAO.isEmailExist(email);
     }
 
     public void unblock(long userId) throws UpdateObjectException {
