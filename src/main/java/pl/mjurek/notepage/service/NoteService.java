@@ -12,10 +12,12 @@ import pl.mjurek.notepage.model.states.ImportantState;
 import pl.mjurek.notepage.model.states.NotesControllerOptions;
 import pl.mjurek.notepage.model.states.SortOptions;
 import pl.mjurek.notepage.model.states.StatusNote;
+import pl.mjurek.notepage.service.encoding.Encode;
 
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class NoteService {
@@ -32,6 +34,7 @@ public class NoteService {
 
     private Note createNote(User user, DateNote date, String description, String importantState) throws ParseException {
         ImportantState state = createEnum(importantState);
+        description = encode(description);
         Note result = Note.builder()
                 .description(description)
                 .importantState(state)
@@ -55,12 +58,14 @@ public class NoteService {
 
     public List<Note> getAll(long userId) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.getAll(userId);
+        List<Note> notes = noteDAO.getAll(userId);
+        return decode(notes);
     }
 
     public List<Note> getAll(long userId, StatusNote status) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.getAll(userId, status);
+        List<Note> notes = noteDAO.getAll(userId, status);
+        return decode(notes);
     }
 
     public List<Note> getAll(long userId, String type, SortOptions sortBy, String order) {
@@ -76,7 +81,18 @@ public class NoteService {
         if (order.equals("desc") && result != null) {
             Collections.reverse(result);
         }
-        return result;
+        return decode(result);
+    }
+
+    private List<Note> decode(List<Note> notes) {
+        Encode encode = Encode.getInstance();
+        return notes.stream()
+                .map(n -> {
+                    String encoded = encode.decode(n.getDescription());
+                    n.setDescription(encoded);
+                    return n;
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -92,6 +108,8 @@ public class NoteService {
 
     public void update(long dateId, String description, String importantStatus) throws UpdateObjectException, ParseException {
         NoteDAO noteDAO = getNoteDAO();
+        description = encode(description);
+
         noteDAO.update(dateId, description, importantStatus);
     }
 
@@ -113,7 +131,10 @@ public class NoteService {
 
     public Note read(long noteId) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.read(noteId);
+        Note note = noteDAO.read(noteId);
+        Encode encode = Encode.getInstance();
+        note.setDescription(encode.decode(note.getDescription()));
+        return note;
     }
 
     public void deleteAllUserNotes(long userId) throws DeleteObjectException {
@@ -131,5 +152,10 @@ public class NoteService {
     private NoteDAO getNoteDAO() {
         DAOFactory factory = DAOFactory.getDAOFactory();
         return factory.getNoteDAO();
+    }
+
+    private String encode(String text) {
+        Encode encode = Encode.getInstance();
+        return encode.encode(text);
     }
 }
