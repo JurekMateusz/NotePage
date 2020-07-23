@@ -3,7 +3,7 @@ package pl.mjurek.notepage.controller.note;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.service.DateNoteService;
-import pl.mjurek.notepage.service.NoteActionService;
+import pl.mjurek.notepage.service.fun.NewLineConverter;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ public class WrenchController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String description = request.getParameter("description").trim();
-        description = NoteActionService.convertNewLineCharToBR_Tag(description);
+        description = NewLineConverter.convertNewLineCharToBR_Tag(description);
         String importantStatus = request.getParameter("importantState");
         String deadlineDate = request.getParameter("date");
 
@@ -65,7 +65,7 @@ public class WrenchController extends HttpServlet {
         NoteService service = new NoteService();
         Note note = service.read(noteId);
 
-        String description = NoteActionService.convertReadableNewLine(note.getDescription());
+        String description = NewLineConverter.convertReadableNewLine(note.getDescription());
         note.setDescription(description);
 
         request.getSession(false).setAttribute("note_id", noteId);

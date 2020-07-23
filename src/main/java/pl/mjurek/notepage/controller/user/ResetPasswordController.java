@@ -4,9 +4,9 @@ import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.KeyAction;
-import pl.mjurek.notepage.service.AccountActionService;
 import pl.mjurek.notepage.service.KeyActionService;
 import pl.mjurek.notepage.service.UserService;
+import pl.mjurek.notepage.service.fun.Hash;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +36,7 @@ public class ResetPasswordController extends HttpServlet {
         }
         KeyAction keyAct = keyActionOpt.get();
         long userId = keyAct.getUserId();
-        String resetPasswordKey = AccountActionService.getKey();
+        String resetPasswordKey = Hash.getKey();
 
         try {
             keyService.addKey(userId, resetPasswordKey);
@@ -82,7 +82,7 @@ public class ResetPasswordController extends HttpServlet {
 
         KeyAction keyAct = keyActionOpt.get();
         long userId = keyAct.getUserId();
-        password = AccountActionService.encodePassword(password);
+        password = Hash.encodePassword(password);
 
         UserService userService = new UserService();
         try {
@@ -92,7 +92,7 @@ public class ResetPasswordController extends HttpServlet {
             req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);
             return;
         }
-        req.setAttribute("successMessage", "New password has been set");
+        req.setAttribute("errorMessage", "New password has been set");
         req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);
     }
 }
