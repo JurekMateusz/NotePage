@@ -20,17 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class NoteService {
-    public static ImportantState createEnum(String state) {
-        ImportantState result = ImportantState.JUST_REMEMBER;
-        try {
-            result = ImportantState.valueOf(state.toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        }
-        return result;
-    }
 
+public class NoteService {
     public Note addNote(User user, String description, String importantState, String deadlineDate) throws AddObjectException, ParseException {
         DateNoteService dateNoteService = new DateNoteService();
         DateNote date = dateNoteService.addDate(deadlineDate);
@@ -44,7 +35,7 @@ public class NoteService {
 
     private Note createNote(User user, DateNote date, String description, String importantState) throws ParseException {
         ImportantState state = createEnum(importantState);
-        description = encode(description);
+        description = Encode.encrypt(description);
 
         return Note.builder()
                 .description(description)
@@ -53,6 +44,16 @@ public class NoteService {
                 .date(date)
                 .user(user)
                 .build();
+    }
+
+    public static ImportantState createEnum(String state) {
+        ImportantState result = ImportantState.JUST_REMEMBER;
+        try {
+            result = ImportantState.valueOf(state.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     public List<Note> getAll(long userId) {
@@ -84,10 +85,9 @@ public class NoteService {
     }
 
     private List<Note> decode(List<Note> notes) {
-        Encode encode = Encode.getInstance();
         return notes.stream()
                 .map(n -> {
-                    String encoded = encode.decode(n.getDescription());
+                    String encoded = Encode.decrypt(n.getDescription());
                     n.setDescription(encoded);
                     return n;
                 })
@@ -107,7 +107,7 @@ public class NoteService {
 
     public void update(long dateId, String description, String importantStatus) throws UpdateObjectException, ParseException {
         NoteDAO noteDAO = getNoteDAO();
-        description = encode(description);
+        description = Encode.encrypt(description);
 
         noteDAO.update(dateId, description, importantStatus);
     }
@@ -131,8 +131,7 @@ public class NoteService {
     public Note read(long noteId) {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
-        Encode encode = Encode.getInstance();
-        note.setDescription(encode.decode(note.getDescription()));
+        note.setDescription(Encode.decrypt(note.getDescription()));
         return note;
     }
 
@@ -153,8 +152,4 @@ public class NoteService {
         return factory.getNoteDAO();
     }
 
-    private String encode(String text) {
-        Encode encode = Encode.getInstance();
-        return encode.encode(text);
-    }
 }

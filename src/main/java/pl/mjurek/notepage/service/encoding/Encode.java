@@ -1,56 +1,53 @@
 package pl.mjurek.notepage.service.encoding;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class Encode {
-    private static Encode instance;
-    private static Cipher cipher;
-    private static Key aesKey;
-    private static final String key = "Bar12345Bar12345";
+    private static final String ALGORITHM = "AES";
+    private static final String myEncryptionKey = "Bar12345Bar12345";
+    private static final String UNICODE_FORMAT = "UTF8";
 
-    private Encode() {
-    }
-
-    public static Encode getInstance() {
-        if (instance == null) {
-            instance = new Encode();
-
-            aesKey = new SecretKeySpec(key.getBytes(), "AES");
-            try {
-                cipher = Cipher.getInstance("AES");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (NoSuchPaddingException e) {
-                e.printStackTrace();
-            }
-        }
-        return new Encode();
-    }
-
-    public String encode(String text) {
-        String result = "";
+    public static String encrypt(String valueToEnc) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-            byte[] encrypted = cipher.doFinal(text.getBytes());
-            result = new String(encrypted);
-        } catch (Exception e) {
+            Key key = generateKey();
+            Cipher c = Cipher.getInstance(ALGORITHM);
+            c.init(Cipher.ENCRYPT_MODE, key);
+            byte[] encValue = c.doFinal(valueToEnc.getBytes());
+            return Base64.getEncoder().encodeToString(encValue);
+        } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException
+                | BadPaddingException | UnsupportedEncodingException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
-        return result;
+        return "";
     }
 
-    public String decode(String encrypted) {
-        String result = "";
+    public static String decrypt(String encryptedValue) {
         try {
-            cipher.init(Cipher.DECRYPT_MODE, aesKey);
-            result = new String(cipher.doFinal(encrypted.getBytes()));
-        } catch (Exception e) {
+            Key key = generateKey();
+            Cipher c = Cipher.getInstance(ALGORITHM);
+            c.init(Cipher.DECRYPT_MODE, key);
+            byte[] decodedValue = Base64.getDecoder().decode(encryptedValue);
+            byte[] decValue = c.doFinal(decodedValue);
+            return new String(decValue);
+        } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException
+                | BadPaddingException | UnsupportedEncodingException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
-        return result;
+        return "";
+    }
+
+    private static Key generateKey() throws UnsupportedEncodingException {
+        byte[] keyAsBytes;
+        keyAsBytes = myEncryptionKey.getBytes(UNICODE_FORMAT);
+        return new SecretKeySpec(keyAsBytes, ALGORITHM);
     }
 }
