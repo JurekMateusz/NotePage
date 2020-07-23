@@ -22,7 +22,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String CREATE =
             "INSERT INTO date(stick_note,deadline_note) VALUES(:stick_note,:deadline_note);";
     private static final String READ =
-            "SELECT date_id,stick_note,deadline_note,user_made_task from date WHERE date_id=:date_id;";
+            "SELECT date_id,stick_note,deadline_note,user_made_task from date WHERE date_id=:date_id LIMIT 1;";
     private static final String UPDATE =
             "UPDATE date SET deadline_note=:deadline_note, user_made_task=:user_made_task " +
                     "WHERE date_id=:date_id;";
@@ -31,7 +31,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String DELETE =
             "DELETE FROM date WHERE date_id=:date_id;";
 
-    private NamedParameterJdbcTemplate template;
+    private final NamedParameterJdbcTemplate template;
 
     public DateNoteDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
@@ -92,7 +92,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
     public void update(long dateId, Timestamp deadline) throws UpdateObjectException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("date_id", dateId);
-        paramMap.put("deadline_note",deadline);
+        paramMap.put("deadline_note", deadline);
 
         SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
         int update = template.update(UPDATE_DEADLINE, paramSource);
@@ -112,7 +112,7 @@ public class DateNoteDAOImpl implements DateNoteDAO {
         }
     }
 
-    private class DateNoteRowMapper implements RowMapper<DateNote> {
+    private static class DateNoteRowMapper implements RowMapper<DateNote> {
         @Override
         public DateNote mapRow(ResultSet resultSet, int i) throws SQLException {
             return DateNote.builder()

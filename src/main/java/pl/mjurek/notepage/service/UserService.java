@@ -7,29 +7,37 @@ import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.User;
 
+import java.util.Optional;
+
 public class UserService {
     public User addUser(User user) throws AddObjectException {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.create(user);
-        return result;
+        return userDAO.create(user);
     }
 
     public User getUserByUserName(String name) {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.getUserByUserName(name);
-        return result;
+        return userDAO.getUserByUserName(name);
     }
 
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByCredential(String name, String password) {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.getUserByEmail(email);
-        return result;
+        return userDAO.readUserByCredential(name, password);
     }
 
     public User update(User user) throws UpdateObjectException {
         UserDAO userDAO = getUserDAO();
-        User result = userDAO.update(user);
-        return result;
+        return userDAO.update(user);
+    }
+
+    public void updatePassword(long id, String password) throws UpdateObjectException {
+        UserDAO userDAO = getUserDAO();
+        userDAO.updatePassword(id, password);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        UserDAO userDAO = getUserDAO();
+        return userDAO.readUserByEmail(email);
     }
 
     public void delete(User user) {
@@ -62,14 +70,12 @@ public class UserService {
 
     public boolean isNameExisting(String name) {
         UserDAO userDAO = getUserDAO();
-        User user = userDAO.getUserByUserName(name);
-        return user == null ? false : true;
+        return userDAO.isUsernameExist(name);
     }
 
     public boolean isEmailExisting(String email) {
         UserDAO userDAO = getUserDAO();
-        User user = userDAO.getUserByEmail(email);
-        return user == null ? false : true;
+        return userDAO.isEmailExist(email);
     }
 
     public void unblock(long userId) throws UpdateObjectException {

@@ -17,19 +17,17 @@ public class DateNoteService {
     public DateNote addDate(String deadlineDate) throws ParseException, AddObjectException {
         DateNote date = createDate(deadlineDate);
         DateNoteDAO noteDAO = getDateNoteDAO();
-        DateNote result = noteDAO.create(date);
-        return result;
+        return noteDAO.create(date);
     }
 
     private DateNote createDate(String deadlineDate) throws ParseException {
         Date date = new SimpleDateFormat("MM/dd/yyyy").parse(deadlineDate);
         Timestamp deadlineTimestamp = new Timestamp(date.getTime());
-        DateNote result = DateNote.builder()
+
+        return DateNote.builder()
                 .dateStickNote(new Timestamp(new Date().getTime()))
                 .dateDeadlineNote(deadlineTimestamp)
                 .build();
-
-        return result;
     }
 
     public void update(DateNote dateNote, NotesControllerOptions action) throws UpdateObjectException {

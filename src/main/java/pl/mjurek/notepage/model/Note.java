@@ -7,7 +7,7 @@ import lombok.Setter;
 import pl.mjurek.notepage.model.states.ImportantState;
 import pl.mjurek.notepage.model.states.StatusNote;
 
-@Builder(toBuilder=true)
+@Builder(toBuilder = true)
 @Getter
 @Setter
 @EqualsAndHashCode

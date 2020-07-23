@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@Builder(toBuilder=true)
+@Builder(toBuilder = true)
 public class DateNote {
     private long id;
     private Timestamp dateStickNote;

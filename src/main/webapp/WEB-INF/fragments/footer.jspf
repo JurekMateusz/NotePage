@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <footer class="footer">
     <div class="container">
         <p class="navbar-text text-center navbar-text col-md-12 col-sm-12 col-xs-12">
             NOTE_Page - developed by <a href="https://github.com/JurekMateusz">
             <img src="${pageContext.request.contextPath}/resources/img/github.png"
-            width="30" height="30" class="d-inline-block mr-1" alt=""></a>
+                 width="30" height="30" class="d-inline-block mr-1" alt=""></a>
         </p>
     </div>
 </footer>

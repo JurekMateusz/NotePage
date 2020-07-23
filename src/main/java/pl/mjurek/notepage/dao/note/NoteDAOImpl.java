@@ -9,7 +9,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.model.*;
+import pl.mjurek.notepage.model.DateNote;
+import pl.mjurek.notepage.model.Note;
+import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.model.states.ImportantState;
 import pl.mjurek.notepage.model.states.SortOptions;
 import pl.mjurek.notepage.model.states.StatusNote;
@@ -25,14 +27,14 @@ import java.util.Map;
 
 public class NoteDAOImpl implements NoteDAO {
     private static final String CREATE =
-            "INSERT INTO note(description,  date_id, user_id, important_state, status_note)" +
+            "INSERT INTO note(description,  date_id, user_id, important_state, status_note) " +
                     "VALUES(:description, :date_id, :user_id, :important_state, :status_note);";
 
     private static final String READ =
             "SELECT note_id, description, note.date_id, note.user_id, status_note, important_state," +
                     "date.date_id, stick_note, deadline_note, user_made_task," +
                     "user.user_id,name,email FROM note JOIN date ON note.date_id=date.date_id" +
-                    " JOIN user ON note.user_id=user.user_id WHERE note_id=:note_id;";
+                    " JOIN user ON note.user_id=user.user_id WHERE note_id=:note_id LIMIT 1;";
 
     private static final String UPDATE =
             "UPDATE note SET description=:description, date_id=:date_id, user_id=:user_id," +
@@ -54,7 +56,7 @@ public class NoteDAOImpl implements NoteDAO {
                     "FROM note JOIN date ON note.date_id=date.date_id" +
                     " WHERE status_note=:status_note AND user_id=:user_id;";
 
-    private NamedParameterJdbcTemplate template;
+    private final NamedParameterJdbcTemplate template;
 
     public NoteDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
@@ -73,12 +75,11 @@ public class NoteDAOImpl implements NoteDAO {
         }
         return copyNote;
     }
-
+    //TODO org.springframework.dao.DataAccessException if note dont exist ,HTML change
     @Override
     public Note read(Long noteId) {
         SqlParameterSource paramSource = new MapSqlParameterSource("note_id", noteId);
-        Note note = template.queryForObject(READ, paramSource, new NoteFullRowMapper());
-        return note;
+        return template.queryForObject(READ, paramSource, new NoteFullRowMapper());
     }
 
     @Override
@@ -145,7 +146,6 @@ public class NoteDAOImpl implements NoteDAO {
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
             //elegant solution dont working
             // https://stackoverflow.com/questions/34760951/binding-value-in-orderby-not-working-with-namedparameterjdbctemplate
-            // todo prepared statement
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
@@ -173,13 +173,11 @@ public class NoteDAOImpl implements NoteDAO {
     public List<Note> getAll(long user_id, StatusNote state, SortOptions sortBy) {
         List<Note> result = null;
         try (Statement statement = ConnectionProvider.getConnection().createStatement()) {
-            //elegant solution dont working
-            // https://stackoverflow.com/questions/34760951/binding-value-in-orderby-not-working-with-namedparameterjdbctemplate
             String sql = "SELECT note_id,description,note.date_id,user_id,status_note,important_state" +
                     ",date.date_id,stick_note,deadline_note,user_made_task " +
                     "FROM note JOIN date ON note.date_id=date.date_id" +
-                    " WHERE user_id=" + user_id + " AND status_note=\'" +
-                    state.name() + "\' ORDER BY " + sortBy.name().toLowerCase() + " ASC;";
+                    " WHERE user_id=" + user_id + " AND status_note='" +
+                    state.name() + "' ORDER BY " + sortBy.name().toLowerCase() + " ASC;";
             ResultSet set = statement.executeQuery(sql);
 
             result = makeList(set);
@@ -201,7 +199,7 @@ public class NoteDAOImpl implements NoteDAO {
     }
 
 
-    private class NoteFullRowMapper implements RowMapper<Note> {
+    private static class NoteFullRowMapper implements RowMapper<Note> {
         @Override
         public Note mapRow(ResultSet resultSet, int i) throws SQLException {
             DateNote date = DateNote.builder()
@@ -216,7 +214,7 @@ public class NoteDAOImpl implements NoteDAO {
                     .email(resultSet.getString("email"))
                     .build();
 
-            Note note = Note.builder()
+            return Note.builder()
                     .id(resultSet.getLong("note_id"))
                     .description(resultSet.getString("description"))
                     .importantState(ImportantState.valueOf(resultSet.getString("important_state")))
@@ -224,12 +222,10 @@ public class NoteDAOImpl implements NoteDAO {
                     .statusNote(StatusNote.valueOf(resultSet.getString("status_note")))
                     .user(user)
                     .build();
-
-            return note;
         }
     }
 
-    private class NoteRowMapper implements RowMapper<Note> {
+    private static class NoteRowMapper implements RowMapper<Note> {
         @Override
         public Note mapRow(ResultSet resultSet, int i) throws SQLException {
             DateNote date = DateNote.builder()
@@ -239,15 +235,13 @@ public class NoteDAOImpl implements NoteDAO {
                     .dateUserMadeTask(resultSet.getTimestamp("user_made_task"))
                     .build();
 
-            Note note = Note.builder()
+            return Note.builder()
                     .id(resultSet.getLong("note_id"))
                     .description(resultSet.getString("description"))
                     .importantState(ImportantState.valueOf(resultSet.getString("important_state")))
                     .date(date)
                     .statusNote(StatusNote.valueOf(resultSet.getString("status_note")))
                     .build();
-
-            return note;
         }
     }
 }

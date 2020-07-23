@@ -1,4 +1,4 @@
-@CHARSET "UTF-8";
+
 html {
     position: relative;
     min-height: 100%;
@@ -7,8 +7,14 @@ html {
 body {
     /*Margin bottom by footer height*/
     margin-bottom: 60px;
-    background-image: url(../img/back_note.jpg);
+    background-color: #000000;
+    background-image: url(../img/black.jpg);
+    background-repeat: no-repeat;
     overflow-x: hidden;
+}
+
+h1{
+color:white;
 }
 
 .footer {
@@ -17,7 +23,7 @@ body {
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 60px;
-    background-color: orange;
+ /*  background-color: orange;*/
 }
 
 #search {
@@ -102,4 +108,104 @@ body {
 
 .centered {
     margin: 0 auto;
+}
+
+
+/* Made with love by Mutiullah Samim*/
+
+.container{
+height: 100%;
+align-content: center;
+}
+
+.card{
+height: 370px;
+margin-top: auto;
+margin-bottom: auto;
+width: 400px;
+background-color: rgba(0,0,0,0.5) !important;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.login_btn{
+color: black;
+background-color: #FFC312;
+width: 100px;
+}
+
+.login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
+
+.alert-fixed {
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index:9999;
+    border-radius:0px
+}
+
+#description{
+font-style: italic;
+font-weight: bold;
+}
+
+#myNote{
+background:#ffe16a;
 }

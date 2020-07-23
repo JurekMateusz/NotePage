@@ -12,10 +12,13 @@ import pl.mjurek.notepage.model.states.ImportantState;
 import pl.mjurek.notepage.model.states.NotesControllerOptions;
 import pl.mjurek.notepage.model.states.SortOptions;
 import pl.mjurek.notepage.model.states.StatusNote;
+import pl.mjurek.notepage.service.encoding.Encode;
 
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 public class NoteService {
@@ -32,15 +35,15 @@ public class NoteService {
 
     private Note createNote(User user, DateNote date, String description, String importantState) throws ParseException {
         ImportantState state = createEnum(importantState);
-        Note result = Note.builder()
+        description = Encode.encrypt(description);
+
+        return Note.builder()
                 .description(description)
                 .importantState(state)
                 .statusNote(StatusNote.TODO)
                 .date(date)
                 .user(user)
                 .build();
-
-        return result;
     }
 
     public static ImportantState createEnum(String state) {
@@ -55,12 +58,14 @@ public class NoteService {
 
     public List<Note> getAll(long userId) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.getAll(userId);
+        List<Note> notes = noteDAO.getAll(userId);
+        return decode(notes);
     }
 
     public List<Note> getAll(long userId, StatusNote status) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.getAll(userId, status);
+        List<Note> notes = noteDAO.getAll(userId, status);
+        return decode(notes);
     }
 
     public List<Note> getAll(long userId, String type, SortOptions sortBy, String order) {
@@ -76,7 +81,17 @@ public class NoteService {
         if (order.equals("desc") && result != null) {
             Collections.reverse(result);
         }
-        return result;
+        return decode(result);
+    }
+
+    private List<Note> decode(List<Note> notes) {
+        return notes.stream()
+                .map(n -> {
+                    String encoded = Encode.decrypt(n.getDescription());
+                    n.setDescription(encoded);
+                    return n;
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -92,6 +107,8 @@ public class NoteService {
 
     public void update(long dateId, String description, String importantStatus) throws UpdateObjectException, ParseException {
         NoteDAO noteDAO = getNoteDAO();
+        description = Encode.encrypt(description);
+
         noteDAO.update(dateId, description, importantStatus);
     }
 
@@ -113,7 +130,9 @@ public class NoteService {
 
     public Note read(long noteId) {
         NoteDAO noteDAO = getNoteDAO();
-        return noteDAO.read(noteId);
+        Note note = noteDAO.read(noteId);
+        note.setDescription(Encode.decrypt(note.getDescription()));
+        return note;
     }
 
     public void deleteAllUserNotes(long userId) throws DeleteObjectException {
@@ -132,4 +151,5 @@ public class NoteService {
         DAOFactory factory = DAOFactory.getDAOFactory();
         return factory.getNoteDAO();
     }
+
 }

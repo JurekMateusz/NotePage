@@ -4,72 +4,81 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="pl.mjurek.notepage.model.states.ImportantState" %>
 <%@ page import="pl.mjurek.notepage.model.states.StatusNote" %>
-
-
 <jsp:useBean id="now" class="java.util.Date"/>
-<c:if test="${not empty requestScope.notesList}">
+<div id="notes">
+    <c:if test="${not empty requestScope.notesList}">
     <c:forEach var="note" items="${requestScope.notesList}">
-
-        <div class="container" id="myTable">
-        <c:choose>
-            <c:when test="${note.importantState eq ImportantState.JUST_REMEMBER  && note.statusNote eq StatusNote.TODO}">
-                <div class="row bs-callout bs-callout-default col-sm-offset-1">
-            </c:when>
-            <c:when test="${note.importantState eq ImportantState.IMPORTANT && note.statusNote eq StatusNote.TODO}">
-                <div class="row bs-callout bs-callout-warning col-sm-offset-1">
+    <c:choose>
+    <c:when test="${note.importantState eq ImportantState.JUST_REMEMBER  && note.statusNote eq StatusNote.TODO}">
+    <div id="myNote" class="row bs-callout bs-callout-default col-sm-offset-1">
+        </c:when>
+        <c:when test="${note.importantState eq ImportantState.IMPORTANT && note.statusNote eq StatusNote.TODO}">
+        <div id="myNote" class="row bs-callout bs-callout-warning col-sm-offset-1">
             </c:when>
             <c:when test="${note.importantState eq ImportantState.VERY_IMPORTANT  && note.statusNote eq StatusNote.TODO}">
-                <div class="row bs-callout bs-callout-danger col-sm-offset-1">
-            </c:when>
-            <c:when test="${note.statusNote eq StatusNote.MADE}">
-                <div class="row bs-callout bs-callout-success col-sm-offset-1">
-            </c:when>
-            <c:otherwise>
-                <div class="row bs-callout bs-callout-primary col-sm-offset-1">
-            </c:otherwise>
-        </c:choose>
-        <div class="col  col-md-11 col-sm-10">
-            <h6>
-                <medium>Added: <fmt:formatDate value="${note.date.dateStickNote}" pattern="dd/MM/YYYY"/>,
-                    <c:choose>
-                        <c:when test="${(now.time - note.date.dateDeadlineNote.time) gt 0 && note.statusNote eq StatusNote.TODO}">
-                            <strong style="color:red">Deadline: <fmt:formatDate value="${note.date.dateDeadlineNote}"
-                                                                                pattern="dd/MM/YYYY"/></strong>
-                        </c:when>
-                        <c:otherwise>
-                            <strong>Deadline: <fmt:formatDate value="${note.date.dateDeadlineNote}"
-                                                              pattern="dd/MM/YYYY"/></strong>
+            <div id="myNote" class="row bs-callout bs-callout-danger col-sm-offset-1">
+                </c:when>
+                <c:when test="${note.statusNote eq StatusNote.MADE}">
+                <div id="myNote" class="row bs-callout bs-callout-success col-sm-offset-1">
+                    </c:when>
+                    <c:otherwise>
+                    <div id="myNote" class="row bs-callout bs-callout-primary col-sm-offset-1">
                         </c:otherwise>
-                    </c:choose>
-                    <c:if test="${not empty note.date.dateUserMadeTask}">
-                        Made: <fmt:formatDate value="${note.date.dateUserMadeTask}" pattern="dd/MM/YYYY"/>
+                        </c:choose>
+                        <div class="col col-md-9 col-sm-9">
+                            <div class="col col-md-2 col-sm-1 justify-content-left">
+                                <h7>
+                                    <medium>Added: <fmt:formatDate value="${note.date.dateStickNote}"
+                                                                   pattern="dd/MM/YYYY"/>,
+                                        <c:choose>
+                                            <c:when test="${(now.time - note.date.dateDeadlineNote.time) gt 0 && note.statusNote eq StatusNote.TODO}">
+                                                <p style="color:red">Deadline: <fmt:formatDate
+                                                        value="${note.date.dateDeadlineNote}"
+                                                        pattern="dd/MM/YYYY"/></p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p>Deadline: <fmt:formatDate value="${note.date.dateDeadlineNote}"
+                                                                             pattern="dd/MM/YYYY"/></p>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:if test="${not empty note.date.dateUserMadeTask}">
+                                            Made: <fmt:formatDate value="${note.date.dateUserMadeTask}"
+                                                                  pattern="dd/MM/YYYY"/>
+                                        </c:if>
+                                    </medium>
+                                </h7>
+                            </div>
+                            <div>
+                                <p id="description" class="text-center"><c:out value="${note.description}"
+                                                                               escapeXml="false"/></p>
+                            </div>
+
+                        </div>
+                        <div class="col col-md-3 col-sm-2">
+
+                            <c:if test="${note.statusNote eq StatusNote.TODO}">
+                                <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DONE"
+                                   class="btn btn-block btn-success" role="button"
+                                ><span><i class="fa fa-chevron-circle-down"></i></span></a>
+                            </c:if>
+
+                            <c:if test="${note.statusNote eq StatusNote.MADE}">
+                                <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=TODO"
+                                   class="btn btn-block btn-warning" role="button">
+                                    <span><i class="fa fa-undo" aria-hidden="true"></i></span></a>
+                            </c:if>
+
+                            <a href="${pageContext.request.contextPath}/wrench?note_id=${note.id}&action=WRENCH"
+                               class="btn btn-block btn-warning" role="button">
+                                <span><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span></a>
+
+                            <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DELETE"
+                               class="btn btn-block btn-danger" role="button">
+                                <span><i class="fa fa-trash" aria-hidden="true"></i></span></a>
+
+                        </div>
+                    </div>
+                    </c:forEach>
                     </c:if>
-                        <%--                                <p> Status: <c:out value="${note.importantState}"/></p>--%>
-                </medium>
-            </h6>
-
-            <p><c:out value="${note.description}" escapeXml="false"/></p>
-        </div>
-        <div class="col col-md-1 col-sm-2">
-            <c:if test="${note.statusNote eq StatusNote.TODO}">
-                <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DONE"
-                   class="btn btn-block btn-primary btn-success"><span
-                        class="glyphicon glyphicon-ok-circle"></span> </a>
-            </c:if>
-            <c:if test="${note.statusNote eq StatusNote.MADE}">
-                <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=TODO"
-                   class="btn btn-block btn-primary btn-warning"><span
-                        class="glyphicon glyphicon-repeat"></span> </a>
-            </c:if>
-            <a href="${pageContext.request.contextPath}/wrench?note_id=${note.id}&action=WRENCH"
-               class="btn btn-block btn-primary btn-warning"><span
-                    class="glyphicon glyphicon-wrench"></span> </a>
-
-            <a href="${pageContext.request.contextPath}/button_control?note_id=${note.id}&action=DELETE"
-               class="btn btn-block btn-primary btn-danger"><span
-                    class="glyphicon glyphicon-trash"></span> </a>
-        </div>
-        </div>
-        </div>
-    </c:forEach>
-</c:if>
+                </div>
+            </div>

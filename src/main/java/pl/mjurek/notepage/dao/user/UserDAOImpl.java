@@ -17,25 +17,40 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class UserDAOImpl implements UserDAO {
 
     private static final String CREATE =
-            "INSERT INTO user(name,email,password) VALUES (:name,:email,:password);";
+            "INSERT INTO user(name, email, password) VALUES (:name, :email, :password);";
 
     private static final String UPDATE =
-            "UPDATE user SET email=:email, password=:password WHERE user_id=:user_id;";
+            "UPDATE user SET email = :email, password = :password WHERE user_id = :user_id;";
+    private static final String UPDATE_PASSWORD =
+            "UPDATE user SET password = :password WHERE user_id = :user_id;";
+
     private static final String UPDATE_VERIFICATION =
-            "UPDATE user SET verification=:verification WHERE user_id=:user_id;";
+            "UPDATE user SET verification = :verification WHERE user_id = :user_id;";
+
     private static final String READ_USER_BY_USERNAME =
-            "SELECT user_id,name,email,password,verification FROM user WHERE name=:name LIMIT 1;";
+            "SELECT user_id ,name ,email ,password ,verification FROM user WHERE name = :name LIMIT 1;";
+
+    private static final String READ_USER_BY_CREDENTIAL =
+            "SELECT user_id ,name ,email ,password ,verification FROM user " +
+                    "WHERE name = :name AND password = :password LIMIT 1;";
 
     private static final String READ_USER_BY_EMAIL =
-            "SELECT user_id,name,email,password,verification FROM user WHERE email=:email LIMIT 1;";
-    private static final String DELETE =
-            "DELETE FROM user WHERE user_id=:user_id";
+            "SELECT user_id ,name ,email ,password ,verification FROM user WHERE email = :email LIMIT 1;";
 
-    private NamedParameterJdbcTemplate template;
+    private static final String DELETE =
+            "DELETE FROM user WHERE user_id = :user_id";
+
+    private final String isNameExist = "SELECT EXISTS(SELECT 1 FROM user WHERE name = :name )";
+
+    private final String isEmailExist = "SELECT EXISTS(SELECT 1 FROM user WHERE email = :email )";
+
+
+    private final NamedParameterJdbcTemplate template;
 
     public UserDAOImpl() {
         template = new NamedParameterJdbcTemplate(ConnectionProvider.getDataSource());
@@ -47,6 +62,11 @@ public class UserDAOImpl implements UserDAO {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         int update = template.update(CREATE, parameterSource, keyHolder);
         return copyIfUpdateSuccessful(update, user, keyHolder);
+    }
+
+    @Override
+    public User read(Long primaryKey) {
+        return null;
     }
 
     private User copyIfUpdateSuccessful(int update, User user, KeyHolder keyHolder) {
@@ -62,10 +82,36 @@ public class UserDAOImpl implements UserDAO {
         return resultUser;
     }
 
+    @Override
+    public Optional<User> readUserByCredential(String name, String password) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("name", name);
+        paramMap.put("password", password);
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+
+        List<User> users = template.query(READ_USER_BY_CREDENTIAL, paramSource, new UserRowMapper());
+        return users.isEmpty() ? Optional.empty() : Optional.ofNullable(users.get(0));
+    }
 
     @Override
-    public User read(Long primaryKey) {
-        return null;
+    public Optional<User> readUserByEmail(String email) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("email", email);
+        List<User> users = template.query(READ_USER_BY_EMAIL, parameterSource, new UserRowMapper());
+
+        return users.isEmpty() ? Optional.empty() : Optional.ofNullable(users.get(0));
+    }
+
+    @Override
+    public void updatePassword(long id, String password) throws UpdateObjectException {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("password", password);
+        paramMap.put("user_id", id);
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+
+        int update = template.update(UPDATE_PASSWORD, paramSource);
+        if (update < 1) {
+            throw new UpdateObjectException();
+        }
     }
 
     @Override
@@ -104,16 +150,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        SqlParameterSource parameterSource = new MapSqlParameterSource("email", email);
-        List<User> resultUser = template.query(READ_USER_BY_EMAIL, parameterSource, new UserRowMapper());
-        if (resultUser.isEmpty()) {
-            return null;
-        }
-        return resultUser.get(0);
-    }
-
-    @Override
     public void updateVerification(long userId, String status) throws UpdateObjectException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("user_id", userId);
@@ -125,12 +161,26 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public boolean isUsernameExist(String username) {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource("name", username);
+        int result = template.queryForObject(isNameExist, paramSource, Integer.class);
+        return result == 1;
+    }
 
-    private class UserRowMapper implements RowMapper<User> {
+    @Override
+    public boolean isEmailExist(String email) {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource("email", email);
+        int result = template.queryForObject(isEmailExist, paramSource, Integer.class);
+        return result == 1;
+    }
+
+
+    private static class UserRowMapper implements RowMapper<User> {
 
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            Long id = resultSet.getLong("user_id");
+            long id = resultSet.getLong("user_id");
             String name = resultSet.getString("name");
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
