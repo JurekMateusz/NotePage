@@ -19,19 +19,25 @@ public class UserService {
         UserDAO userDAO = getUserDAO();
         return userDAO.getUserByUserName(name);
     }
-    public Optional<User> getUserByCredential(String name,String password) {
-        UserDAO userDAO = getUserDAO();
-        return userDAO.readUserByCredential(name,password);
-    }
 
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByCredential(String name, String password) {
         UserDAO userDAO = getUserDAO();
-        return userDAO.getUserByEmail(email);
+        return userDAO.readUserByCredential(name, password);
     }
 
     public User update(User user) throws UpdateObjectException {
         UserDAO userDAO = getUserDAO();
         return userDAO.update(user);
+    }
+
+    public void updatePassword(long id, String password) throws UpdateObjectException {
+        UserDAO userDAO = getUserDAO();
+        userDAO.updatePassword(id, password);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        UserDAO userDAO = getUserDAO();
+        return userDAO.readUserByEmail(email);
     }
 
     public void delete(User user) {

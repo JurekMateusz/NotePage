@@ -66,6 +66,9 @@
     <c:when test="${fragment eq 'resetPasswordEmail'}">
         <jsp:include page="fragments/resetPasswordEmail.jspf"/>
     </c:when>
+    <c:when test="${fragment eq 'resetPasswordForm'}">
+        <jsp:include page="fragments/resetPasswordForm.jspf"/>
+    </c:when>
     <c:otherwise>
         <jsp:include page="fragments/login.jspf"/>
     </c:otherwise>

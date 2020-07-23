@@ -26,6 +26,8 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String UPDATE =
             "UPDATE user SET email = :email, password = :password WHERE user_id = :user_id;";
+    private static final String UPDATE_PASSWORD =
+            "UPDATE user SET password = :password WHERE user_id = :user_id;";
 
     private static final String UPDATE_VERIFICATION =
             "UPDATE user SET verification = :verification WHERE user_id = :user_id;";
@@ -92,6 +94,27 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public Optional<User> readUserByEmail(String email) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("email", email);
+        List<User> users = template.query(READ_USER_BY_EMAIL, parameterSource, new UserRowMapper());
+
+        return users.isEmpty() ? Optional.empty() : Optional.ofNullable(users.get(0));
+    }
+
+    @Override
+    public void updatePassword(long id, String password) throws UpdateObjectException {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("password", password);
+        paramMap.put("user_id", id);
+        SqlParameterSource paramSource = new MapSqlParameterSource(paramMap);
+
+        int update = template.update(UPDATE_PASSWORD, paramSource);
+        if (update < 1) {
+            throw new UpdateObjectException();
+        }
+    }
+
+    @Override
     public User update(User updateUser) throws UpdateObjectException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("email", updateUser.getEmail());
@@ -127,16 +150,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        SqlParameterSource parameterSource = new MapSqlParameterSource("email", email);
-        List<User> resultUser = template.query(READ_USER_BY_EMAIL, parameterSource, new UserRowMapper());
-        if (resultUser.isEmpty()) {
-            return null;
-        }
-        return resultUser.get(0);
-    }
-
-    @Override
     public void updateVerification(long userId, String status) throws UpdateObjectException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("user_id", userId);
@@ -163,11 +176,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-    private class UserRowMapper implements RowMapper<User> {
+    private static class UserRowMapper implements RowMapper<User> {
 
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            Long id = resultSet.getLong("user_id");
+            long id = resultSet.getLong("user_id");
             String name = resultSet.getString("name");
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
