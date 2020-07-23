@@ -3,7 +3,7 @@ package pl.mjurek.notepage.controller.note;
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.Note;
 import pl.mjurek.notepage.model.User;
-import pl.mjurek.notepage.service.NoteActionService;
+import pl.mjurek.notepage.service.fun.NewLineConverter;
 import pl.mjurek.notepage.service.NoteService;
 
 import javax.servlet.ServletException;
@@ -31,7 +31,7 @@ public class AddController extends HttpServlet {
                 .description(description)
                 .build();
 
-        description = NoteActionService.convertNewLineCharToBR_Tag(description);
+        description = NewLineConverter.convertNewLineCharToBR_Tag(description);
         NoteService noteService = new NoteService();
         try {
             noteService.addNote(authenticatedUser, description, importantState, deadlineDate);

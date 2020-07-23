@@ -2,9 +2,10 @@ package pl.mjurek.notepage.controller.user;
 
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
-import pl.mjurek.notepage.service.AccountActionService;
+import pl.mjurek.notepage.service.EmailService;
 import pl.mjurek.notepage.service.KeyActionService;
 import pl.mjurek.notepage.service.UserService;
+import pl.mjurek.notepage.service.fun.Hash;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,9 +29,9 @@ public class ResetPasswordEmailController extends HttpServlet {
         if (userOpt.isEmpty()) {
             request.setAttribute("errorMessage", "Email don't exist in database");
         } else {
-            AccountActionService actionService = new AccountActionService();
+            EmailService actionService = new EmailService();
             User user = userOpt.get();
-            String key = AccountActionService.getKey();
+            String key = Hash.getKey();
             long id = user.getId();
 
             try {

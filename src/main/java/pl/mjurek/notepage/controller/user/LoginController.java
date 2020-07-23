@@ -1,8 +1,8 @@
 package pl.mjurek.notepage.controller.user;
 
 import pl.mjurek.notepage.model.User;
-import pl.mjurek.notepage.service.AccountActionService;
 import pl.mjurek.notepage.service.UserService;
+import pl.mjurek.notepage.service.fun.Hash;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +28,7 @@ public class LoginController extends HttpServlet {
 
         UserService userService = new UserService();
 
-        String encodedPassword = AccountActionService.encodePassword(password);
+        String encodedPassword = Hash.encodePassword(password);
         Optional<User> userOpt = userService.getUserByCredential(username, encodedPassword);
 
         if (userOpt.isPresent()) {

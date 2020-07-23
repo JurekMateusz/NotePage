@@ -2,8 +2,9 @@ package pl.mjurek.notepage.controller.user;
 
 import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
-import pl.mjurek.notepage.service.AccountActionService;
+import pl.mjurek.notepage.service.EmailService;
 import pl.mjurek.notepage.service.UserService;
+import pl.mjurek.notepage.service.fun.Hash;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +25,7 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String repeatPassword = request.getParameter("confirm_password");
 
-        String encodePassword = AccountActionService.encodePassword(password);
+        String encodePassword = Hash.encodePassword(password);
 
         User user = User.builder()
                 .name(username)
@@ -69,7 +70,7 @@ public class RegisterController extends HttpServlet {
         StringBuffer patch = request.getRequestURL();
 
         Thread thread = new Thread(() -> {
-            AccountActionService action = new AccountActionService();
+            EmailService action = new EmailService();
             try {
                 action.makeActivateKeyAndSendEmail(registerUser, patch);
             } catch (AddObjectException e) {

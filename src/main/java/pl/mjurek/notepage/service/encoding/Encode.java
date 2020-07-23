@@ -1,5 +1,7 @@
 package pl.mjurek.notepage.service.encoding;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
