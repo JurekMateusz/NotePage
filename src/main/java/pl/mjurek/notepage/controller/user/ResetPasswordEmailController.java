@@ -1,8 +1,9 @@
 package pl.mjurek.notepage.controller.user;
 
-import pl.mjurek.notepage.exception.UpdateObjectException;
+import pl.mjurek.notepage.exception.AddObjectException;
 import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.AccountActionService;
+import pl.mjurek.notepage.service.KeyActionService;
 import pl.mjurek.notepage.service.UserService;
 
 import javax.servlet.ServletException;
@@ -16,27 +17,34 @@ import java.io.IOException;
 public class ResetPasswordEmailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String mail = request.getParameter("email").trim();
-        String message = "Check email";
+        String email = request.getParameter("email").trim();
 
         UserService service = new UserService();
-        User user = service.getUserByEmail(mail);
-        if (user == null) {
-            message = "Email don't exist in database";
+        KeyActionService keyActionService = new KeyActionService();
+        StringBuffer patch = request.getRequestURL();
+
+        var userOpt = service.getUserByEmail(email);
+
+        if (userOpt.isEmpty()) {
+            request.setAttribute("errorMessage", "Email don't exist in database");
         } else {
             AccountActionService actionService = new AccountActionService();
-            String newPassword = actionService.getNewPassword();
-            actionService.sendEmail(user.getEmail(), newPassword);
+            User user = userOpt.get();
+            String key = AccountActionService.getKey();
+            long id = user.getId();
 
-            newPassword = AccountActionService.encodePassword(newPassword);
-            user.setPassword(newPassword);
             try {
-                service.update(user);
-            } catch (UpdateObjectException e) {
-                e.printStackTrace();
+                keyActionService.addKey(id, key);
+            } catch (AddObjectException e) {
+                request.setAttribute("errorMessage", "Can't add new key to db");
+                request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+                return;
             }
+            actionService.sendEmailWithResetLink(email, patch, key);
+            request.setAttribute("successMessage", "Check email");
         }
-        request.setAttribute("errorMessage", message);
+
+
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
 

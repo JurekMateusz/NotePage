@@ -12,7 +12,9 @@ public interface UserDAO extends GenericDAO<User, Long> {
 
     Optional<User> readUserByCredential(String name, String password);
 
-    User getUserByEmail(String email);
+    Optional<User> readUserByEmail(String email);
+
+    void updatePassword(long id, String password) throws UpdateObjectException;
 
     void updateVerification(long userId, String status) throws UpdateObjectException;
 

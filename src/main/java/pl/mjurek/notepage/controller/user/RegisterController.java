@@ -66,7 +66,7 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        String patch = makeURL(request.getRequestURL());
+        StringBuffer patch = request.getRequestURL();
 
         Thread thread = new Thread(() -> {
             AccountActionService action = new AccountActionService();
@@ -91,13 +91,6 @@ public class RegisterController extends HttpServlet {
         request.setAttribute("fragment", "register");
         request.setAttribute("user", user);
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-    }
-
-    private String makeURL(StringBuffer stringBuffer) {
-        int lastIndex = stringBuffer.lastIndexOf("/");
-        String result = String.valueOf(stringBuffer);
-        result = result.substring(0, lastIndex);
-        return result;
     }
 
     @Override

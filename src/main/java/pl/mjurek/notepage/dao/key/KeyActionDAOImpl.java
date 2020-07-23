@@ -11,16 +11,17 @@ import pl.mjurek.notepage.util.ConnectionProvider;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class KeyActionDAOImpl implements KeyActionDAO {
     private static final String CREATE =
-            "INSERT INTO key_action(user_id,code) VALUES(:user_id,:code);";
+            "INSERT INTO key_action(user_id ,code) VALUES(:user_id, :code);";
     private static final String READ =
-            "SELECT user_id,code FROM key_action WHERE code=:code";
+            "SELECT user_id ,code FROM key_action WHERE code = :code LIMIT 1;";
     private static final String DELETE =
-            "DELETE FROM key_action WHERE user_id=:user_id;";
+            "DELETE FROM key_action WHERE code = :code;";
 
     private final NamedParameterJdbcTemplate template;
 
@@ -41,16 +42,12 @@ public class KeyActionDAOImpl implements KeyActionDAO {
         return key;
     }
 
-    @Override
-    public KeyAction read(Long userId) {
-        return null;
-    }
 
     @Override
     public KeyAction read(String key) {
         SqlParameterSource paramSource = new MapSqlParameterSource("code", key);
-        KeyAction keyAction = template.queryForObject(READ, paramSource, new KeyActionDAOImpl.KeyActionRowMapper());
-        return keyAction;
+        List<KeyAction> result = template.query(READ, paramSource, new KeyActionRowMapper());
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
@@ -59,15 +56,15 @@ public class KeyActionDAOImpl implements KeyActionDAO {
     }
 
     @Override
-    public void delete(Long userId) throws DeleteObjectException {
-        MapSqlParameterSource paramSource = new MapSqlParameterSource("user_id", userId);
+    public void delete(String key) throws DeleteObjectException {
+        MapSqlParameterSource paramSource = new MapSqlParameterSource("code", key);
         int update = template.update(DELETE, paramSource);
         if (update < 1) {
             throw new DeleteObjectException();
         }
     }
 
-    private class KeyActionRowMapper implements RowMapper<KeyAction> {
+    private static class KeyActionRowMapper implements RowMapper<KeyAction> {
         @Override
         public KeyAction mapRow(ResultSet resultSet, int i) throws SQLException {
             return KeyAction.builder()

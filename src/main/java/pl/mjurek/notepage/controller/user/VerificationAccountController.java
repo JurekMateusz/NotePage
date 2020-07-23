@@ -2,7 +2,9 @@ package pl.mjurek.notepage.controller.user;
 
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
-import pl.mjurek.notepage.service.AccountActionService;
+import pl.mjurek.notepage.model.KeyAction;
+import pl.mjurek.notepage.service.KeyActionService;
+import pl.mjurek.notepage.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,17 +17,28 @@ import java.io.IOException;
 public class VerificationAccountController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String destination = "WEB-INF/index.jsp";
-
         String key = request.getParameter("key");
-        AccountActionService service = new AccountActionService();
+        KeyActionService service = new KeyActionService();
+
         try {
-            service.verification(key);
-        } catch (UpdateObjectException | DeleteObjectException e) {
-            request.setAttribute("errorMessage", "Something went wrong");
-            destination = "WEB-INF/error.jsp";
+            var keyActionOpt = service.read(key);
+            if (keyActionOpt.isEmpty()) {
+                request.setAttribute("errorMessage", "Wrong link");
+                request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+                return;
+            }
+            KeyAction keyAct = keyActionOpt.get();
+            long userId = keyAct.getUserId();
+            UserService userService = new UserService();
+            userService.unblock(userId);
+            service.delete(key);
+        } catch (DeleteObjectException | UpdateObjectException e) {
+            request.setAttribute("errorMessage", "Something went wrong with DB");
+            request.getRequestDispatcher("WEB-INF/error.jsp").forward(request, response);
+            return;
         }
+
         request.setAttribute("successMessage", "Verification successful");
-        request.getRequestDispatcher(destination).forward(request, response);
+        request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
     }
 }
