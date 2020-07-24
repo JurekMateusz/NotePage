@@ -1,70 +1,64 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TODO Note Page</title>
+    <title>Note Page - Error</title>
 
     <meta http-equiv="X-Ua-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext" rel="stylesheet">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 
 <body>
 
 <jsp:include page="fragments/navbar.jspf"/>
 
-<div class="container">
-    <br><br><br><br>
-    <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <div class="error-template">
-                <h1>
-                    Oops,some went wrong!</h1>
-                <h2>
-                    403 Not Found</h2>
-                <div class="error-details">
-                    <c:out value="${errorMessage}"></c:out>
-                </div>
-                <div class="error-actions">
-                    <a href="${pageContext.request.contextPath}/" class="btn btn-primary btn-lg">
-                        <span class="glyphicon glyphicon-home"></span>Take Me Home </a>
-                </div>
-            </div>
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%--            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>--%>
+            <%--            <span class="sr-only">Error:</span>--%>
+        <h3><strong><c:out value="${errorMessage}"/></strong></h3>
+    </div>
+</c:if>
+
+<%--This template was made by Colorlib (https://colorlib.com)--%>
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1 style="color: white">Oops!</h1>
         </div>
     </div>
 </div>
 
-
-<jsp:include page="fragments/footer.jspf"/>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-    $(function () {
-        $("#datepicker").datepicker();
-    });
-</script>
+<script src="${pageContext.request.contextPath}/resources/js/script.js"></script>
+
 </body>
 </html>
 
