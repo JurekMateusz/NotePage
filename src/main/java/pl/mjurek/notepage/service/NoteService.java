@@ -3,6 +3,7 @@ package pl.mjurek.notepage.service;
 import pl.mjurek.notepage.dao.DAOFactory;
 import pl.mjurek.notepage.dao.note.NoteDAO;
 import pl.mjurek.notepage.exception.AddObjectException;
+import pl.mjurek.notepage.exception.DataAccessException;
 import pl.mjurek.notepage.exception.DeleteObjectException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.DateNote;
@@ -17,8 +18,8 @@ import pl.mjurek.notepage.service.encoding.Encode;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-
 
 
 public class NoteService {
@@ -95,11 +96,11 @@ public class NoteService {
     }
 
 
-    public void deleteNote(long noteId) throws DeleteObjectException {
+    public void deleteNote(User user, long noteId) throws DeleteObjectException, DataAccessException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
-
-        noteDAO.delete(note.getId());
+        checkDataLeak(user,note);
+        noteDAO.delete(noteId);
 
         DateNoteService service = new DateNoteService();
         service.delete(note.getDate().getId());
@@ -112,9 +113,10 @@ public class NoteService {
         noteDAO.update(dateId, description, importantStatus);
     }
 
-    public void update(long noteId, NotesControllerOptions action) throws UpdateObjectException {
+    public void update(User user, long noteId, NotesControllerOptions action) throws UpdateObjectException, DataAccessException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
+        checkDataLeak(user,note);
 
         DateNoteService dateNoteService = new DateNoteService();
         dateNoteService.update(note.getDate(), action);
@@ -128,9 +130,10 @@ public class NoteService {
         noteDAO.update(note);
     }
 
-    public Note read(long noteId) {
+    public Note read(User user, long noteId) throws DataAccessException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
+        checkDataLeak(user, note);
         note.setDescription(Encode.decrypt(note.getDescription()));
         return note;
     }
@@ -152,4 +155,13 @@ public class NoteService {
         return factory.getNoteDAO();
     }
 
+    private void checkDataLeak(User user, Note note) throws DataAccessException {
+        if (!isIdEquals(user, note)) {
+            throw new DataAccessException();
+        }
+    }
+
+    private boolean isIdEquals(User user, Note note) {
+        return Objects.equals(user.getId(), note.getUser().getId());
+    }
 }

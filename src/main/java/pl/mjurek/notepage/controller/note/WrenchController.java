@@ -1,7 +1,9 @@
 package pl.mjurek.notepage.controller.note;
 
+import pl.mjurek.notepage.exception.DataAccessException;
 import pl.mjurek.notepage.exception.UpdateObjectException;
 import pl.mjurek.notepage.model.Note;
+import pl.mjurek.notepage.model.User;
 import pl.mjurek.notepage.service.DateNoteService;
 import pl.mjurek.notepage.service.fun.NewLineConverter;
 import pl.mjurek.notepage.service.NoteService;
@@ -11,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -26,8 +29,10 @@ public class WrenchController extends HttpServlet {
         String importantStatus = request.getParameter("importantState");
         String deadlineDate = request.getParameter("date");
 
-        Long noteId = (Long) request.getSession().getAttribute("note_id");
-        Long dateId = (Long) request.getSession().getAttribute("date_id");
+        HttpSession session = request.getSession();
+
+        long noteId = (long) session.getAttribute("note_id");
+        long dateId = (long) session.getAttribute("date_id");
 
         NoteService noteService = new NoteService();
         DateNoteService dateNoteService = new DateNoteService();
@@ -61,9 +66,19 @@ public class WrenchController extends HttpServlet {
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
         }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedUser");
 
         NoteService service = new NoteService();
-        Note note = service.read(noteId);
+        Note note;
+
+        try {
+            note = service.read(user,noteId);
+        } catch (DataAccessException e) {
+            request.setAttribute("errorMessage","Note not found");
+            request.getRequestDispatcher("WEB-INF/error.jsp").forward(request,response);
+            return;
+        }
 
         String description = NewLineConverter.convertReadableNewLine(note.getDescription());
         note.setDescription(description);
