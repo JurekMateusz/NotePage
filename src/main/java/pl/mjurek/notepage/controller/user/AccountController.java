@@ -41,7 +41,8 @@ public class AccountController extends HttpServlet {
                 req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);
                 return;
             }
-            resp.sendRedirect(req.getContextPath() + "/logout");
+            req.setAttribute("successMessage", "Everything saved");
+            req.getRequestDispatcher("/logout").forward(req,resp);
         } else {
             req.setAttribute("errorMessage", "Passwords not the same");
             req.setAttribute("fragment", "account");

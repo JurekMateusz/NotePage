@@ -92,7 +92,7 @@ public class ResetPasswordController extends HttpServlet {
             req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);
             return;
         }
-        req.setAttribute("errorMessage", "New password has been set");
+        req.setAttribute("successMessage", "New password has been set");
         req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);
     }
 }
