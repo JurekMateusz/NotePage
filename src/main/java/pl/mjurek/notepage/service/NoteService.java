@@ -99,7 +99,7 @@ public class NoteService {
     public void deleteNote(User user, long noteId) throws DeleteObjectException, DataAccessException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
-        checkDataLeak(user,note);
+        checkDataLeak(user, note);
         noteDAO.delete(noteId);
 
         DateNoteService service = new DateNoteService();
@@ -116,7 +116,7 @@ public class NoteService {
     public void update(User user, long noteId, NotesControllerOptions action) throws UpdateObjectException, DataAccessException {
         NoteDAO noteDAO = getNoteDAO();
         Note note = noteDAO.read(noteId);
-        checkDataLeak(user,note);
+        checkDataLeak(user, note);
 
         DateNoteService dateNoteService = new DateNoteService();
         dateNoteService.update(note.getDate(), action);
@@ -156,9 +156,13 @@ public class NoteService {
     }
 
     private void checkDataLeak(User user, Note note) throws DataAccessException {
-        if (!isIdEquals(user, note)) {
+        if (isNull(user, note) || !isIdEquals(user, note)) {
             throw new DataAccessException();
         }
+    }
+
+    private boolean isNull(User user, Note note) {
+        return Objects.isNull(user) || Objects.isNull(note);
     }
 
     private boolean isIdEquals(User user, Note note) {

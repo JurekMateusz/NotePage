@@ -75,11 +75,12 @@ public class NoteDAOImpl implements NoteDAO {
         }
         return copyNote;
     }
-    //TODO org.springframework.dao.DataAccessException if note dont exist ,HTML change
+
     @Override
     public Note read(Long noteId) {
         SqlParameterSource paramSource = new MapSqlParameterSource("note_id", noteId);
-        return template.queryForObject(READ, paramSource, new NoteFullRowMapper());
+        List<Note> result = template.query(READ, paramSource, new NoteFullRowMapper());
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
@@ -134,7 +135,7 @@ public class NoteDAOImpl implements NoteDAO {
     }
 
     private SqlParameterSource getSqlParamSource(long user_id, StatusNote state) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("user_id", user_id);
         paramMap.put("status_note", state.name());
         return new MapSqlParameterSource(paramMap);
