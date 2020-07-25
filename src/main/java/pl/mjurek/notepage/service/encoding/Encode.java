@@ -11,6 +11,8 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+// Ale co to koduje? Jeśli może wszystko to proponuje StandardEncoder/DefaultEncoder
+// A jeśli to jest do hasła to zgadnij co bym zaproponował ;P
 public class Encode {
     private static final String ALGORITHM = "AES";
     private static final String myEncryptionKey = "Bar12345Bar12345";

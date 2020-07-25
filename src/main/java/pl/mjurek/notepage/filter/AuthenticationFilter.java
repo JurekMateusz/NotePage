@@ -23,6 +23,7 @@ public class AuthenticationFilter implements Filter {
 
     private boolean isUserLogged(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
+        // return session != null ? session.getAttribute("loggedUser") != null : false;
         if (session != null) {
             return session.getAttribute("loggedUser") != null;
         }

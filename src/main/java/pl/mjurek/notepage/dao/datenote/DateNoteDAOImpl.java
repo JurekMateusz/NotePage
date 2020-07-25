@@ -18,6 +18,8 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+// Czemu nie używasz hibernate? Lubisz pisać zapytania ręcznie? :)
+// Na resztę dao nawet nie chce mi się patrzeć ;)
 public class DateNoteDAOImpl implements DateNoteDAO {
     private static final String CREATE =
             "INSERT INTO date(stick_note,deadline_note) VALUES(:stick_note,:deadline_note);";

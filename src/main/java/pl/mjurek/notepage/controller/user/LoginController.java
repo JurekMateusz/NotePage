@@ -29,6 +29,9 @@ public class LoginController extends HttpServlet {
         UserService userService = new UserService();
 
         String encodedPassword = Hash.encodePassword(password);
+        // Pytałeś o Query w moim projekcie, właśnie tutaj miałbyś jedną metodę getUser(query) a w query trzy pola: userName, password, verified (to ostatnie opcjonalne)
+        // i zależnie jak byś to query sobie uzupełnij to zastąpi Ci to część poniższych ifów. Bo możesz podać od razu te trzy rzeczy do zapytania i otrzymać informację: mam usera/lub nie
+        // wtedy na frontendzie robisz, że jest ok lub nie - nie mówisz dokładnie że konto nie zweryfikowane itp (względy bezpieczeństwa) lepiej nie zdradzać, że konto o takich danych już jest
         Optional<User> userOpt = userService.getUserByCredential(username, encodedPassword);
 
         if (userOpt.isPresent()) {

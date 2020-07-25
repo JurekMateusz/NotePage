@@ -36,6 +36,8 @@ public class AccountController extends HttpServlet {
 
             try {
                 service.update(user);
+                // W sumie w swoich własnych serwisach możesz uzywać własnych wyjątków (czyli dla aktualizacji usera zrobić jakiś nazwany/lub kilka zależnie od tego co się stało)
+                // wtedy dalej w aplikacji można je obsłużyć jakoś lepiej
             } catch (UpdateObjectException e) {
                 req.setAttribute("errorMessage", "Password or email change failed");
                 req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);

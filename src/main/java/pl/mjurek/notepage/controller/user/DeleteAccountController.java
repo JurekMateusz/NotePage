@@ -21,6 +21,8 @@ public class DeleteAccountController extends HttpServlet {
         String correctText = "NotePage/" + user.getName();
         if (deleteText.equals(correctText)) {
             Thread thread = new Thread(() -> {
+                // Możesz użyć springa żeby tworzył Ci instancje serwisów (singletony) - wtedy nie musisz ich tak instancjonować a tylko wstrzykiwać zależności (dependency injection)
+                // co do tego są różne szkoły, jedni polecają inni nie
                 UserService service = new UserService();
                 service.delete(user);
             });

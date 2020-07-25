@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
+<!--    Czemu TODO ;) Jak i wyżej w artifactId - nazwij tak jak ma się projekt nazywać-->
     <name>TODOpage Maven Webapp</name>
 
 
@@ -18,6 +19,8 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
+<!--    Wszystkie wersje zależności postaraj się trzymać jak wyżej w sekcji properties (zerknij do mojego projektu)-->
+<!--    Zresztą nie używaż chyba tamtych propercji, w maven compiler plugin (na samym końcu tego pliku masz wpisane wersję java 11)-->
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

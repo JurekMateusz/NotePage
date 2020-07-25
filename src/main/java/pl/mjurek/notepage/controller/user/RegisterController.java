@@ -46,6 +46,8 @@ public class RegisterController extends HttpServlet {
 
         UserService userService = new UserService();
 
+        // Nie podawaj dokładnie co jest nie tak (lepiej nie zdradzać tak na wszelki wypadek osobom które chcą Ci popsuć apkę)
+        // zgłoś błąd podczas rejestracji lub bardziej ogólnie: 'User name or login already taken.'
         if (userService.isNameExisting(username)) {
             request.setAttribute("errorMessage", "User exist");
             setAttributeAndForward(user, request, response);

@@ -21,6 +21,9 @@ public class VerificationAccountController extends HttpServlet {
         KeyActionService service = new KeyActionService();
 
         try {
+            // Ogólnie w try powinno być jak najmniej kodu - najlepiej sama ta linia która może powodować błąd który wurzycasz
+            // bo teraz to ja nie jestem w stanie stwierdzić co tu rzuca DeleteObjectException | UpdateObjectException
+            // ewentualnie wyciągnij do osobnej metody - nie bój się tworzyć małych metod, dobrze nazwane opiszą samem za siebie co robią
             var keyActionOpt = service.read(key);
             if (keyActionOpt.isEmpty()) {
                 request.setAttribute("errorMessage", "Wrong link");

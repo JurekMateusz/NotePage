@@ -24,6 +24,7 @@ public class EmailSessionBean {
     protected String username;
     protected String password;
 
+    // To sobie lombokiem załatw, ten konstruktor niżej też
     private EmailSessionBean() {
     }
 
@@ -63,6 +64,7 @@ public class EmailSessionBean {
             }
         });
         try {
+            // Wiadomość zbuduj przed try, w try samo wysłanie powinno zostać
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(mailEmailFrom));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));

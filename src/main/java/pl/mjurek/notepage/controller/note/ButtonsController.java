@@ -34,6 +34,9 @@ public class ButtonsController extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loggedUser");
         NoteService service = new NoteService();
+//      Źle się to czyta, zostawił bym samego switch (swoją drogą co te enumy znaczą w kontekscie tego co robią?) Bo można by to lepiej opisać, napisz mi do czego są to Ci podpowiem jak.
+//      Bo ogólnie kod powinienś pisać tak, że jak go czytasz to nie potrzebujesz komentarzy ani się zastanawiać za bardzo co on robi, czytasz i wiesz
+//      A więc zmiana była by taka, że switch zostaje, w case zrób sobie odpowiednie metody prywatne i w nich małe try-catch
         try {
             switch (actionStatus) {
                 case TODO:

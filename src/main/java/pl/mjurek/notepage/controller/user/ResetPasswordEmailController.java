@@ -29,6 +29,7 @@ public class ResetPasswordEmailController extends HttpServlet {
         if (userOpt.isEmpty()) {
             request.setAttribute("errorMessage", "Email don't exist in database");
         } else {
+            // Całość tego else można wyciągnąć do metody resetPassword - bo cały doPost niewiele mówi - postaraj się wszędzie tak robić
             EmailService actionService = new EmailService();
             User user = userOpt.get();
             String key = Hash.getKey();

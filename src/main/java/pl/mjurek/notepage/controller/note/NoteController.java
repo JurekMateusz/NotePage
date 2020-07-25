@@ -29,6 +29,7 @@ public class NoteController extends HttpServlet {
         NoteService service = new NoteService();
         List<Note> notes;
 
+//        Tutaj pokombinuj z uproszczeniem tych if-ów
         if (searchByFromRequest != null) {
             notes = service.getAll(id);
             session.setAttribute("search_by", "all");

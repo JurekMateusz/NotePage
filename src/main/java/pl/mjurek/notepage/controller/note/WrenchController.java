@@ -72,6 +72,7 @@ public class WrenchController extends HttpServlet {
         NoteService service = new NoteService();
         Note note;
 
+//      Jeśli wyżej wystąpi błąd to bez sensu czytać z serwisu note o id 'null' - proponuję lepiej zabezpieczyć, wyjść z metody/zgłosić ładny błąd itp
         try {
             note = service.read(user,noteId);
         } catch (DataAccessException e) {
@@ -83,6 +84,8 @@ public class WrenchController extends HttpServlet {
         String description = NewLineConverter.convertReadableNewLine(note.getDescription());
         note.setDescription(description);
 
+//      request.getSession(false) - leci do zmiennej lokalnej w takim przypadku (masz więcej niż jedno wywołanie) - sugestia
+//      Chociaż nie ma takiej potrzeby, druga linia i tak zastąpi wywołanie pierwszej (zobacz sobie javadoc metody)
         request.getSession(false).setAttribute("note_id", noteId);
         request.getSession(false).setAttribute("date_id", note.getDate().getId());
 

@@ -2,6 +2,7 @@ package pl.mjurek.notepage.service.fun;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+// Co to za pakiet 'fun' - bawimy się tutaj dobrze? :) nie bój się pełnych nazw
 public class Hash {
     public static String encodePassword(String pass) {
         return DigestUtils.sha1Hex(pass).substring(0, 40);

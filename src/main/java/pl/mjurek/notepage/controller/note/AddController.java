@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 
+//Pobierz sobie code style od google :) Mniejsze wcięcia bo tylko 2 spacje - mi osobiście jest wygodniej, zobacz sobie sam jak Tobie
 @WebServlet("/add")
 public class AddController extends HttpServlet {
     @Override
