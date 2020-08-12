@@ -1,0 +1,42 @@
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar"
+            aria-controls="navbar"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="color:blue"></span>
+    </button>
+    <a class="navbar-brand" href="note_list">
+        <img src="${pageContext.request.contextPath}/resources/img/note.jpg" width="30" height="30" alt=""></a>
+
+    <c:if test="${not empty sessionScope.loggedUser}">
+        <div class="collapse navbar-collapse justify-content-end " id="navbar">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/add">Add Note</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/param_note_list">Search Notes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/note_list?search_by=all">All notes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/account">Account</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/logout">Log out</a>
+                </li>
+            </ul>
+        </div>
+    </c:if>
+</nav>
+<%--<form class="form-inline my-2 my-lg-0">--%>
+<%--    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">--%>
+<%--    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>--%>
+<%--</form>--%>

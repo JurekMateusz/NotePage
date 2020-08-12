@@ -26,7 +26,7 @@
 
 <body>
 
-<jsp:include page="fragments/navbar.jspf"/>
+<jsp:include page="fragments/navbar/navbar.jspf"/>
 
 <c:if test="${not empty errorMessage}">
     <div class="alert alert-danger text-center" role="alert">
@@ -46,36 +46,35 @@
 
 <c:choose>
     <c:when test="${fragment eq 'register'}">
-        <jsp:include page="fragments/register.jspf"/>
+        <jsp:include page="fragments/user/register/register.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'notes'}">
-        <jsp:include page="fragments/notes.jspf"/>
+        <jsp:include page="fragments/note/view/notes.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'add'}">
-        <jsp:include page="fragments/add.jspf"/>
+        <jsp:include page="fragments/note/add/add.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'search'}">
-        <jsp:include page="fragments/search.jspf"/>
+        <jsp:include page="fragments/note/search/search.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'account'}">
-        <jsp:include page="fragments/account.jspf"/>
+        <jsp:include page="fragments/user/modify/account.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'deleteAccount'}">
-        <jsp:include page="fragments/deleteAccount.jspf"/>
+        <jsp:include page="fragments/user/modify/delete/deleteAccount.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'resetPasswordEmail'}">
-        <jsp:include page="fragments/resetPasswordEmail.jspf"/>
+        <jsp:include page="fragments/user/reset/resetPasswordEmail.jspf"/>
     </c:when>
     <c:when test="${fragment eq 'resetPasswordForm'}">
-        <jsp:include page="fragments/resetPasswordForm.jspf"/>
+        <jsp:include page="fragments/user/reset/resetPasswordForm.jspf"/>
     </c:when>
     <c:otherwise>
-        <jsp:include page="fragments/login.jspf"/>
+        <jsp:include page="fragments/user/auth/login.jspf"/>
     </c:otherwise>
 </c:choose>
 
 
-<%--<jsp:include page="fragments/footer.jspf"/>--%>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

@@ -24,7 +24,7 @@
 
 <body>
 
-<jsp:include page="fragments/navbar.jspf"/>
+<jsp:include page="fragments/navbar/navbar.jspf"/>
 
 <c:if test="${not empty errorMessage}">
     <div class="alert alert-danger text-center" role="alert">
