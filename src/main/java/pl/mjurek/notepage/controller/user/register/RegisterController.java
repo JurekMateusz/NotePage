@@ -49,9 +49,9 @@ public class RegisterController extends HttpServlet {
       setAttributeAndForward(user, request, response);
       return;
     }
-
+  User registeredUser;
     try {
-      userService.addUser(user);
+      registeredUser = userService.addUser(user);
     } catch (AddObjectException e) {
       request.setAttribute("errorMessage", "add user to DB fail");
       request
@@ -63,7 +63,7 @@ public class RegisterController extends HttpServlet {
     StringBuffer patch = request.getRequestURL();
 
     try {
-      sendEmail(patch, user);
+      createKeyVerificationAndSendEmail(patch, registeredUser);
     } catch (AddObjectException e) {
       request.setAttribute("errorMessage", "add activate key to DB fail");
       request
@@ -90,7 +90,7 @@ public class RegisterController extends HttpServlet {
     request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
   }
 
-  private void sendEmail(StringBuffer patch, User user) throws AddObjectException {
+  private void createKeyVerificationAndSendEmail(StringBuffer patch, User user) throws AddObjectException {
     String activateKey = Hash.getKey();
     KeyActionService service = new KeyActionService();
     service.addKey(user.getId(), activateKey);
