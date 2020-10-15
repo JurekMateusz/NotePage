@@ -15,3 +15,8 @@ When you will test this ,be ready that this can take time.
 
 > https://notespage.herokuapp.com/
 
+You can use this account credential to test:
+```
+username: username
+password: password
+```
